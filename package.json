@@ -1,0 +1,21 @@
+{
+  "name": "digitalserviceportal",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "setup": "npm i && cd frontend && npm i && cd .. && cd backend && npm i",
+    "start": "concurrently --names \"Backend,Frontend\" -c \"bgBlue.bold,bgGreen.bold\" \"npm run server:dev\" \"npm run app:dev\"",
+    "server:dev": "cd backend && npm run dev",
+    "app:dev": "cd frontend && npm run dev"
+  },
+  "keywords": [],
+  "author": "Mahamud Hasan",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^7.6.0"
+  },
+  "devDependencies": {
+    "husky": "^8.0.3"
+  }
+}
