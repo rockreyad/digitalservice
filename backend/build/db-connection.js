@@ -12,27 +12,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const dotenv_1 = __importDefault(require("dotenv"));
-const express_1 = __importDefault(require("express"));
+const mongoose_1 = __importDefault(require("mongoose"));
 const config_1 = require("./config");
-const db_connection_1 = __importDefault(require("./db-connection"));
-dotenv_1.default.config();
-const app = (0, express_1.default)();
-const port = config_1.config.server.port;
-//Create Connection with Mongo]
-const connectMongo = () => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        yield (0, db_connection_1.default)();
-    }
-    catch (error) {
-        throw error;
-    }
-});
-connectMongo();
-app.get('/', (req, res) => {
-    res.send('Express + TypeScript Server');
-});
-app.listen(port, () => {
-    console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
-});
-//# sourceMappingURL=server.js.map
+function connect() {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const dbUrl = config_1.config.database.server;
+            const port = config_1.config.database.port;
+            yield mongoose_1.default.connect(`mongodb://${dbUrl}:${port}`).then(() => console.log("Database Connected!")).catch((error) => console.log(error));
+        }
+        catch (error) {
+            console.log(error);
+        }
+    });
+}
+exports.default = connect;
+//# sourceMappingURL=db-connection.js.map
