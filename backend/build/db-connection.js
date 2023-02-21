@@ -19,7 +19,11 @@ function connect() {
         try {
             const dbUrl = config_1.config.database.server;
             const port = config_1.config.database.port;
-            yield mongoose_1.default.connect(`mongodb://${dbUrl}:${port}`).then(() => console.log("Database Connected!")).catch((error) => console.log(error));
+            const dbName = config_1.config.database.name;
+            yield mongoose_1.default
+                .connect(`mongodb://${dbUrl}:${port}/${dbName}`)
+                .then(() => console.log("Database Connected!"))
+                .catch((error) => console.log(error));
         }
         catch (error) {
             console.log(error);
