@@ -9,11 +9,9 @@ const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
   return (
-    <div className="flex">
-      <Sidebar />
-      <div className="flex flex-col w-full p-2">
-        <QuickStats />
-        <TotalStats /></div>
+    <div className="flex flex-col w-full p-2">
+      <QuickStats />
+      <TotalStats />
     </div>
   );
 }
