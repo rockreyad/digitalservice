@@ -1,16 +1,17 @@
 "use client";
+import { addService } from "@/utils/api/services";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { useMutation } from "react-query";
 import { useQuery, useQueryClient } from "react-query";
 
-const addService = async (data: any) => {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve("success");
-    }, 1000);
-  });
-};
+// const addService = async (data: any) => {
+//   return new Promise((resolve, reject) => {
+//     setTimeout(() => {
+//       resolve("success");
+//     }, 1000);
+//   });
+// };
 
 const Create = () => {
   const [services, setServices] = React.useState({
