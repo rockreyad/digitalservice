@@ -11,7 +11,6 @@ import {
 } from "@chakra-ui/react";
 import { useQuery } from "react-query";
 import { getService } from "@/utils/api/services";
-import { Service } from "types/service";
 
 export default function ServiceList() {
   const { data, isLoading, isError } = useQuery("services", getService);
@@ -31,23 +30,27 @@ export default function ServiceList() {
               <Td>Loading...</Td>
             </Tr>
           ) : null}
-          {isError ? (
-            <Tr>
-              <Td>Error...</Td>
-            </Tr>
-          ) : null}
-          {data?.data.length > 0 ? (
-            data?.data.map((service, index) => (
+          {data && data?.length > 0 ? (
+            data?.map((service, index) => (
               <Tr key={index}>
                 <Td>{service.title}</Td>
                 <Td>{service.status ? "active" : "deactive"}</Td>
               </Tr>
             ))
           ) : (
-            <Tr>
-              <Td>no data found</Td>
-            </Tr>
+            <>
+              {!(isLoading || isError) ? (
+                <Tr>
+                  <Td>no data found</Td>
+                </Tr>
+              ) : null}
+            </>
           )}
+          {isError ? (
+            <Tr>
+              <Td>Error...</Td>
+            </Tr>
+          ) : null}
         </Tbody>
       </Table>
     </TableContainer>

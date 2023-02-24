@@ -29,7 +29,7 @@ export default function Sidebar() {
     { name: "Payment", link: "/", icon: MdPayments, margin: true },
     { name: "profit", link: "/", icon: MdOutlinePriceChange },
     { name: "analytics", link: "/", icon: TbReportAnalytics, margin: true },
-    { name: "service", link: "/service", icon: RiStackLine },
+    { name: "service", link: "/dashboard/service", icon: RiStackLine },
     { name: "Setting", link: "/", icon: RiSettings4Line, margin: true },
   ];
   const [open, setOpen] = useState(true);

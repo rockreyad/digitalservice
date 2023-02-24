@@ -1,17 +1,7 @@
-import Image from "next/image";
-import { Inter } from "@next/font/google";
-import styles from "./page.module.css";
-import Sidebar from "@/components/Sidebar";
-import QuickStats from "@/components/overview/QuickStats";
-import TotalStats from "@/components/overview/TotalStats";
-
-const inter = Inter({ subsets: ["latin"] });
+export const metadata = {
+  title: "Landing Page of Digital Services",
+};
 
 export default function Home() {
-  return (
-    <div className="flex flex-col w-full p-2">
-      <QuickStats />
-      <TotalStats />
-    </div>
-  );
+  return <div>Landing Page</div>;
 }
