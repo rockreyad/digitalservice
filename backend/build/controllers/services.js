@@ -15,36 +15,38 @@ function getErrorStatus(error) {
     return error.status || 500;
 }
 const prisma = new client_1.PrismaClient();
-const services_1 = require("../services/services");
+const service_1 = require("../services/service");
 const new_service = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { title, description } = req.body;
-        const service = yield prisma.service.create({
-            data: Object.assign({}, req.body),
+        const responseData = yield prisma.service.create({
+            data: { title, description },
         });
-        return res.json(service);
+        return res.json(responseData);
     }
     catch (error) {
         let status = getErrorStatus(error);
-        res.status(status || 500).json({
+        let responseData = {
             status: "FAILED",
             message: error,
-        });
+        };
+        res.status(status || 500).json(responseData);
     }
 });
 exports.new_service = new_service;
 //get service list
 const get_service_list = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const service = yield (0, services_1.read)();
-        return res.json(service);
+        const responseData = yield (0, service_1.read)();
+        return res.json(responseData);
     }
     catch (error) {
         let status = getErrorStatus(error);
-        res.status(status || 500).json({
+        let responseData = {
             status: "FAILED",
             message: error,
-        });
+        };
+        res.status(status || 500).json(responseData);
     }
 });
 exports.get_service_list = get_service_list;

@@ -11,7 +11,7 @@ const Service = () => {
           <h1 className="text-xl font-bold">Service</h1>
           <p>Welcome to digital service</p>
         </div>
-        <RouterButton name="create" link="service/create" />
+        <RouterButton name="create" link="dashboard/service/create" />
       </div>
       <ServiceList />
     </div>

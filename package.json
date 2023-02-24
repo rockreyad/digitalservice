@@ -7,11 +7,25 @@
     "setup": "npm i && cd frontend && npm i && cd .. && cd backend && npm i",
     "start": "concurrently --names \"Backend,Frontend\" -c \"bgBlue.bold,bgGreen.bold\" \"npm run server:dev\" \"npm run app:dev\"",
     "server:dev": "cd backend && npm run dev",
-    "app:dev": "cd frontend && npm run dev"
+    "server:start": "cd backend && npm run start",
+    "app:dev": "cd frontend && npm run dev",
+    "app:build": "cd frontend && npm run build",
+    "app:start": "cd frontend && npm run start",
+    "prisma:generate": "cd backend && npx prisma generate",
+    "prisma:studio": "cd backend && npx prisma studio",
+    "prisma:migrate": "cd backend && npx prisma migrate dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rockreyad/digitalservice"
   },
   "keywords": [],
-  "author": "Mahamud Hasan",
+  "author": "Md. Mahamud Hasan",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rockreyad/digitalservice/issues"
+  },
+  "homepage": "https://github.com/rockreyad/digitalservice#readme",
   "dependencies": {
     "concurrently": "^7.6.0"
   },

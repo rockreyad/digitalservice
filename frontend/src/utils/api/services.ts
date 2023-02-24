@@ -1,6 +1,5 @@
 import { Service } from "./../../../types/service";
 import axios from "axios";
-import { config } from "config";
 
 export async function addService({
   title,
@@ -20,7 +19,7 @@ export async function addService({
 
 export async function getService() {
   //send the request with axios
-  const res: Service[] = await axios.get(`http://localhost:4000/service`);
+  const res = await axios.get(`http://localhost:4000/service`);
   console.log("Service: ", res);
-  return res;
+  return res.data as Service[];
 }
