@@ -46,7 +46,7 @@ export default function Navbar() {
                 <VisuallyHidden>digiS</VisuallyHidden>
               </chakra.a>
               <chakra.h1 fontSize="xl" fontWeight="medium" ml="2">
-                Choc
+                digiS
               </chakra.h1>
             </Flex>
             <HStack display="flex" alignItems="center" spacing={1}>
