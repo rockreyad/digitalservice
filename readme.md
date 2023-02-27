@@ -22,7 +22,8 @@ Set the following environment variable to `backend` directory. Also, an example 
 
 ```bash
 SERVER_PORT=4000
-DATABASE_URL="mysql://username:password@localhost:port/testdatabase"
+#DATABASE_URL="mysql://username:password@localhost:port/testdatabase"
+DATABASE_URL="file:./dev.db"
 ```
 
 Set the following environment variable to `frontend` directory. Also, an example file is given with the name of `.env.example`:
@@ -34,7 +35,13 @@ SERVER_PORT=4000
 
 ### Database migration
 
-Run the followning command to migrate the prisma schema:
+Run the following command to migrate the prisma schema:
+
+```bash
+npm run prisma:reset
+```
+
+Run the following command to generate the sql
 
 ```bash
 npm run prisma:migrate
