@@ -10,6 +10,7 @@ const app: Express = express();
 const port = config.server.port;
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 /** Rules for our Api */
 app.use((req: Request, res: Response, next: NextFunction) => {

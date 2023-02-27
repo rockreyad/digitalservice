@@ -12,41 +12,24 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.update_service = exports.all_service = exports.create_service = void 0;
+exports.get_user = exports.user_list = void 0;
 const prisma_1 = __importDefault(require("../config/prisma"));
-function create_service({ title, description, }) {
+function user_list() {
     return __awaiter(this, void 0, void 0, function* () {
-        const service = yield prisma_1.default.service.create({
-            data: {
-                title,
-                description,
-            },
-        });
-        return service;
+        const users = yield prisma_1.default.user.findMany();
+        return users;
     });
 }
-exports.create_service = create_service;
-function all_service() {
+exports.user_list = user_list;
+function get_user({ email }) {
     return __awaiter(this, void 0, void 0, function* () {
-        const service = yield prisma_1.default.service.findMany();
-        return service;
-    });
-}
-exports.all_service = all_service;
-function update_service({ id, description, title, status, }) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const service = yield prisma_1.default.service.update({
+        const user = yield prisma_1.default.user.findUnique({
             where: {
-                id,
-            },
-            data: {
-                title,
-                description,
-                status,
+                email,
             },
         });
-        return service;
+        return user;
     });
 }
-exports.update_service = update_service;
-//# sourceMappingURL=service.js.map
+exports.get_user = get_user;
+//# sourceMappingURL=user.js.map

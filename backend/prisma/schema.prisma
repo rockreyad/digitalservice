@@ -2,9 +2,49 @@ generator client {
   provider = "prisma-client-js"
 }
 
+
+// MySQL Connector
+// datasource db {
+//   provider = "mysql"
+//   url      = env("DATABASE_URL")
+// }
+
+// SQLite Connector
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider = "sqlite" // data source connector
+  url      = env("DATABASE_URL") // path to the database file
+}
+
+model User {
+  user_id   String   @id @default(uuid())
+  firstName String
+  lastName  String
+  phone     String   
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  role      Role[]
+}
+
+
+model Role {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [user_id])
+  userId    String
+  role RoleDescription @relation(fields: [roleDescriptionId], references: [id])
+  roleDescriptionId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model RoleDescription {
+  id        Int      @id @default(autoincrement())
+  role_name String   @unique
+  description String?
+  role      Role[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Service {
@@ -16,19 +56,4 @@ model Service {
   updatedAt   DateTime @updatedAt
 }
 
-model User {
-  user_id   String   @id @default(uuid())
-  email     String   @unique
-  password  String
-  firstName String
-  lastName  String
-  phone     Int      @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  role      Role     @default(USER)
-}
 
-enum Role {
-  ADMIN
-  USER
-}

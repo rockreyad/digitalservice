@@ -12,9 +12,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.create_user = void 0;
+exports.login_user = exports.create_user = void 0;
 const prisma_1 = __importDefault(require("../config/prisma"));
-function create_user({ firstName, lastName, email, password, phone }) {
+function create_user({ firstName, lastName, email, password, phone, }) {
     return __awaiter(this, void 0, void 0, function* () {
         const createaccount = prisma_1.default.user.create({
             data: {
@@ -22,11 +22,20 @@ function create_user({ firstName, lastName, email, password, phone }) {
                 lastName,
                 password,
                 email,
-                phone
-            }
+                phone,
+            },
         });
         return createaccount;
     });
 }
 exports.create_user = create_user;
+function login_user({ email, password, }) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const user = yield prisma_1.default.user.findUnique({
+            where: { email },
+        });
+        return user;
+    });
+}
+exports.login_user = login_user;
 //# sourceMappingURL=auth.js.map

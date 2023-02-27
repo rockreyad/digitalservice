@@ -1,8 +1,12 @@
-import { PrismaClient } from "@prisma/client";
+import prisma from "../config/prisma";
 
-const prisma = new PrismaClient();
-
-async function create_service(title: string, description: string) {
+async function create_service({
+  title,
+  description,
+}: {
+  title: string;
+  description: string;
+}) {
   const service = await prisma.service.create({
     data: {
       title,
@@ -12,9 +16,33 @@ async function create_service(title: string, description: string) {
   return service;
 }
 
-async function read() {
+async function all_service() {
   const service = await prisma.service.findMany();
   return service;
 }
 
-export { create_service, read };
+async function update_service({
+  id,
+  description,
+  title,
+  status,
+}: {
+  id: number;
+  title: string;
+  description: string;
+  status: boolean;
+}) {
+  const service = await prisma.service.update({
+    where: {
+      id,
+    },
+    data: {
+      title,
+      description,
+      status,
+    },
+  });
+  return service;
+}
+
+export { create_service, all_service, update_service };

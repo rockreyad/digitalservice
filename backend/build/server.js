@@ -11,6 +11,7 @@ dotenv_1.default.config();
 const app = (0, express_1.default)();
 const port = config_1.config.server.port;
 app.use(express_1.default.json());
+app.use(express_1.default.urlencoded({ extended: true }));
 /** Rules for our Api */
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
