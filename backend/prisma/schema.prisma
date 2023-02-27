@@ -17,16 +17,18 @@ model Service {
 }
 
 model User {
-  user_id        Int      @id @default(autoincrement())
+  user_id   String   @id @default(uuid())
   email     String   @unique
   password  String
-  name      String
+  firstName String
+  lastName  String
+  phone     Int      @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  role  Role @default(USER)
-  
+  role      Role     @default(USER)
 }
- enum Role {
+
+enum Role {
   ADMIN
   USER
- }
+}

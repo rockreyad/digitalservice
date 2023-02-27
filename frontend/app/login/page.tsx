@@ -55,8 +55,9 @@ export default function Login() {
                 <InputGroup>
                   <InputLeftElement
                     pointerEvents="none"
-                    children={<CFaUserAlt color="gray.300" />}
-                  />
+                  >
+                    <CFaUserAlt color="gray.300" />
+                  </InputLeftElement>
                   <Input type="email" placeholder="email address" />
                 </InputGroup>
               </FormControl>
@@ -65,8 +66,9 @@ export default function Login() {
                   <InputLeftElement
                     pointerEvents="none"
                     color="gray.300"
-                    children={<CFaLock color="gray.300" />}
-                  />
+
+                  ><CFaLock color="gray.300" />
+                  </InputLeftElement>
                   <Input
                     type={showPassword ? "text" : "password"}
                     placeholder="Password"
@@ -96,7 +98,7 @@ export default function Login() {
       </Stack>
       <Box>
         New to us?{" "}
-        <Link color="teal.500" href="#">
+        <Link color="teal.500" href="/register">
           Sign Up
         </Link>
       </Box>
