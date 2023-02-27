@@ -1,12 +1,47 @@
 'use client'
+import { createUser } from "@/utils/api/user";
 import { Avatar, Box, Button, Divider, Flex, FormControl, FormHelperText, FormLabel, GridItem, Heading, Input, InputGroup, InputLeftAddon, Radio, RadioGroup, Select, SimpleGrid, Stack, Text, Textarea, chakra, Icon, VisuallyHidden, Checkbox } from "@chakra-ui/react"
+import { useState } from "react"
 import { FaUser } from "react-icons/fa"
+
+
+import { useMutation, useQueryClient } from "react-query";
 
 export const metadata = {
     title: "Registration on Digital Web Service"
 }
 
 export default function Register() {
+
+    const [user, setUser] = useState({ firstName: '', lastName: '', email: '', password: '', repeatPassword: '' })
+
+    const queryClient = useQueryClient();
+    const { mutate, isLoading, isError, isSuccess, data } = useMutation(
+        createUser,
+        {
+            onSuccess: () => {
+                queryClient.invalidateQueries("user");
+            },
+        }
+    );
+
+    //mutate the inputfiled data
+    function handleChange(
+        e:
+            | React.ChangeEvent<HTMLInputElement>
+            | React.ChangeEvent<HTMLTextAreaElement>
+    ) {
+        setUser({ ...user, [e.target.name]: e.target.value });
+    }
+
+
+    //validation and send data to backend
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        console.log("Service Data sending to backend :", user);
+        mutate(user);
+    };
+
     return (<><Box
         bg="#edf3f8"
         _dark={{
@@ -216,8 +251,9 @@ export default function Register() {
                             textAlign="right"
                         >
                             <Button
+                                className="bg-green-400"
                                 type="submit"
-                                colorScheme="brand.100"
+                                colorScheme="green.100"
                                 _focus={{
                                     shadow: "",
                                 }}

@@ -1,4 +1,5 @@
 import { Express, Request, Response } from "express";
+import { RegisterAnUserWithEmailAndPassword, signInWithEmailAndPassword } from "../controllers/authentication";
 import { new_service, get_service_list } from "../controllers/services";
 
 export default function routes(app: Express) {
@@ -9,4 +10,9 @@ export default function routes(app: Express) {
   /** Service : new,Service list,modify*/
   app.get("/service", get_service_list);
   app.post("/service", new_service);
+
+  /** Authentication : Login , Register */
+  app.post("/login", signInWithEmailAndPassword);
+  app.post("/register", RegisterAnUserWithEmailAndPassword);
+
 }
