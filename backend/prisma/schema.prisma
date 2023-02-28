@@ -25,6 +25,7 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   role      Role[]
+  order     Order[]
 }
 
 
@@ -52,8 +53,51 @@ model Service {
   title       String
   status      Boolean? @default(false)
   description String?
+  categoryId Int
+  category    ServiceCategory @relation(fields: [categoryId], references: [id])
+  OrderItem OrderItem[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
 
+model ServiceCategory {
+  id          Int      @id @default(autoincrement())
+  name       String
+  description String?
+  service      Service[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+
+model OrderItem{
+  id Int @id @default(autoincrement())
+  orderId Int
+  order Order @relation(fields: [orderId], references: [id])
+  serviceId Int
+  service Service @relation(fields: [serviceId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Order{
+  id Int @id @default(autoincrement())
+  userId String
+  user User @relation(fields: [userId], references: [user_id])
+  orderItems OrderItem[]
+  price Float
+  statusId Int
+  status OrderStatus @relation(fields: [statusId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model OrderStatus{
+  id Int @id @default(autoincrement())
+  name String
+  description String?
+  order Order[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
 

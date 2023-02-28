@@ -3,14 +3,17 @@ import prisma from "../config/prisma";
 async function create_service({
   title,
   description,
+  categoryId,
 }: {
   title: string;
   description: string;
+  categoryId: number;
 }) {
   const service = await prisma.service.create({
     data: {
       title,
       description,
+      categoryId: categoryId,
     },
   });
   return service;
@@ -45,4 +48,13 @@ async function update_service({
   return service;
 }
 
-export { create_service, all_service, update_service };
+async function find_first_service({ title }: { title: string }) {
+  const service = await prisma.service.findFirst({
+    where: {
+      title,
+    },
+  });
+  return service;
+}
+
+export { create_service, all_service, update_service, find_first_service };

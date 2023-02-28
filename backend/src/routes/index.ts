@@ -9,6 +9,11 @@ import {
   update_a_service,
 } from "../controllers/services";
 import { all_users } from "../controllers/users";
+import {
+  find_all_services_by_category,
+  create_a_category,
+  update_a_category,
+} from "../controllers/serviceCategory";
 
 export default function routes(app: Express) {
   app.get("/", (req: Request, res: Response) => {
@@ -26,4 +31,9 @@ export default function routes(app: Express) {
 
   /** User : User list, User details, User modify */
   app.get("/user", all_users);
+
+  /** Service Category : new,Service list by Category,modify*/
+  app.get("/service/category", find_all_services_by_category);
+  app.post("/service/category", create_a_category);
+  app.put("/service/category", update_a_category);
 }

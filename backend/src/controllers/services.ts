@@ -8,11 +8,12 @@ import {
   create_service,
   all_service,
   update_service,
+  find_first_service,
 } from "../services/service";
 
 const new_service = async (req: Request, res: Response) => {
   try {
-    const { title, description } = req.body;
+    const { title, description, categoryId } = req.body;
 
     if (!title || !description) {
       //Response: Mandatory fields are missing
@@ -24,7 +25,17 @@ const new_service = async (req: Request, res: Response) => {
     let serviceData = {
       title,
       description,
+      categoryId: Number(categoryId),
     };
+
+    //find duplicate service
+    const duplicateService = await find_first_service(serviceData.title);
+    if (duplicateService) {
+      //Response: Service already exist
+      return res
+        .status(400)
+        .json({ status: false, message: "Service already exist" });
+    }
 
     const responseData = await create_service(serviceData);
 
@@ -43,7 +54,7 @@ const new_service = async (req: Request, res: Response) => {
     let status: number = getErrorStatus(error);
 
     let responseData = {
-      status: "FAILED",
+      status: false,
       message: error,
     };
 
@@ -81,7 +92,7 @@ const find_all_services = async (req: Request, res: Response) => {
     let status: number = getErrorStatus(error);
 
     let responseData = {
-      status: "FAILED",
+      status: false,
       message: error,
     };
 

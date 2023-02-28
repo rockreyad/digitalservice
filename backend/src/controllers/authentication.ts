@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { Prisma, PrismaClient } from "@prisma/client";
 import { create_user, login_user } from "../services/auth";
 import { get_user } from "../services/user";
+import { create_role, get_role } from "../services/role";
 
 const prisma = new PrismaClient();
 
@@ -36,21 +37,23 @@ const RegisterAnUserWithEmailAndPassword = async (
 
     if (duplicateUser) {
       //Response: User already exists
-      return res
-        .status(380)
-        .json({
-          status: false,
-          message: "Registration Fields! User already exists!",
-        });
+      return res.status(380).json({
+        status: false,
+        message: "Registration Fields! User already exists!",
+      });
     }
 
     const createdUser = await create_user(userData);
 
+    //Assign a Role to User
+    const role = await create_role({ userId: createdUser.user_id });
+
     let response = {
       status: true,
-      message: "User created successfully",
+      message: "User created successfully assigned a role",
       data: {
         userId: createdUser.user_id,
+        role: role.role.role_name,
       },
     };
 
@@ -99,10 +102,13 @@ const signInWithEmailAndPassword = async (req: Request, res: Response) => {
         .json({ status: false, message: "Password is incorrect!" });
     }
 
+    //Get User Role
+    const role = await get_role({ userId: user.user_id });
+
     const response = {
       status: true,
       message: "Login success!",
-      data: { userId: user.user_id },
+      data: { userId: user.user_id, role: role[0]?.role.role_name },
     };
 
     //Response: Login success

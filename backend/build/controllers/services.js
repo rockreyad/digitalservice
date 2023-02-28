@@ -16,7 +16,7 @@ function getErrorStatus(error) {
 const service_1 = require("../services/service");
 const new_service = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { title, description } = req.body;
+        const { title, description, categoryId } = req.body;
         if (!title || !description) {
             //Response: Mandatory fields are missing
             return res
@@ -26,7 +26,16 @@ const new_service = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         let serviceData = {
             title,
             description,
+            categoryId: Number(categoryId),
         };
+        //find duplicate service
+        const duplicateService = yield (0, service_1.find_first_service)(serviceData.title);
+        if (duplicateService) {
+            //Response: Service already exist
+            return res
+                .status(400)
+                .json({ status: false, message: "Service already exist" });
+        }
         const responseData = yield (0, service_1.create_service)(serviceData);
         let response = {
             status: true,
@@ -42,7 +51,7 @@ const new_service = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     catch (error) {
         let status = getErrorStatus(error);
         let responseData = {
-            status: "FAILED",
+            status: false,
             message: error,
         };
         //Response: Error
@@ -76,7 +85,7 @@ const find_all_services = (req, res) => __awaiter(void 0, void 0, void 0, functi
     catch (error) {
         let status = getErrorStatus(error);
         let responseData = {
-            status: "FAILED",
+            status: false,
             message: error,
         };
         res.status(status || 500).json(responseData);

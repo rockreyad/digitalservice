@@ -13,6 +13,7 @@ exports.signInWithEmailAndPassword = exports.RegisterAnUserWithEmailAndPassword 
 const client_1 = require("@prisma/client");
 const auth_1 = require("../services/auth");
 const user_1 = require("../services/user");
+const role_1 = require("../services/role");
 const prisma = new client_1.PrismaClient();
 function getErrorStatus(error) {
     return error.status || 500;
@@ -37,19 +38,20 @@ const RegisterAnUserWithEmailAndPassword = (req, res) => __awaiter(void 0, void 
         const duplicateUser = yield (0, user_1.get_user)({ email });
         if (duplicateUser) {
             //Response: User already exists
-            return res
-                .status(380)
-                .json({
+            return res.status(380).json({
                 status: false,
                 message: "Registration Fields! User already exists!",
             });
         }
         const createdUser = yield (0, auth_1.create_user)(userData);
+        //Assign a Role to User
+        const role = yield (0, role_1.create_role)({ userId: createdUser.user_id });
         let response = {
             status: true,
-            message: "User created successfully",
+            message: "User created successfully assigned a role",
             data: {
                 userId: createdUser.user_id,
+                role: role.role.role_name,
             },
         };
         //Response: User created successfully
@@ -67,6 +69,7 @@ const RegisterAnUserWithEmailAndPassword = (req, res) => __awaiter(void 0, void 
 });
 exports.RegisterAnUserWithEmailAndPassword = RegisterAnUserWithEmailAndPassword;
 const signInWithEmailAndPassword = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     const { email, password } = req.body;
     try {
         if (!email || !password) {
@@ -92,10 +95,12 @@ const signInWithEmailAndPassword = (req, res) => __awaiter(void 0, void 0, void 
                 .status(401)
                 .json({ status: false, message: "Password is incorrect!" });
         }
+        //Get User Role
+        const role = yield (0, role_1.get_role)({ userId: user.user_id });
         const response = {
             status: true,
             message: "Login success!",
-            data: { userId: user.user_id },
+            data: { userId: user.user_id, role: (_a = role[0]) === null || _a === void 0 ? void 0 : _a.role.role_name },
         };
         //Response: Login success
         return res.status(200).json(response);

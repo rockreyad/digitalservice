@@ -35,16 +35,16 @@ SERVER_PORT=4000
 
 ### Database migration
 
-Run the following command to migrate the prisma schema:
-
-```bash
-npm run prisma:reset
-```
-
-Run the following command to generate the sql
+Run the following command to `generate the sql`
 
 ```bash
 npm run prisma:migrate
+```
+
+Run the following command if you want `reset` database and applying migration:
+
+```bash
+npm run prisma:reset
 ```
 
 You only have to run this for only one time at the beginning of project setup
