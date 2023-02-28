@@ -2,9 +2,50 @@ generator client {
   provider = "prisma-client-js"
 }
 
+
+// MySQL Connector
+// datasource db {
+//   provider = "mysql"
+//   url      = env("DATABASE_URL")
+// }
+
+// SQLite Connector
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider = "sqlite" // data source connector
+  url      = env("DATABASE_URL") // path to the database file
+}
+
+model User {
+  user_id   String   @id @default(uuid())
+  firstName String
+  lastName  String
+  phone     String   
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  role      Role[]
+  order     Order[]
+}
+
+
+model Role {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [user_id])
+  userId    String
+  role RoleDescription @relation(fields: [roleDescriptionId], references: [id])
+  roleDescriptionId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model RoleDescription {
+  id        Int      @id @default(autoincrement())
+  role_name String   @unique
+  description String?
+  role      Role[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Service {
@@ -12,23 +53,51 @@ model Service {
   title       String
   status      Boolean? @default(false)
   description String?
+  categoryId Int
+  category    ServiceCategory @relation(fields: [categoryId], references: [id])
+  OrderItem OrderItem[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
 
-model User {
-  user_id   String   @id @default(uuid())
-  email     String   @unique
-  password  String
-  firstName String
-  lastName  String
-  phone     Int      @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  role      Role     @default(USER)
+model ServiceCategory {
+  id          Int      @id @default(autoincrement())
+  name       String
+  description String?
+  service      Service[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
-enum Role {
-  ADMIN
-  USER
+
+model OrderItem{
+  id Int @id @default(autoincrement())
+  orderId Int
+  order Order @relation(fields: [orderId], references: [id])
+  serviceId Int
+  service Service @relation(fields: [serviceId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
+
+model Order{
+  id Int @id @default(autoincrement())
+  userId String
+  user User @relation(fields: [userId], references: [user_id])
+  orderItems OrderItem[]
+  price Float
+  statusId Int
+  status OrderStatus @relation(fields: [statusId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model OrderStatus{
+  id Int @id @default(autoincrement())
+  name String
+  description String?
+  order Order[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+

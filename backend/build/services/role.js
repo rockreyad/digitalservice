@@ -12,53 +12,58 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.find_first_service = exports.update_service = exports.all_service = exports.create_service = void 0;
+exports.set_role = exports.get_role = exports.create_role = void 0;
 const prisma_1 = __importDefault(require("../config/prisma"));
-function create_service({ title, description, categoryId, }) {
+function create_role({ userId }) {
     return __awaiter(this, void 0, void 0, function* () {
-        const service = yield prisma_1.default.service.create({
+        const role = yield prisma_1.default.role.create({
             data: {
-                title,
-                description,
-                categoryId: categoryId,
+                userId,
+                roleDescriptionId: 2,
+            },
+            select: {
+                role: {
+                    select: {
+                        role_name: true,
+                    },
+                },
             },
         });
-        return service;
+        return role;
     });
 }
-exports.create_service = create_service;
-function all_service() {
+exports.create_role = create_role;
+function get_role({ userId }) {
     return __awaiter(this, void 0, void 0, function* () {
-        const service = yield prisma_1.default.service.findMany();
-        return service;
-    });
-}
-exports.all_service = all_service;
-function update_service({ id, description, title, status, }) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const service = yield prisma_1.default.service.update({
+        const role = yield prisma_1.default.role.findMany({
             where: {
-                id,
+                userId,
+            },
+            include: {
+                role: {
+                    select: {
+                        role_name: true,
+                        description: true,
+                    },
+                },
+            },
+        });
+        return role;
+    });
+}
+exports.get_role = get_role;
+function set_role({ roleId, roleDescriptionId = 2, }) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const role = yield prisma_1.default.role.update({
+            where: {
+                id: roleId,
             },
             data: {
-                title,
-                description,
-                status,
+                roleDescriptionId,
             },
         });
-        return service;
+        return role;
     });
 }
-exports.update_service = update_service;
-function find_first_service({ title }) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const service = yield prisma_1.default.service.findFirst({
-            where: {
-                title,
-            },
-        });
-        return service;
-    });
-}
-exports.find_first_service = find_first_service;
-//# sourceMappingURL=service.js.map
+exports.set_role = set_role;
+//# sourceMappingURL=role.js.map

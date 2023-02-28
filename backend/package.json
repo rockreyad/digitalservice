@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "src/server.ts",
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
   "scripts": {
     "postinstall": "tsc",
     "start": "node build/server.js",
@@ -19,7 +22,7 @@
   },
   "devDependencies": {
     "@types/express": "^4.17.17",
-    "@types/node": "^18.14.1",
+    "@types/node": "^18.14.2",
     "concurrently": "^7.6.0",
     "nodemon": "^2.0.20",
     "prisma": "^4.10.1",

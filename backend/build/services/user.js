@@ -12,30 +12,24 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.login_user = exports.create_user = void 0;
+exports.get_user = exports.user_list = void 0;
 const prisma_1 = __importDefault(require("../config/prisma"));
-function create_user({ firstName, lastName, email, password, phone, }) {
+function user_list() {
     return __awaiter(this, void 0, void 0, function* () {
-        const createaccount = prisma_1.default.user.create({
-            data: {
-                firstName,
-                lastName,
-                password,
-                email,
-                phone,
-            },
-        });
-        return createaccount;
+        const users = yield prisma_1.default.user.findMany();
+        return users;
     });
 }
-exports.create_user = create_user;
-function login_user({ email, password, }) {
+exports.user_list = user_list;
+function get_user({ email }) {
     return __awaiter(this, void 0, void 0, function* () {
         const user = yield prisma_1.default.user.findUnique({
-            where: { email },
+            where: {
+                email,
+            },
         });
         return user;
     });
 }
-exports.login_user = login_user;
-//# sourceMappingURL=auth.js.map
+exports.get_user = get_user;
+//# sourceMappingURL=user.js.map

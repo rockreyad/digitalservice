@@ -13,7 +13,9 @@
     "app:start": "cd frontend && npm run start",
     "prisma:generate": "cd backend && npx prisma generate",
     "prisma:studio": "cd backend && npx prisma studio",
-    "prisma:migrate": "cd backend && npx prisma migrate dev"
+    "prisma:migrate:dev": "cd backend && npx prisma migrate dev",
+    "prisma:migrate": "cd backend && npx prisma migrate dev --name init",
+    "prisma:reset": "cd backend && npx prisma migrate reset"
   },
   "repository": {
     "type": "git",
