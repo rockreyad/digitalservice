@@ -21,7 +21,10 @@ function create_service({ title, description, categoryId, }) {
                 title,
                 description,
                 categoryId: categoryId,
+<<<<<<< HEAD
                 status: true,
+=======
+>>>>>>> main
             },
         });
         return service;
@@ -51,7 +54,11 @@ function update_service({ id, description, title, status, }) {
     });
 }
 exports.update_service = update_service;
+<<<<<<< HEAD
 function find_first_service(title) {
+=======
+function find_first_service({ title }) {
+>>>>>>> main
     return __awaiter(this, void 0, void 0, function* () {
         const service = yield prisma_1.default.service.findFirst({
             where: {

@@ -4,7 +4,11 @@
   "description": "",
   "main": "src/server.ts",
   "prisma": {
+<<<<<<< HEAD
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
+=======
+    "seed": "ts-node prisma/seed.ts"
+>>>>>>> main
   },
   "scripts": {
     "postinstall": "tsc",
