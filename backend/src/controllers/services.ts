@@ -15,7 +15,7 @@ const new_service = async (req: Request, res: Response) => {
   try {
     const { title, description, categoryId } = req.body;
 
-    if (!title || !description) {
+    if (!title || !description || !categoryId) {
       //Response: Mandatory fields are missing
       return res
         .status(400)
