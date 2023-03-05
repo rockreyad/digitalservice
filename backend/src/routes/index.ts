@@ -13,7 +13,19 @@ import {
   find_all_services_by_category,
   create_a_category,
   update_a_category,
+<<<<<<< HEAD
+  find_all_category,
 } from "../controllers/serviceCategory";
+import {
+  create_an_order,
+  find_an_order,
+  get_all_order,
+  get_all_order_by_userId,
+  update_an_order,
+} from "../controllers/order";
+=======
+} from "../controllers/serviceCategory";
+>>>>>>> main
 
 export default function routes(app: Express) {
   app.get("/", (req: Request, res: Response) => {
@@ -33,7 +45,21 @@ export default function routes(app: Express) {
   app.get("/user", all_users);
 
   /** Service Category : new,Service list by Category,modify*/
+<<<<<<< HEAD
+  app.get("/service/category", find_all_category);
+  app.get("/service/category/:categoryId", find_all_services_by_category);
+  app.post("/service/category", create_a_category);
+  app.put("/service/category", update_a_category);
+
+  /** Order : new,Order list,modify*/
+  app.post("/order", create_an_order);
+  app.put("/order", update_an_order);
+  app.get("/order", get_all_order);
+  app.get("/order/:orderId", find_an_order);
+  app.get("/order/user/:userId", get_all_order_by_userId);
+=======
   app.get("/service/category", find_all_services_by_category);
   app.post("/service/category", create_a_category);
   app.put("/service/category", update_a_category);
+>>>>>>> main
 }

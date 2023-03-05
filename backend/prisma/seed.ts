@@ -3,6 +3,10 @@ import prisma from "../src/config/prisma";
 async function main() {
   // Create a new user
 
+<<<<<<< HEAD
+  //upsert Admin
+=======
+>>>>>>> main
   const admin = await prisma.user.upsert({
     where: { email: "admin@gmail.com" },
     update: {},
@@ -25,6 +29,10 @@ async function main() {
     },
   });
 
+<<<<<<< HEAD
+  //upsert user
+=======
+>>>>>>> main
   const user = await prisma.user.upsert({
     where: { email: "user@gmail.com" },
     update: {},
@@ -58,6 +66,40 @@ async function main() {
     },
   });
 
+<<<<<<< HEAD
+  //upsert PaymentStatus
+  const paymentStatusPending = await prisma.paymentStatus.upsert({
+    where: { id: 1 },
+    update: {},
+    create: {
+      id: 1,
+      name: "Pending",
+      description: "Payment is pending",
+    },
+  });
+  const paymentStatusFailed = await prisma.paymentStatus.upsert({
+    where: { id: 2 },
+    update: {},
+    create: {
+      id: 2,
+      name: "Failled",
+      description: "Payment is Failled",
+    },
+  });
+
+  //upsert PaymentMethod
+  const paymentMethodCash = await prisma.paymentMethod.upsert({
+    where: { id: 1 },
+    update: {},
+    create: {
+      id: 1,
+      name: "Cash",
+      description: "Cash payment",
+    },
+  });
+
+=======
+>>>>>>> main
   //upsert an Order with OrderItem
   const order = await prisma.order.upsert({
     where: { id: 1 },
@@ -99,6 +141,29 @@ async function main() {
           },
         ],
       },
+<<<<<<< HEAD
+      payment: {
+        create: {
+          paymentAmount: parseFloat("100.67"),
+          paymentStatusId: 1,
+          paymentMethodId: 1,
+        },
+      },
+    },
+  });
+
+  //Upsert a payment
+  const payment = await prisma.payment.upsert({
+    where: { id: 1 },
+    update: {},
+    create: {
+      id: 1,
+      paymentAmount: parseFloat("100.67"),
+      paymentStatusId: 1,
+      paymentMethodId: 1,
+      orderId: order.id,
+=======
+>>>>>>> main
     },
   });
 

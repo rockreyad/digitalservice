@@ -14,6 +14,10 @@ async function create_service({
       title,
       description,
       categoryId: categoryId,
+<<<<<<< HEAD
+      status: true,
+=======
+>>>>>>> main
     },
   });
   return service;
@@ -48,7 +52,11 @@ async function update_service({
   return service;
 }
 
+<<<<<<< HEAD
+async function find_first_service(title: string) {
+=======
 async function find_first_service({ title }: { title: string }) {
+>>>>>>> main
   const service = await prisma.service.findFirst({
     where: {
       title,

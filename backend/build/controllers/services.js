@@ -17,7 +17,11 @@ const service_1 = require("../services/service");
 const new_service = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { title, description, categoryId } = req.body;
+<<<<<<< HEAD
+        if (!title || !description || !categoryId) {
+=======
         if (!title || !description) {
+>>>>>>> main
             //Response: Mandatory fields are missing
             return res
                 .status(400)

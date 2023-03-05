@@ -9,7 +9,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+<<<<<<< HEAD
+exports.create_a_category = exports.update_a_category = exports.find_a_category = exports.find_all_services_by_category = exports.find_all_category = void 0;
+=======
 exports.create_a_category = exports.update_a_category = exports.find_a_category = exports.find_all_services_by_category = void 0;
+>>>>>>> main
 const serviceCategory_1 = require("../services/serviceCategory");
 function getErrorStatus(error) {
     return error.status || 500;
@@ -100,6 +104,38 @@ const update_a_category = (req, res) => __awaiter(void 0, void 0, void 0, functi
     }
 });
 exports.update_a_category = update_a_category;
+<<<<<<< HEAD
+//find all category
+const find_all_category = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const responseData = yield (0, serviceCategory_1.all_category)();
+        if (responseData.length === 0) {
+            //Response: Category not found
+            return res
+                .status(400)
+                .json({ status: false, message: "Category not found" });
+        }
+        let response = {
+            status: true,
+            message: "Category found successfully",
+            data: responseData,
+        };
+        //Response: Category found successfully
+        return res.status(200).json(response);
+    }
+    catch (error) {
+        let status = getErrorStatus(error);
+        let responseData = {
+            status: false,
+            message: error,
+        };
+        //Response: Error
+        res.status(status || 500).json(responseData);
+    }
+});
+exports.find_all_category = find_all_category;
+=======
+>>>>>>> main
 //find a category
 const find_a_category = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { categoryId } = req.body;
@@ -132,12 +168,28 @@ const find_a_category = (req, res) => __awaiter(void 0, void 0, void 0, function
         //Response: Category found successfully
         return res.status(201).json(response);
     }
+<<<<<<< HEAD
+    catch (error) {
+        let status = getErrorStatus(error);
+        let responseData = {
+            status: false,
+            message: error,
+        };
+        //Response: Error
+        res.status(status || 500).json(responseData);
+    }
+=======
     catch (error) { }
+>>>>>>> main
 });
 exports.find_a_category = find_a_category;
 //find all services by category
 const find_all_services_by_category = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+<<<<<<< HEAD
+    const { categoryId } = req.params;
+=======
     const { categoryId } = req.body;
+>>>>>>> main
     try {
         if (!categoryId) {
             //Response: Mandatory fields are missing
@@ -168,9 +220,23 @@ const find_all_services_by_category = (req, res) => __awaiter(void 0, void 0, vo
             }),
         };
         //Response: Category found successfully
+<<<<<<< HEAD
+        return res.status(200).json(response);
+    }
+    catch (error) {
+        let status = getErrorStatus(error);
+        let responseData = {
+            status: false,
+            message: error,
+        };
+        //Response: Error
+        res.status(status || 500).json(responseData);
+    }
+=======
         return res.status(201).json(response);
     }
     catch (error) { }
+>>>>>>> main
 });
 exports.find_all_services_by_category = find_all_services_by_category;
 //# sourceMappingURL=serviceCategory.js.map
