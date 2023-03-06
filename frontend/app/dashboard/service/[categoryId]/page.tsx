@@ -1,20 +1,20 @@
-import ServiceList from "@/components/services/ServiceList";
-import { getServiceByCategory } from "@/utils/api/services";
+import ServiceList from '@/components/services/ServiceList'
+import { getServiceByCategory } from '@/utils/api/services'
 
 interface pageProps {
-  params: { categoryId: number };
+    params: { categoryId: number }
 }
 
 export default async function CategoryService({ params }: pageProps) {
-  const { categoryId } = params;
+    const { categoryId } = params
 
-  console.log(categoryId);
+    console.log(categoryId)
 
-  const data = await getServiceByCategory(categoryId);
+    const data = await getServiceByCategory(categoryId)
 
-  return (
-    <>
-      <ServiceList data={data} />
-    </>
-  );
+    return (
+        <>
+            <ServiceList data={data} />
+        </>
+    )
 }

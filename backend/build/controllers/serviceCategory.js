@@ -20,9 +20,10 @@ const create_a_category = (req, res) => __awaiter(void 0, void 0, void 0, functi
     try {
         if (!name || !description) {
             //Response: Mandatory fields are missing
-            return res
-                .status(400)
-                .json({ status: false, message: "Please submit all the filed" });
+            return res.status(400).json({
+                status: false,
+                message: 'Please submit all the filed',
+            });
         }
         const categoryData = {
             name: String(name).toLowerCase(),
@@ -36,12 +37,12 @@ const create_a_category = (req, res) => __awaiter(void 0, void 0, void 0, functi
             //Response: Category already exist
             return res
                 .status(400)
-                .json({ status: false, message: "Category already exist" });
+                .json({ status: false, message: 'Category already exist' });
         }
         const responseData = yield (0, serviceCategory_1.create_category)(categoryData);
         let response = {
             status: true,
-            message: "Category created successfully",
+            message: 'Category created successfully',
             data: {
                 categoryId: responseData.id,
                 name: responseData.name,
@@ -67,9 +68,10 @@ const update_a_category = (req, res) => __awaiter(void 0, void 0, void 0, functi
     try {
         if (!categoryId || !name || !description) {
             //Response: Mandatory fields are missing
-            return res
-                .status(400)
-                .json({ status: false, message: "Please submit all the filed" });
+            return res.status(400).json({
+                status: false,
+                message: 'Please submit all the filed',
+            });
         }
         const categoryData = {
             id: Number(categoryId),
@@ -79,7 +81,7 @@ const update_a_category = (req, res) => __awaiter(void 0, void 0, void 0, functi
         const responseData = yield (0, serviceCategory_1.update_category)(categoryData);
         let response = {
             status: true,
-            message: "Category updated successfully",
+            message: 'Category updated successfully',
             data: {
                 categoryId: responseData.id,
                 name: responseData.name,
@@ -108,11 +110,11 @@ const find_all_category = (req, res) => __awaiter(void 0, void 0, void 0, functi
             //Response: Category not found
             return res
                 .status(400)
-                .json({ status: false, message: "Category not found" });
+                .json({ status: false, message: 'Category not found' });
         }
         let response = {
             status: true,
-            message: "Category found successfully",
+            message: 'Category found successfully',
             data: responseData,
         };
         //Response: Category found successfully
@@ -135,9 +137,10 @@ const find_a_category = (req, res) => __awaiter(void 0, void 0, void 0, function
     try {
         if (!categoryId) {
             //Response: Mandatory fields are missing
-            return res
-                .status(400)
-                .json({ status: false, message: "Please submit all the filed" });
+            return res.status(400).json({
+                status: false,
+                message: 'Please submit all the filed',
+            });
         }
         let categoryData = {
             id: Number(categoryId),
@@ -147,11 +150,11 @@ const find_a_category = (req, res) => __awaiter(void 0, void 0, void 0, function
             //Response: Category not found
             return res
                 .status(400)
-                .json({ status: false, message: "Category not found" });
+                .json({ status: false, message: 'Category not found' });
         }
         let response = {
             status: true,
-            message: "Category found successfully",
+            message: 'Category found successfully',
             data: {
                 categoryId: responseData.id,
                 name: responseData.name,
@@ -178,9 +181,10 @@ const find_all_services_by_category = (req, res) => __awaiter(void 0, void 0, vo
     try {
         if (!categoryId) {
             //Response: Mandatory fields are missing
-            return res
-                .status(400)
-                .json({ status: false, message: "Please submit all the filed" });
+            return res.status(400).json({
+                status: false,
+                message: 'Please submit all the filed',
+            });
         }
         let categoryData = {
             categoryId: Number(categoryId),
@@ -190,7 +194,7 @@ const find_all_services_by_category = (req, res) => __awaiter(void 0, void 0, vo
             //Response: Category not found
             return res
                 .status(400)
-                .json({ status: false, message: "Category not found" });
+                .json({ status: false, message: 'Category not found' });
         }
         let response = {
             status: true,

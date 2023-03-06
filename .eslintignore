@@ -1,0 +1,17 @@
+node_modules
+.husky
+.vscode
+.github
+frontend/node_modules
+frontend/build
+frontend/.next
+frontend/.vscode
+frontend/.cache
+frontend/styles
+frontend/public/build
+frontend/tailwind.config.js
+frontend/postcss.config.js
+frontend/next.config.js
+backend/node_modules
+backend/dist
+backend/build

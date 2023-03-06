@@ -25,7 +25,7 @@ const create_an_order = (req, res) => __awaiter(void 0, void 0, void 0, function
         //Response: Mandatory fields are missing
         return res
             .status(400)
-            .json({ status: false, message: "Missing required fields" });
+            .json({ status: false, message: 'Missing required fields' });
     }
     const OrderData = {
         userId: String(userId),
@@ -37,7 +37,7 @@ const create_an_order = (req, res) => __awaiter(void 0, void 0, void 0, function
         const createdOrder = yield (0, order_1.create_order)(OrderData);
         let response = {
             status: true,
-            message: "Order created successfully",
+            message: 'Order created successfully',
             data: {
                 orderId: createdOrder.id,
                 userId: createdOrder.userId,
@@ -67,7 +67,7 @@ const update_an_order = (req, res) => __awaiter(void 0, void 0, void 0, function
         //Response: Mandatory fields are missing
         return res
             .status(400)
-            .json({ status: false, message: "Missing required fields" });
+            .json({ status: false, message: 'Missing required fields' });
     }
     const OrderData = {
         id: Number(id),
@@ -77,7 +77,7 @@ const update_an_order = (req, res) => __awaiter(void 0, void 0, void 0, function
         const updatedOrder = yield (0, order_1.update_order)(OrderData);
         let response = {
             status: true,
-            message: "Order updated successfully",
+            message: 'Order updated successfully',
             data: {
                 orderId: updatedOrder.id,
                 userId: updatedOrder.userId,
@@ -108,11 +108,11 @@ const get_all_order = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             //Response: Order not found
             return res
                 .status(404)
-                .json({ status: false, message: "Order not found" });
+                .json({ status: false, message: 'Order not found' });
         }
         let response = {
             status: true,
-            message: "Order found successfully",
+            message: 'Order found successfully',
             data: foundOrder.map((order) => {
                 return {
                     orderId: order.id,
@@ -121,7 +121,7 @@ const get_all_order = (req, res) => __awaiter(void 0, void 0, void 0, function* 
                     statusType: order.status.name,
                     price: order.price,
                     orderItems: order.orderItems,
-                    createAt: (0, dayjs_1.default)(order.createdAt).format("YYYY-MM-DD"),
+                    createAt: (0, dayjs_1.default)(order.createdAt).format('YYYY-MM-DD'),
                 };
             }),
         };
@@ -146,7 +146,7 @@ const find_an_order = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         //Response: Mandatory fields are missing
         return res
             .status(400)
-            .json({ status: false, message: "Missing required fields" });
+            .json({ status: false, message: 'Missing required fields' });
     }
     const OrderData = {
         id: Number(orderId),
@@ -157,11 +157,11 @@ const find_an_order = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             //Response: Order not found
             return res
                 .status(404)
-                .json({ status: false, message: "Order not found" });
+                .json({ status: false, message: 'Order not found' });
         }
         let response = {
             status: true,
-            message: "Order found successfully",
+            message: 'Order found successfully',
             data: {
                 orderId: foundOrder.id,
                 userId: foundOrder.userId,
@@ -191,7 +191,7 @@ const get_all_order_by_userId = (req, res) => __awaiter(void 0, void 0, void 0, 
         //Response: Mandatory fields are missing
         return res
             .status(400)
-            .json({ status: false, message: "Missing required fields" });
+            .json({ status: false, message: 'Missing required fields' });
     }
     const OrderData = {
         userId: String(userId),
@@ -202,11 +202,11 @@ const get_all_order_by_userId = (req, res) => __awaiter(void 0, void 0, void 0, 
             //Response: Order not found
             return res
                 .status(404)
-                .json({ status: false, message: "Order not found" });
+                .json({ status: false, message: 'Order not found' });
         }
         let response = {
             status: true,
-            message: "Order found successfully",
+            message: 'Order found successfully',
             data: foundOrders.map((order) => {
                 return {
                     orderId: order.id,

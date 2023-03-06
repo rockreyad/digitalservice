@@ -19,9 +19,10 @@ const new_service = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         const { title, description, categoryId } = req.body;
         if (!title || !description || !categoryId) {
             //Response: Mandatory fields are missing
-            return res
-                .status(400)
-                .json({ status: false, message: "Please submit all the filed" });
+            return res.status(400).json({
+                status: false,
+                message: 'Please submit all the filed',
+            });
         }
         let serviceData = {
             title,
@@ -34,12 +35,12 @@ const new_service = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             //Response: Service already exist
             return res
                 .status(400)
-                .json({ status: false, message: "Service already exist" });
+                .json({ status: false, message: 'Service already exist' });
         }
         const responseData = yield (0, service_1.create_service)(serviceData);
         let response = {
             status: true,
-            message: "Service created successfully",
+            message: 'Service created successfully',
             data: {
                 serviceId: responseData.id,
                 title: responseData.title,
@@ -66,7 +67,7 @@ const find_all_services = (req, res) => __awaiter(void 0, void 0, void 0, functi
         if (!responseData) {
             return res
                 .status(404)
-                .json({ status: false, message: "No service found" });
+                .json({ status: false, message: 'No service found' });
         }
         let response = {
             status: true,
@@ -98,9 +99,10 @@ const update_a_service = (req, res) => __awaiter(void 0, void 0, void 0, functio
         const { id, title, description, status } = req.body;
         if (!id || !title || !description || !status) {
             //Response: Mandatory fields are missing
-            return res
-                .status(400)
-                .json({ status: false, message: "Please submit all the filed" });
+            return res.status(400).json({
+                status: false,
+                message: 'Please submit all the filed',
+            });
         }
         let serviceData = {
             id: Number(id),
@@ -111,7 +113,7 @@ const update_a_service = (req, res) => __awaiter(void 0, void 0, void 0, functio
         const responseData = yield (0, service_1.update_service)(serviceData);
         let response = {
             status: true,
-            message: "Service updated successfully",
+            message: 'Service updated successfully',
             data: {
                 serviceId: responseData.id,
                 title: responseData.title,

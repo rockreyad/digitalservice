@@ -1,11 +1,11 @@
-import dotenv from "dotenv";
+import dotenv from 'dotenv'
 
-dotenv.config();
+dotenv.config()
 
-const SEVER_PORT = process.env.SERVER_PORT;
+const SEVER_PORT = process.env.SERVER_PORT
 
 export const config = {
-  server: {
-    port: SEVER_PORT,
-  },
-};
+    server: {
+        port: SEVER_PORT,
+    },
+}

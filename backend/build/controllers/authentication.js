@@ -24,7 +24,7 @@ const RegisterAnUserWithEmailAndPassword = (req, res) => __awaiter(void 0, void 
         //Response: Mandatory fields are missing
         return res
             .status(400)
-            .json({ status: false, message: "Please submit all the filed" });
+            .json({ status: false, message: 'Please submit all the filed' });
     }
     let userData = {
         firstName,
@@ -40,7 +40,7 @@ const RegisterAnUserWithEmailAndPassword = (req, res) => __awaiter(void 0, void 
             //Response: User already exists
             return res.status(380).json({
                 status: false,
-                message: "Registration Fields! User already exists!",
+                message: 'Registration Fields! User already exists!',
             });
         }
         const createdUser = yield (0, auth_1.create_user)(userData);
@@ -48,7 +48,7 @@ const RegisterAnUserWithEmailAndPassword = (req, res) => __awaiter(void 0, void 
         const role = yield (0, role_1.create_role)({ userId: createdUser.user_id });
         let response = {
             status: true,
-            message: "User created successfully assigned a role",
+            message: 'User created successfully assigned a role',
             data: {
                 userId: createdUser.user_id,
                 role: role.role.role_name,
@@ -60,7 +60,7 @@ const RegisterAnUserWithEmailAndPassword = (req, res) => __awaiter(void 0, void 
     catch (error) {
         let status = getErrorStatus(error);
         let responseData = {
-            status: "FAILED",
+            status: 'FAILED',
             message: error,
         };
         //Response: Error
@@ -74,9 +74,10 @@ const signInWithEmailAndPassword = (req, res) => __awaiter(void 0, void 0, void 
     try {
         if (!email || !password) {
             //Response: Mandatory fields are missing
-            return res
-                .status(400)
-                .json({ status: false, message: "Please submit all the filed" });
+            return res.status(400).json({
+                status: false,
+                message: 'Please submit all the filed',
+            });
         }
         let userData = {
             email,
@@ -87,19 +88,19 @@ const signInWithEmailAndPassword = (req, res) => __awaiter(void 0, void 0, void 
             //Response: User not exists
             return res
                 .status(404)
-                .json({ status: false, message: "User not found!" });
+                .json({ status: false, message: 'User not found!' });
         }
         if (user.password !== password) {
             //Response: Password not Matched
             return res
                 .status(401)
-                .json({ status: false, message: "Password is incorrect!" });
+                .json({ status: false, message: 'Password is incorrect!' });
         }
         //Get User Role
         const role = yield (0, role_1.get_role)({ userId: user.user_id });
         const response = {
             status: true,
-            message: "Login success!",
+            message: 'Login success!',
             data: { userId: user.user_id, role: (_a = role[0]) === null || _a === void 0 ? void 0 : _a.role.role_name },
         };
         //Response: Login success

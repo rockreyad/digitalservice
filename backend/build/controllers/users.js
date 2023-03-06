@@ -21,7 +21,7 @@ const all_users = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             //Response : User not Found
             return res
                 .status(400)
-                .json({ status: false, message: "No users found!" });
+                .json({ status: false, message: 'No users found!' });
         let response = {
             status: true,
             message: `${users === null || users === void 0 ? void 0 : users.length} Users found`,
@@ -53,20 +53,21 @@ const find_user = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         if (!email) {
             //Response: Mandatory fields are missing
-            return res
-                .status(400)
-                .json({ status: false, message: "Please submit all the filed" });
+            return res.status(400).json({
+                status: false,
+                message: 'Please submit all the filed',
+            });
         }
         const user = yield (0, user_1.get_user)({ email });
         if (!user) {
             //Response : User not Found
             return res
                 .status(400)
-                .json({ status: false, message: "User not found!" });
+                .json({ status: false, message: 'User not found!' });
         }
         let response = {
             status: true,
-            message: "User found",
+            message: 'User found',
             data: {
                 userId: user.user_id,
                 firstName: user.firstName,

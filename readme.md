@@ -63,15 +63,15 @@ And frontend server will be run at [http://localhost:3000](http://localhost:3000
 
 # Built With
 
-- [NodeJS](https://nodejs.org/en/) - Node.js® is an open-source, cross-platform JavaScript runtime environment.
+-   [NodeJS](https://nodejs.org/en/) - Node.js® is an open-source, cross-platform JavaScript runtime environment.
 
-- [Express](https://expressjs.com/) - routing and middleware web framework
+-   [Express](https://expressjs.com/) - routing and middleware web framework
 
-- [NEXT](https://nextjs.org/) - Next.js handles the tooling and configuration needed for React, and provides additional structure, features, and optimizations for our application.
+-   [NEXT](https://nextjs.org/) - Next.js handles the tooling and configuration needed for React, and provides additional structure, features, and optimizations for our application.
 
-- [Prisma](https://www.prisma.io/) - Prisma is a next-generation Node.js and TypeScript ORM
+-   [Prisma](https://www.prisma.io/) - Prisma is a next-generation Node.js and TypeScript ORM
 
-- [Tailwind CSS](https://tailwindcss.com/) - A utility-first CSS framework, easy to customize, adapts to any design, and the build size is tiny.
+-   [Tailwind CSS](https://tailwindcss.com/) - A utility-first CSS framework, easy to customize, adapts to any design, and the build size is tiny.
 
 ## Tech Stack
 
@@ -87,10 +87,10 @@ And frontend server will be run at [http://localhost:3000](http://localhost:3000
 
 This project is used by the following companies:
 
-- Ztrios Tech & Marketing
+-   Ztrios Tech & Marketing
 
 # Credit
 
 # Authors
 
-- [Md. Mahamud Hasan](https://github.com/rockreyad) - **_software engineeer_**
+-   [Md. Mahamud Hasan](https://github.com/rockreyad) - **_software engineeer_**

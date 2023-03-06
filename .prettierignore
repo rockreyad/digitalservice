@@ -1,0 +1,13 @@
+node_modules
+.husky
+.vscode
+.github
+frontend/node_modules
+frontend/build
+frontend/.cache
+frontend/.next
+frontend/public/build
+backend/node_modules
+backend/build
+backend/prisma/migrations
+backend/prisma/dev.db
