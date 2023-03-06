@@ -24,16 +24,12 @@ model User {
   password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-<<<<<<< HEAD
   address   Address[]
-=======
->>>>>>> main
   role      Role[]
   order     Order[]
 }
 
 
-<<<<<<< HEAD
 model Address{
   id Int @id @default(autoincrement())
   userId String
@@ -47,8 +43,6 @@ model Address{
 }
 
 
-=======
->>>>>>> main
 model Role {
   id        Int      @id @default(autoincrement())
   user      User     @relation(fields: [userId], references: [user_id])
@@ -106,10 +100,7 @@ model Order{
   user User @relation(fields: [userId], references: [user_id])
   orderItems OrderItem[]
   price Float
-<<<<<<< HEAD
   payment   Payment[]
-=======
->>>>>>> main
   statusId Int
   status OrderStatus @relation(fields: [statusId], references: [id])
   createdAt DateTime @default(now())
@@ -125,7 +116,6 @@ model OrderStatus{
   updatedAt DateTime @updatedAt
 }
 
-<<<<<<< HEAD
 
 model PaymentStatus{
   id Int @id @default(autoincrement())
@@ -158,5 +148,3 @@ model Payment{
   updatedAt DateTime @updatedAt
 }
 
-=======
->>>>>>> main
