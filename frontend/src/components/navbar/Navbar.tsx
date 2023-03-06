@@ -13,7 +13,6 @@ import {
   VisuallyHidden,
   chakra,
 } from "@chakra-ui/react";
-import { useRouter } from "next/navigation";
 import React from "react";
 import { AiOutlineMenu } from "react-icons/ai";
 
@@ -21,10 +20,6 @@ export default function Navbar() {
   const [show, setShow] = React.useState(true);
   const bg = useColorModeValue("white", "gray.800");
   const mobileNav = useDisclosure();
-
-  const [auth, setAuth] = React.useState(true);
-
-  const router = useRouter();
   return (
     <React.Fragment>
       {show ? (
@@ -48,10 +43,10 @@ export default function Navbar() {
               >
                 {/* Logo Component */}
                 <chakra.span ml="1">🍫</chakra.span>
-                <VisuallyHidden>Project-D</VisuallyHidden>
+                <VisuallyHidden>digiS</VisuallyHidden>
               </chakra.a>
               <chakra.h1 fontSize="xl" fontWeight="medium" ml="2">
-                Project-D
+                digiS
               </chakra.h1>
             </Flex>
             <HStack display="flex" alignItems="center" spacing={1}>
@@ -69,31 +64,9 @@ export default function Navbar() {
                 <Button variant="ghost">Pricing</Button>
                 <Button variant="ghost">Career</Button>
               </HStack>
-
-              {auth ? (
-                <>
-                  <Button
-                    onClick={() => router.push("/dashboard")}
-                    color={"blue.500"}
-                    variant={"outline"}
-                    size={"sm"}
-                  >
-                    Dashboard
-                  </Button>
-                </>
-              ) : (
-                <>
-                  <Button
-                    onClick={() => router.push("/login")}
-                    color={"green.500"}
-                    variant={"outline"}
-                    size={"sm"}
-                  >
-                    Sign in
-                  </Button>
-                </>
-              )}
-
+              <Button color={"green.500"} variant={"outline"} size={"sm"}>
+                Sign in
+              </Button>
               <Box
                 display={{
                   base: "inline-flex",
@@ -148,12 +121,7 @@ export default function Navbar() {
                   <Button w="full" variant="ghost">
                     Company
                   </Button>
-
-                  <Button
-                    onClick={() => router.push("/login")}
-                    w="full"
-                    variant="ghost"
-                  >
+                  <Button w="full" variant="ghost">
                     Sign in
                   </Button>
                 </VStack>

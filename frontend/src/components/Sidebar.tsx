@@ -1,6 +1,8 @@
 "use client";
+import { BiDoughnutChart } from "react-icons/bi";
 import { AiOutlineBarChart } from "react-icons/ai";
-
+import { FiSettings } from "react-icons/fi";
+import { BsViewList } from "react-icons/bs";
 import { MdPayments, MdOutlinePriceChange } from "react-icons/md";
 
 import React, { useState } from "react";
@@ -8,56 +10,43 @@ import { HiMenuAlt3 } from "react-icons/hi";
 import { MdOutlineDashboard } from "react-icons/md";
 import { RiSettings4Line, RiStackLine } from "react-icons/ri";
 import { TbReportAnalytics } from "react-icons/tb";
-import { AiOutlineUser } from "react-icons/ai";
-
+import { AiOutlineUser, AiOutlineHeart } from "react-icons/ai";
+import { FiMessageSquare, FiFolder, FiShoppingCart } from "react-icons/fi";
 import Link from "next/link";
-import { useSidebar } from "@/contexts/SidebarContext";
 export default function Sidebar() {
-  //Sidebar Menu
   const menus = [
-    { name: "dashboard", link: "/dashboard", icon: MdOutlineDashboard },
-    { name: "order", link: "/dashboard/order", icon: AiOutlineBarChart },
+    { name: "dashboard", link: "/", icon: MdOutlineDashboard },
+    { name: "order", link: "/", icon: AiOutlineBarChart },
     {
-      name: "user",
-      link: "/dashboard/user",
+      name: "client",
+      link: "/",
       icon: AiOutlineUser,
       submenu: [
         { name: "client list", link: "/client-list", icon: AiOutlineUser },
         { name: "client Report", link: "/client-list", icon: AiOutlineUser },
       ],
     },
-    {
-      name: "Payment",
-      link: "/dashboard/payment",
-      icon: MdPayments,
-      margin: true,
-    },
-    { name: "profit", link: "/dashboard/payment", icon: MdOutlinePriceChange },
-    {
-      name: "analytics",
-      link: "/dashboard/analytics",
-      icon: TbReportAnalytics,
-      margin: true,
-    },
+    { name: "Payment", link: "/", icon: MdPayments, margin: true },
+    { name: "profit", link: "/", icon: MdOutlinePriceChange },
+    { name: "analytics", link: "/", icon: TbReportAnalytics, margin: true },
     { name: "service", link: "/dashboard/service", icon: RiStackLine },
-    { name: "Setting", link: "/setting", icon: RiSettings4Line, margin: true },
+    { name: "Setting", link: "/", icon: RiSettings4Line, margin: true },
   ];
-
-  //Call the custom hook to use the SidebarContext
-  const { toggleSidebar, setToggleSidebar } = useSidebar();
+  const [open, setOpen] = useState(true);
+  const [active, setActive] = useState(0);
 
   return (
     <section className="flex gap-6">
       <div
         className={`bg-[#0e0e0e] min-h-screen ${
-          toggleSidebar ? "w-72" : "w-16"
+          open ? "w-72" : "w-16"
         } duration-500 text-gray-100 px-4`}
       >
         <div className={`py-3 px-3 flex justify-end`}>
           <HiMenuAlt3
             size={26}
             className="cursor-pointer"
-            onClick={() => setToggleSidebar(!toggleSidebar)}
+            onClick={() => setOpen(!open)}
           />
         </div>
         <div className="mt-4 flex flex-col gap-4 relative">
@@ -75,14 +64,14 @@ export default function Sidebar() {
                   transitionDelay: `${i + 3}00ms`,
                 }}
                 className={`whitespace-pre duration-500 ${
-                  !toggleSidebar && "opacity-0 translate-x-28 overflow-hidden"
+                  !open && "opacity-0 translate-x-28 overflow-hidden"
                 }`}
               >
                 {menu?.name}
               </h2>
               <h2
                 className={`${
-                  toggleSidebar && "hidden"
+                  open && "hidden"
                 } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
               >
                 {menu?.name}

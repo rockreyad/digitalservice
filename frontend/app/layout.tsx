@@ -1,12 +1,13 @@
 import "./globals.css";
 import { Montserrat } from "next/font/google";
+import Sidebar from "@/components/Sidebar";
 
-import ChakraWrapper from "@/components/wrappers/chakra";
-import QueryClientWrapper from "@/components/wrappers/QueryClientWrapper";
-import ContextWrapper from "@/contexts";
+import ChakraWrapper from "@/components/Chakra";
+import QueryClientWrapper from "@/components/QueryClientWrapper";
+import Navbar from "@/components/navbar/Navbar";
 
 const montserrat = Montserrat({
-  weight: ["100", "200", "300", "400", "500", "600", "700"],
+  weight: ["400", "700"],
   subsets: ["latin"],
   variable: "--font-montserrat",
 });
@@ -19,11 +20,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${montserrat.className}`}>
-        <ContextWrapper>
-          <ChakraWrapper>
-            <QueryClientWrapper>{children}</QueryClientWrapper>
-          </ChakraWrapper>
-        </ContextWrapper>
+        <ChakraWrapper>
+          <QueryClientWrapper>
+            <Navbar />
+            {children}
+          </QueryClientWrapper>
+        </ChakraWrapper>
       </body>
     </html>
   );

@@ -6,7 +6,6 @@
   "scripts": {
     "setup": "npm i && cd frontend && npm i && cd .. && cd backend && npm i",
     "start": "concurrently --names \"Backend,Frontend\" -c \"bgBlue.bold,bgGreen.bold\" \"npm run server:dev\" \"npm run app:dev\"",
-    "build": "npm run app:build && npm run server:start",
     "server:dev": "cd backend && npm run dev",
     "server:start": "cd backend && npm run start",
     "app:dev": "cd frontend && npm run dev",

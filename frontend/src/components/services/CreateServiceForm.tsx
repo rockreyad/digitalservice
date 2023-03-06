@@ -1,16 +1,12 @@
 "use client";
 
-import { addService, getServiceCategory } from "@/utils/api/services";
-import { Checkbox, Select, Stack, Text, Textarea } from "@chakra-ui/react";
-import { useRouter } from "next/navigation";
+import { addService } from "@/utils/api/services";
 import React, { useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 export default function CreateServiceForm() {
   const [services, setServices] = useState({
-    title: String(""),
-    description: String(""),
-    categoryId: Number(""),
-    status: Boolean(true),
+    title: "",
+    description: "",
   });
 
   //mutate the inputfiled data
@@ -18,12 +14,8 @@ export default function CreateServiceForm() {
     e:
       | React.ChangeEvent<HTMLInputElement>
       | React.ChangeEvent<HTMLTextAreaElement>
-      | React.ChangeEvent<HTMLSelectElement>
   ) {
-    setServices({
-      ...services,
-      [e.target.name]: e.target.value,
-    });
+    setServices({ ...services, [e.target.name]: e.target.value });
   }
 
   const queryClient = useQueryClient();
@@ -36,114 +28,63 @@ export default function CreateServiceForm() {
     }
   );
 
-  const { data: categories } = useQuery("categories", getServiceCategory);
-
   //validation and send data to backend
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log("Service Data sending to backend :", services);
     mutate(services);
   };
 
-  const router = useRouter();
-  React.useEffect(() => {
-    isSuccess ? router.push(`/dashboard/service/${services.categoryId}`) : null;
-  }, [isSuccess, services.categoryId, router]);
+  //   const router = useRouter();
+  //   React.useEffect(() => {
+  //     isSuccess ? router.push("/service") : null;
+  //   }, [isSuccess]);
   return (
     <>
       <div>
         {isLoading && <p>loading...</p>}
         {/* {isSuccess && <p>{data}</p>} */}
         {isError && <p>error</p>}
-        <form onSubmit={handleSubmit} className="w-full space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-6">
-            {/* Title and Description field  */}
-            <div className="space-y-4">
-              <div className="">
-                <label
-                  className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                  htmlFor="service-name"
-                >
-                  Title
-                </label>
-                <input
-                  className="appearance-none block w-full bg-transparent  text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-                  id="service-name"
-                  type="text"
-                  onChange={handleChange}
-                  value={services.title}
-                  name="title"
-                  placeholder="facebook ad campaign"
-                />
-                <p className="text-gray-600 text-xs italic">
-                  Make it shorter and as simpler as you&apos;d like
-                </p>
-              </div>
-              <div className="">
-                <label
-                  className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                  htmlFor="service-description"
-                >
-                  Description
-                </label>
-                <Textarea
-                  onChange={handleChange}
-                  value={services.description}
-                  id="service-description"
-                  name="description"
-                  _focus={{ backgroundColor: "white" }}
-                  placeholder="Facebook ads are targeted to users based on their location, demographic, and profile information"
-                  size="sm"
-                />
-              </div>
-            </div>
-
-            {/* Category field  */}
-            <div className="w-full ">
+        <form onSubmit={handleSubmit} className="w-full max-w-lg">
+          <div className="flex flex-wrap -mx-3 mb-6">
+            <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
               <label
                 className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                htmlFor="service-description"
+                htmlFor="service-name"
               >
-                Category
+                Title
               </label>
-              <Select
-                value={services.categoryId}
+              <input
+                className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                id="service-name"
+                type="text"
                 onChange={handleChange}
-                name="categoryId"
-                placeholder="Select option"
-              >
-                {categories &&
-                  categories.data?.map((category) => {
-                    return (
-                      <option key={category.id} value={category.id}>
-                        {category.name}
-                      </option>
-                    );
-                  })}
-              </Select>
+                value={services.title}
+                name="title"
+                placeholder="facebook ad campaign"
+              />
+              <p className="text-gray-600 text-xs italic">
+                Make it shorter and as simpler as you'd like
+              </p>
             </div>
-            {/* Status Field */}
-            <div className="w-full">
+            <div className="w-full md:w-1/2 px-3">
               <label
                 className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                 htmlFor="service-description"
               >
-                Status
+                Description
               </label>
-
-              <Stack spacing={5} direction="row">
-                <Checkbox
-                  onChange={handleChange}
-                  colorScheme="green"
-                  defaultChecked
-                >
-                  Active
-                </Checkbox>
-              </Stack>
+              <textarea
+                className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                id="service-description"
+                onChange={handleChange}
+                value={services.description}
+                name="description"
+                placeholder="Facebook ads are targeted to users based on their location, demographic, and profile information"
+              />
             </div>
           </div>
-
-          {/* Submit Button */}
           <button
             className="bg-black py-1 px-6 rounded text-white capitalize"
             type="submit"

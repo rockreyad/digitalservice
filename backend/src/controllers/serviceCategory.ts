@@ -5,10 +5,6 @@ import {
   find_first_category,
   find_first_category_by_id,
   update_category,
-<<<<<<< HEAD
-  all_category,
-=======
->>>>>>> main
 } from "../services/serviceCategory";
 
 function getErrorStatus(error: any) {
@@ -113,41 +109,6 @@ const update_a_category = async (req: Request, res: Response) => {
   }
 };
 
-<<<<<<< HEAD
-//find all category
-const find_all_category = async (req: Request, res: Response) => {
-  try {
-    const responseData = await all_category();
-
-    if (responseData.length === 0) {
-      //Response: Category not found
-      return res
-        .status(400)
-        .json({ status: false, message: "Category not found" });
-    }
-
-    let response = {
-      status: true,
-      message: "Category found successfully",
-      data: responseData,
-    };
-    //Response: Category found successfully
-    return res.status(200).json(response);
-  } catch (error: unknown) {
-    let status: number = getErrorStatus(error);
-
-    let responseData = {
-      status: false,
-      message: error,
-    };
-
-    //Response: Error
-    res.status(status || 500).json(responseData);
-  }
-};
-
-=======
->>>>>>> main
 //find a category
 const find_a_category = async (req: Request, res: Response) => {
   const { categoryId } = req.body;
@@ -184,30 +145,12 @@ const find_a_category = async (req: Request, res: Response) => {
     };
     //Response: Category found successfully
     return res.status(201).json(response);
-<<<<<<< HEAD
-  } catch (error: unknown) {
-    let status: number = getErrorStatus(error);
-
-    let responseData = {
-      status: false,
-      message: error,
-    };
-
-    //Response: Error
-    res.status(status || 500).json(responseData);
-  }
-=======
   } catch (error: unknown) {}
->>>>>>> main
 };
 
 //find all services by category
 const find_all_services_by_category = async (req: Request, res: Response) => {
-<<<<<<< HEAD
-  const { categoryId } = req.params;
-=======
   const { categoryId } = req.body;
->>>>>>> main
 
   try {
     if (!categoryId) {
@@ -243,30 +186,11 @@ const find_all_services_by_category = async (req: Request, res: Response) => {
       }),
     };
     //Response: Category found successfully
-<<<<<<< HEAD
-    return res.status(200).json(response);
-  } catch (error: unknown) {
-    let status: number = getErrorStatus(error);
-
-    let responseData = {
-      status: false,
-      message: error,
-    };
-
-    //Response: Error
-    res.status(status || 500).json(responseData);
-  }
-};
-
-export {
-  find_all_category,
-=======
     return res.status(201).json(response);
   } catch (error: unknown) {}
 };
 
 export {
->>>>>>> main
   find_all_services_by_category,
   find_a_category,
   update_a_category,

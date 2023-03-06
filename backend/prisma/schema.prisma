@@ -24,31 +24,11 @@ model User {
   password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-<<<<<<< HEAD
-  address   Address[]
-=======
->>>>>>> main
   role      Role[]
   order     Order[]
 }
 
 
-<<<<<<< HEAD
-model Address{
-  id Int @id @default(autoincrement())
-  userId String
-  user User @relation(fields: [userId], references: [user_id])
-  address String?
-  city String?
-  state String?
-  country String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-
-=======
->>>>>>> main
 model Role {
   id        Int      @id @default(autoincrement())
   user      User     @relation(fields: [userId], references: [user_id])
@@ -106,10 +86,6 @@ model Order{
   user User @relation(fields: [userId], references: [user_id])
   orderItems OrderItem[]
   price Float
-<<<<<<< HEAD
-  payment   Payment[]
-=======
->>>>>>> main
   statusId Int
   status OrderStatus @relation(fields: [statusId], references: [id])
   createdAt DateTime @default(now())
@@ -125,38 +101,3 @@ model OrderStatus{
   updatedAt DateTime @updatedAt
 }
 
-<<<<<<< HEAD
-
-model PaymentStatus{
-  id Int @id @default(autoincrement())
-  name String
-  description String?
-  payment Payment[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model PaymentMethod{
-  id Int @id @default(autoincrement())
-  name String
-  description String?
-  payment Payment[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Payment{
-  id Int @id @default(autoincrement())
-  orderId Int
-  order Order @relation(fields: [orderId], references: [id])
-  paymentStatusId Int
-  paymentStatus PaymentStatus @relation(fields: [paymentStatusId], references: [id])
-  paymentAmount Float
-  paymentMethodId Int
-  paymentMethod PaymentMethod @relation(fields: [paymentMethodId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-=======
->>>>>>> main
