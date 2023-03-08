@@ -8,17 +8,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.signInWithEmailAndPassword = exports.RegisterAnUserWithEmailAndPassword = void 0;
-const client_1 = require("@prisma/client");
 const auth_1 = require("../services/auth");
 const user_1 = require("../services/user");
-const role_1 = require("../services/role");
-const prisma = new client_1.PrismaClient();
+const bcrypt_1 = __importDefault(require("bcrypt"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const config_1 = require("../config");
 function getErrorStatus(error) {
     return error.status || 500;
 }
 const RegisterAnUserWithEmailAndPassword = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     const { firstName, lastName, phone, email, password } = req.body;
     if (!firstName || !lastName || !phone || !email || !password) {
         //Response: Mandatory fields are missing
@@ -26,11 +30,13 @@ const RegisterAnUserWithEmailAndPassword = (req, res) => __awaiter(void 0, void 
             .status(400)
             .json({ status: false, message: 'Please submit all the filed' });
     }
+    const salt = yield bcrypt_1.default.genSalt(config_1.config.bcrypt.saltOrRound);
+    const hash = yield bcrypt_1.default.hash(password, salt);
     let userData = {
         firstName,
         lastName,
         email,
-        password,
+        password: hash,
         phone,
     };
     try {
@@ -44,15 +50,14 @@ const RegisterAnUserWithEmailAndPassword = (req, res) => __awaiter(void 0, void 
             });
         }
         const createdUser = yield (0, auth_1.create_user)(userData);
-        //Assign a Role to User
-        const role = yield (0, role_1.create_role)({ userId: createdUser.user_id });
-        let response = {
+        let jwtToken = yield jsonwebtoken_1.default.sign({
+            userId: createdUser.user_id,
+            role: (_a = createdUser.role[0]) === null || _a === void 0 ? void 0 : _a.role.role_name,
+        }, config_1.config.jwt.secret, { expiresIn: config_1.config.jwt.expiresIn });
+        const response = {
             status: true,
-            message: 'User created successfully assigned a role',
-            data: {
-                userId: createdUser.user_id,
-                role: role.role.role_name,
-            },
+            message: 'Registration success!',
+            data: { token: jwtToken, expiresIn: config_1.config.jwt.expiresIn },
         };
         //Response: User created successfully
         return res.status(201).json(response);
@@ -69,7 +74,7 @@ const RegisterAnUserWithEmailAndPassword = (req, res) => __awaiter(void 0, void 
 });
 exports.RegisterAnUserWithEmailAndPassword = RegisterAnUserWithEmailAndPassword;
 const signInWithEmailAndPassword = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
+    var _b;
     const { email, password } = req.body;
     try {
         if (!email || !password) {
@@ -90,18 +95,21 @@ const signInWithEmailAndPassword = (req, res) => __awaiter(void 0, void 0, void 
                 .status(404)
                 .json({ status: false, message: 'User not found!' });
         }
-        if (user.password !== password) {
+        const validPassword = yield bcrypt_1.default.compare(userData.password, user.password);
+        if (!validPassword) {
             //Response: Password not Matched
             return res
                 .status(401)
                 .json({ status: false, message: 'Password is incorrect!' });
         }
-        //Get User Role
-        const role = yield (0, role_1.get_role)({ userId: user.user_id });
+        let jwtToken = yield jsonwebtoken_1.default.sign({
+            userId: user.user_id,
+            role: (_b = user.role[0]) === null || _b === void 0 ? void 0 : _b.role.role_name,
+        }, config_1.config.jwt.secret, { expiresIn: config_1.config.jwt.expiresIn });
         const response = {
             status: true,
             message: 'Login success!',
-            data: { userId: user.user_id, role: (_a = role[0]) === null || _a === void 0 ? void 0 : _a.role.role_name },
+            data: { token: jwtToken, expiresIn: config_1.config.jwt.expiresIn },
         };
         //Response: Login success
         return res.status(200).json(response);
@@ -110,7 +118,7 @@ const signInWithEmailAndPassword = (req, res) => __awaiter(void 0, void 0, void 
         let status = getErrorStatus(error);
         let responseData = {
             status: false,
-            message: error,
+            message: 'Authentication Field',
         };
         //Response: Error
         res.status(status || 500).json(responseData);

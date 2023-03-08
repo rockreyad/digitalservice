@@ -20,15 +20,17 @@ function getErrorStatus(error) {
 }
 //create an order
 const create_an_order = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { userId, statusId, price, orderItems } = req.body;
-    if (!userId || !statusId || !price || !orderItems) {
+    const { userId, statusId, price, orderItems, requestUser } = req.body;
+    if (!userId || !statusId || !orderItems) {
         //Response: Mandatory fields are missing
         return res
             .status(400)
             .json({ status: false, message: 'Missing required fields' });
     }
     const OrderData = {
-        userId: String(userId),
+        userId: requestUser.role === 'admin'
+            ? String(userId)
+            : String(requestUser.userId),
         statusId: Number(statusId),
         price: Number(price),
         orderItems,
@@ -103,7 +105,16 @@ exports.update_an_order = update_an_order;
 //Get all order
 const get_all_order = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const foundOrder = yield (0, order_1.all_order)();
+        const { requestUser } = req.body;
+        let foundOrder;
+        if (requestUser.role === 'admin') {
+            foundOrder = yield (0, order_1.all_order)();
+        }
+        if (requestUser.role === 'user') {
+            foundOrder = yield (0, order_1.find_order_by_userId)({
+                userId: requestUser.userId,
+            });
+        }
         if (!foundOrder) {
             //Response: Order not found
             return res

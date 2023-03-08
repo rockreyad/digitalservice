@@ -23,6 +23,22 @@ function create_user({ firstName, lastName, email, password, phone, }) {
                 password,
                 email,
                 phone,
+                role: {
+                    create: {
+                        roleDescriptionId: 2,
+                    },
+                },
+            },
+            include: {
+                role: {
+                    select: {
+                        role: {
+                            select: {
+                                role_name: true,
+                            },
+                        },
+                    },
+                },
             },
         });
         return createaccount;
@@ -33,6 +49,17 @@ function login_user({ email, password, }) {
     return __awaiter(this, void 0, void 0, function* () {
         const user = yield prisma_1.default.user.findUnique({
             where: { email },
+            include: {
+                role: {
+                    select: {
+                        role: {
+                            select: {
+                                role_name: true,
+                            },
+                        },
+                    },
+                },
+            },
         });
         return user;
     });

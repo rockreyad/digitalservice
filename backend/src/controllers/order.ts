@@ -13,9 +13,9 @@ function getErrorStatus(error: any) {
 }
 //create an order
 const create_an_order = async (req: Request, res: Response) => {
-    const { userId, statusId, price, orderItems } = req.body
+    const { userId, statusId, price, orderItems, requestUser } = req.body
 
-    if (!userId || !statusId || !price || !orderItems) {
+    if (!userId || !statusId || !orderItems) {
         //Response: Mandatory fields are missing
         return res
             .status(400)
@@ -23,7 +23,10 @@ const create_an_order = async (req: Request, res: Response) => {
     }
 
     const OrderData = {
-        userId: String(userId),
+        userId:
+            requestUser.role === 'admin'
+                ? String(userId)
+                : String(requestUser.userId),
         statusId: Number(statusId),
         price: Number(price),
         orderItems,
@@ -101,7 +104,16 @@ const update_an_order = async (req: Request, res: Response) => {
 //Get all order
 const get_all_order = async (req: Request, res: Response) => {
     try {
-        const foundOrder = await all_order()
+        const { requestUser } = req.body
+        let foundOrder
+        if (requestUser.role === 'admin') {
+            foundOrder = await all_order()
+        }
+        if (requestUser.role === 'user') {
+            foundOrder = await find_order_by_userId({
+                userId: requestUser.userId,
+            })
+        }
         if (!foundOrder) {
             //Response: Order not found
             return res

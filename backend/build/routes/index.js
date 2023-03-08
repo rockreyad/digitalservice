@@ -5,6 +5,7 @@ const services_1 = require("../controllers/services");
 const users_1 = require("../controllers/users");
 const serviceCategory_1 = require("../controllers/serviceCategory");
 const order_1 = require("../controllers/order");
+const auth_1 = require("../middlewares/auth");
 function routes(app) {
     app.get('/', (req, res) => {
         res.send('Express + TypeScript Server');
@@ -24,9 +25,9 @@ function routes(app) {
     app.post('/service/category', serviceCategory_1.create_a_category);
     app.put('/service/category', serviceCategory_1.update_a_category);
     /** Order : new,Order list,modify*/
-    app.post('/order', order_1.create_an_order);
+    app.post('/order', auth_1.authorize, order_1.create_an_order);
     app.put('/order', order_1.update_an_order);
-    app.get('/order', order_1.get_all_order);
+    app.get('/order', auth_1.authorize, order_1.get_all_order);
     app.get('/order/:orderId', order_1.find_an_order);
     app.get('/order/user/:userId', order_1.get_all_order_by_userId);
 }

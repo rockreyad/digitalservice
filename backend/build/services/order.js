@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.find_order_by_orderId = exports.find_order_by_userId = exports.update_order = exports.all_order = exports.create_order = void 0;
 const prisma_1 = __importDefault(require("../config/prisma"));
-function create_order({ userId, statusId, price, orderItems, }) {
+function create_order({ userId, statusId, price = 0, orderItems, }) {
     return __awaiter(this, void 0, void 0, function* () {
         const order = yield prisma_1.default.order.create({
             data: {
@@ -40,7 +40,27 @@ function find_order_by_userId({ userId }) {
                 userId,
             },
             include: {
-                orderItems: true,
+                orderItems: {
+                    select: {
+                        service: {
+                            select: {
+                                title: true,
+                            },
+                        },
+                    },
+                },
+                user: {
+                    select: {
+                        firstName: true,
+                        lastName: true,
+                        user_id: true,
+                    },
+                },
+                status: {
+                    select: {
+                        name: true,
+                    },
+                },
             },
         });
         return order;
