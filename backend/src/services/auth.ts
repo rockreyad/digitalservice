@@ -20,6 +20,22 @@ async function create_user({
             password,
             email,
             phone,
+            role: {
+                create: {
+                    roleDescriptionId: 2,
+                },
+            },
+        },
+        include: {
+            role: {
+                select: {
+                    role: {
+                        select: {
+                            role_name: true,
+                        },
+                    },
+                },
+            },
         },
     })
 
@@ -35,6 +51,17 @@ async function login_user({
 }) {
     const user = await prisma.user.findUnique({
         where: { email },
+        include: {
+            role: {
+                select: {
+                    role: {
+                        select: {
+                            role_name: true,
+                        },
+                    },
+                },
+            },
+        },
     })
 
     return user

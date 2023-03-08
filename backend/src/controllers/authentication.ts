@@ -1,10 +1,10 @@
 import { Request, Response } from 'express'
-import { Prisma, PrismaClient } from '@prisma/client'
 import { create_user, login_user } from '../services/auth'
 import { get_user } from '../services/user'
 import { create_role, get_role } from '../services/role'
-
-const prisma = new PrismaClient()
+import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
+import { config } from '../config'
 
 function getErrorStatus(error: any) {
     return error.status || 500
@@ -23,11 +23,13 @@ const RegisterAnUserWithEmailAndPassword = async (
             .json({ status: false, message: 'Please submit all the filed' })
     }
 
+    const salt = await bcrypt.genSalt(config.bcrypt.saltOrRound)
+    const hash = await bcrypt.hash(password, salt)
     let userData = {
         firstName,
         lastName,
         email,
-        password,
+        password: hash,
         phone,
     }
 
@@ -45,16 +47,19 @@ const RegisterAnUserWithEmailAndPassword = async (
 
         const createdUser = await create_user(userData)
 
-        //Assign a Role to User
-        const role = await create_role({ userId: createdUser.user_id })
-
-        let response = {
-            status: true,
-            message: 'User created successfully assigned a role',
-            data: {
+        let jwtToken = await jwt.sign(
+            {
                 userId: createdUser.user_id,
-                role: role.role.role_name,
+                role: createdUser.role[0]?.role.role_name,
             },
+            config.jwt.secret as string,
+            { expiresIn: config.jwt.expiresIn },
+        )
+
+        const response = {
+            status: true,
+            message: 'Registration success!',
+            data: { token: jwtToken, expiresIn: config.jwt.expiresIn },
         }
 
         //Response: User created successfully
@@ -95,21 +100,30 @@ const signInWithEmailAndPassword = async (req: Request, res: Response) => {
                 .status(404)
                 .json({ status: false, message: 'User not found!' })
         }
+        const validPassword = await bcrypt.compare(
+            userData.password,
+            user.password,
+        )
 
-        if (user.password !== password) {
+        if (!validPassword) {
             //Response: Password not Matched
             return res
                 .status(401)
                 .json({ status: false, message: 'Password is incorrect!' })
         }
 
-        //Get User Role
-        const role = await get_role({ userId: user.user_id })
-
+        let jwtToken = await jwt.sign(
+            {
+                userId: user.user_id,
+                role: user.role[0]?.role.role_name,
+            },
+            config.jwt.secret as string,
+            { expiresIn: config.jwt.expiresIn },
+        )
         const response = {
             status: true,
             message: 'Login success!',
-            data: { userId: user.user_id, role: role[0]?.role.role_name },
+            data: { token: jwtToken, expiresIn: config.jwt.expiresIn },
         }
 
         //Response: Login success
@@ -119,7 +133,7 @@ const signInWithEmailAndPassword = async (req: Request, res: Response) => {
 
         let responseData = {
             status: false,
-            message: error,
+            message: 'Authentication Field',
         }
 
         //Response: Error

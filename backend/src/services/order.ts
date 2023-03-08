@@ -3,7 +3,7 @@ import prisma from '../config/prisma'
 async function create_order({
     userId,
     statusId,
-    price,
+    price = 0,
     orderItems,
 }: {
     userId: string
@@ -35,7 +35,27 @@ async function find_order_by_userId({ userId }: { userId: string }) {
             userId,
         },
         include: {
-            orderItems: true,
+            orderItems: {
+                select: {
+                    service: {
+                        select: {
+                            title: true,
+                        },
+                    },
+                },
+            },
+            user: {
+                select: {
+                    firstName: true,
+                    lastName: true,
+                    user_id: true,
+                },
+            },
+            status: {
+                select: {
+                    name: true,
+                },
+            },
         },
     })
     return order

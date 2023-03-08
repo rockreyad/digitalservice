@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { createUser } from '@/utils/api/user'
 import {
     Box,
@@ -17,6 +17,7 @@ import {
 import { useState } from 'react'
 
 import { useMutation, useQueryClient } from 'react-query'
+import { useRouter } from 'next/navigation'
 
 export const metadata = {
     title: 'Registration on Digital Web Service',
@@ -27,12 +28,14 @@ export default function Register() {
         firstName: '',
         lastName: '',
         email: '',
+        phone: '',
         password: '',
         repeatPassword: '',
     })
 
     const queryClient = useQueryClient()
-    const { mutate } = useMutation(createUser, {
+    const router = useRouter()
+    const { mutate, isSuccess, isError, data } = useMutation(createUser, {
         onSuccess: () => {
             queryClient.invalidateQueries('user')
         },
@@ -54,9 +57,19 @@ export default function Register() {
             | React.MouseEvent<HTMLButtonElement>,
     ) => {
         e.preventDefault()
-        console.log('Service Data sending to backend :', user)
+        if (user.password !== user.repeatPassword) {
+            //TODO: send a toast message
+            return alert('Password does not match')
+        }
         mutate(user)
     }
+
+    useEffect(() => {
+        if (isSuccess) {
+            localStorage.setItem('token', JSON.stringify(data?.data?.token))
+            router.push('/login')
+        }
+    }, [isSuccess, router, data])
 
     return (
         <>
@@ -114,6 +127,7 @@ export default function Register() {
                             <chakra.form
                                 method="POST"
                                 shadow="base"
+                                onSubmit={handleSubmit}
                                 rounded={[null, 'md']}
                                 overflow={{
                                     sm: 'hidden',
@@ -129,6 +143,12 @@ export default function Register() {
                                     }}
                                     spacing={6}
                                 >
+                                    {isError ? (
+                                        <Text fontSize="sm" color="gray.500">
+                                            &quot;Something went wrong&quot;
+                                        </Text>
+                                    ) : null}
+
                                     <SimpleGrid columns={6} spacing={6}>
                                         <FormControl
                                             as={GridItem}
@@ -147,7 +167,7 @@ export default function Register() {
                                             </FormLabel>
                                             <Input
                                                 type="text"
-                                                name="first_name"
+                                                name="firstName"
                                                 id="first_name"
                                                 autoComplete="given-name"
                                                 mt={1}
@@ -156,7 +176,9 @@ export default function Register() {
                                                 size="sm"
                                                 w="full"
                                                 rounded="md"
+                                                required
                                                 onChange={handleChange}
+                                                value={user.firstName}
                                             />
                                         </FormControl>
 
@@ -177,7 +199,7 @@ export default function Register() {
                                             </FormLabel>
                                             <Input
                                                 type="text"
-                                                name="last_name"
+                                                name="lastName"
                                                 id="last_name"
                                                 autoComplete="family-name"
                                                 mt={1}
@@ -186,6 +208,9 @@ export default function Register() {
                                                 size="sm"
                                                 w="full"
                                                 rounded="md"
+                                                required
+                                                value={user.lastName}
+                                                onChange={handleChange}
                                             />
                                         </FormControl>
 
@@ -206,7 +231,7 @@ export default function Register() {
                                             </FormLabel>
                                             <Input
                                                 type="text"
-                                                name="email_address"
+                                                name="email"
                                                 id="email_address"
                                                 autoComplete="email"
                                                 mt={1}
@@ -215,6 +240,41 @@ export default function Register() {
                                                 size="sm"
                                                 w="full"
                                                 rounded="md"
+                                                required
+                                                value={user.email}
+                                                onChange={handleChange}
+                                            />
+                                        </FormControl>
+
+                                        <FormControl
+                                            as={GridItem}
+                                            colSpan={[6, 4]}
+                                        >
+                                            <FormLabel
+                                                htmlFor="phone"
+                                                fontSize="sm"
+                                                fontWeight="md"
+                                                color="gray.700"
+                                                _dark={{
+                                                    color: 'gray.50',
+                                                }}
+                                            >
+                                                Phone
+                                            </FormLabel>
+                                            <Input
+                                                type="text"
+                                                name="phone"
+                                                id="phone"
+                                                autoComplete="phone"
+                                                mt={1}
+                                                focusBorderColor="brand.400"
+                                                shadow="sm"
+                                                size="sm"
+                                                w="full"
+                                                rounded="md"
+                                                required
+                                                value={user.phone}
+                                                onChange={handleChange}
                                             />
                                         </FormControl>
 
@@ -244,6 +304,9 @@ export default function Register() {
                                                 size="sm"
                                                 w="full"
                                                 rounded="md"
+                                                required
+                                                value={user.password}
+                                                onChange={handleChange}
                                             />
                                         </FormControl>
                                         <FormControl
@@ -263,8 +326,8 @@ export default function Register() {
                                             </FormLabel>
                                             <Input
                                                 type="text/password"
-                                                name="password"
-                                                id="password"
+                                                name="repeatPassword"
+                                                id="repeatPassword"
                                                 autoComplete="password"
                                                 mt={1}
                                                 focusBorderColor="brand.400"
@@ -272,6 +335,9 @@ export default function Register() {
                                                 size="sm"
                                                 w="full"
                                                 rounded="md"
+                                                required
+                                                value={user.repeatPassword}
+                                                onChange={handleChange}
                                             />
                                         </FormControl>
                                     </SimpleGrid>
@@ -296,7 +362,6 @@ export default function Register() {
                                             shadow: '',
                                         }}
                                         fontWeight="md"
-                                        onClick={handleSubmit}
                                     >
                                         Save
                                     </Button>

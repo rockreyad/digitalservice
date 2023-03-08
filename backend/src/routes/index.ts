@@ -23,6 +23,8 @@ import {
     update_an_order,
 } from '../controllers/order'
 
+import { authorize } from '../middlewares/auth'
+
 export default function routes(app: Express) {
     app.get('/', (req: Request, res: Response) => {
         res.send('Express + TypeScript Server')
@@ -47,9 +49,9 @@ export default function routes(app: Express) {
     app.put('/service/category', update_a_category)
 
     /** Order : new,Order list,modify*/
-    app.post('/order', create_an_order)
+    app.post('/order', authorize, create_an_order)
     app.put('/order', update_an_order)
-    app.get('/order', get_all_order)
+    app.get('/order', authorize, get_all_order)
     app.get('/order/:orderId', find_an_order)
     app.get('/order/user/:userId', get_all_order_by_userId)
 }
