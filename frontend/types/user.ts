@@ -7,10 +7,14 @@ export type User = {
     password?: string
 }
 
-export type RegistrationResponse = {
+export type AuthResponse = {
     status: boolean
     message: string
     data?: {
+        userId: string
+        role: string
+        firstName: string
+        lastName: string
         token: string
         expiresIn: string
     }

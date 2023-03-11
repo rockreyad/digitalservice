@@ -17,12 +17,14 @@ import { BsFillSunFill } from 'react-icons/bs'
 import { useState } from 'react'
 import Link from 'next/link'
 import { useSidebar } from '@/contexts/SidebarContext'
+import { useAuth } from '@/contexts/auth-context'
 
 export default function DashboardHeader() {
     const [isDark] = useState(false)
 
     //Call the custom hook to use the SidebarContext
     const { setToggleSidebar } = useSidebar()
+    const { logout } = useAuth()
     const router = usePathname()
     return (
         <div className="p-2">
@@ -93,7 +95,9 @@ export default function DashboardHeader() {
                                 <MenuDivider />
                                 <MenuGroup title="Help">
                                     <MenuItem>Docs</MenuItem>
-                                    <MenuItem>FAQ</MenuItem>
+                                    <MenuItem onClick={() => logout()}>
+                                        Logout
+                                    </MenuItem>
                                 </MenuGroup>
                             </MenuList>
                         </Menu>

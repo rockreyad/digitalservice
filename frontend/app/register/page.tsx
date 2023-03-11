@@ -64,12 +64,7 @@ export default function Register() {
         mutate(user)
     }
 
-    useEffect(() => {
-        if (isSuccess) {
-            localStorage.setItem('token', JSON.stringify(data?.data?.token))
-            router.push('/login')
-        }
-    }, [isSuccess, router, data])
+    useEffect(() => {}, [isSuccess, router, data])
 
     return (
         <>

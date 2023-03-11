@@ -1,5 +1,6 @@
 'use client'
 
+import { useAuth } from '@/contexts/auth-context'
 import {
     Box,
     Button,
@@ -22,7 +23,7 @@ export default function Navbar() {
     const bg = useColorModeValue('white', 'gray.800')
     const mobileNav = useDisclosure()
 
-    const [auth] = React.useState(true)
+    const { isAuthenticated } = useAuth()
 
     const router = useRouter()
     return (
@@ -74,7 +75,7 @@ export default function Navbar() {
                                 <Button variant="ghost">Career</Button>
                             </HStack>
 
-                            {auth ? (
+                            {isAuthenticated ? (
                                 <>
                                     <Button
                                         onClick={() =>
