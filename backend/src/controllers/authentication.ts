@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
 import { create_user, login_user } from '../services/auth'
 import { get_user } from '../services/user'
-import { create_role, get_role } from '../services/role'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import { config } from '../config'
@@ -59,7 +58,14 @@ const RegisterAnUserWithEmailAndPassword = async (
         const response = {
             status: true,
             message: 'Registration success!',
-            data: { token: jwtToken, expiresIn: config.jwt.expiresIn },
+            data: {
+                userId: createdUser.user_id,
+                role: createdUser.role[0]?.role.role_name,
+                firstName: createdUser.firstName,
+                lastName: createdUser.lastName,
+                token: jwtToken,
+                expiresIn: config.jwt.expiresIn,
+            },
         }
 
         //Response: User created successfully
@@ -123,7 +129,14 @@ const signInWithEmailAndPassword = async (req: Request, res: Response) => {
         const response = {
             status: true,
             message: 'Login success!',
-            data: { token: jwtToken, expiresIn: config.jwt.expiresIn },
+            data: {
+                userId: user.user_id,
+                role: user.role[0]?.role.role_name,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                token: jwtToken,
+                expiresIn: config.jwt.expiresIn,
+            },
         }
 
         //Response: Login success

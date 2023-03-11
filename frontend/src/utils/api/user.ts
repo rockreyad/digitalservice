@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { RegistrationResponse, User } from 'types/user'
+import { AuthResponse, User } from 'types/user'
 
 export async function createUser(user: User) {
     const response = await axios.post('http://localhost:4000/register', {
@@ -9,5 +9,13 @@ export async function createUser(user: User) {
         phone: user.phone,
         password: user.password,
     })
-    return response.data as RegistrationResponse
+    return response.data as AuthResponse
+}
+
+export async function loginUser(user: { email: string; password: string }) {
+    const response = await axios.post('http://localhost:4000/login', {
+        email: user.email,
+        password: user.password,
+    })
+    return response.data as AuthResponse
 }

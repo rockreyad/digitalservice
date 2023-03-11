@@ -1,4 +1,5 @@
 'use client'
+import React, { useEffect } from 'react'
 import { useState } from 'react'
 import {
     Flex,
@@ -15,16 +16,71 @@ import {
     FormControl,
     FormHelperText,
     InputRightElement,
+    Text,
 } from '@chakra-ui/react'
 import { FaUserAlt, FaLock } from 'react-icons/fa'
+
+import { useMutation, useQueryClient } from 'react-query'
+import { useRouter } from 'next/navigation'
+import { loginUser } from '@/utils/api/user'
+import { useAuth } from '@/contexts/auth-context'
 
 const CFaUserAlt = chakra(FaUserAlt)
 const CFaLock = chakra(FaLock)
 
+export const metadata = {
+    title: 'Login || Digital Web Service',
+}
+
 export default function Login() {
     const [showPassword, setShowPassword] = useState(false)
+    const { setCurrentUser, isAuthenticated } = useAuth()
+
+    const [user, setUser] = useState({
+        email: '',
+        password: '',
+    })
+
+    const queryClient = useQueryClient()
+    const router = useRouter()
+
+    const { mutate, isSuccess, isError, data } = useMutation(loginUser, {
+        onSuccess: () => {
+            queryClient.invalidateQueries('user')
+        },
+    })
 
     const handleShowClick = () => setShowPassword(!showPassword)
+
+    //mutate the inputfiled data
+    function handleChange(
+        e:
+            | React.ChangeEvent<HTMLInputElement>
+            | React.ChangeEvent<HTMLTextAreaElement>,
+    ) {
+        setUser({ ...user, [e.target.name]: e.target.value })
+    }
+
+    //validation and send data to backend
+    const handleSubmit = async (
+        e:
+            | React.FormEvent<HTMLFormElement>
+            | React.MouseEvent<HTMLButtonElement>,
+    ) => {
+        e.preventDefault()
+
+        mutate(user)
+    }
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            router.push('/dashboard')
+        }
+        if (isSuccess) {
+            setCurrentUser(data?.data as any)
+            router.push('/')
+        }
+    }, [isSuccess, router, data, isAuthenticated, setCurrentUser])
 
     return (
         <Flex
@@ -44,13 +100,43 @@ export default function Login() {
                 <Avatar bg="teal.500" />
                 <Heading color="teal.400">Welcome</Heading>
                 <Box minW={{ base: '90%', md: '468px' }}>
-                    <form>
+                    <form onSubmit={handleSubmit}>
                         <Stack
                             spacing={4}
                             p="1rem"
                             backgroundColor="whiteAlpha.900"
                             boxShadow="md"
                         >
+                            {isError ? (
+                                <FormControl>
+                                    <Box
+                                        fontWeight="semibold"
+                                        letterSpacing="wide"
+                                        fontSize="xs"
+                                        textTransform="uppercase"
+                                        ml="2"
+                                    >
+                                        <Text textColor={'red.400'}>
+                                            Something went wrong!
+                                        </Text>
+                                    </Box>
+                                </FormControl>
+                            ) : null}
+                            {isSuccess ? (
+                                <FormControl>
+                                    <Box
+                                        fontWeight="semibold"
+                                        letterSpacing="wide"
+                                        fontSize="xs"
+                                        textTransform="uppercase"
+                                        ml="2"
+                                    >
+                                        <Text textColor={'green.500'}>
+                                            {data?.message}
+                                        </Text>
+                                    </Box>
+                                </FormControl>
+                            ) : null}
                             <FormControl>
                                 <InputGroup>
                                     <InputLeftElement pointerEvents="none">
@@ -59,6 +145,9 @@ export default function Login() {
                                     <Input
                                         type="email"
                                         placeholder="email address"
+                                        name="email"
+                                        value={user.email}
+                                        onChange={handleChange}
                                     />
                                 </InputGroup>
                             </FormControl>
@@ -74,6 +163,9 @@ export default function Login() {
                                         type={
                                             showPassword ? 'text' : 'password'
                                         }
+                                        name="password"
+                                        value={user.password}
+                                        onChange={handleChange}
                                         placeholder="Password"
                                     />
                                     <InputRightElement width="4.5rem">
@@ -104,7 +196,7 @@ export default function Login() {
                 </Box>
             </Stack>
             <Box>
-                New to us?{' '}
+                New to us?
                 <Link color="teal.500" href="/register">
                     Sign Up
                 </Link>

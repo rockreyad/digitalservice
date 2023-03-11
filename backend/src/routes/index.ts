@@ -1,4 +1,4 @@
-import { Express, Request, Response } from 'express'
+import express, { Express, Request, Response } from 'express'
 import {
     RegisterAnUserWithEmailAndPassword,
     signInWithEmailAndPassword,
@@ -49,9 +49,12 @@ export default function routes(app: Express) {
     app.put('/service/category', update_a_category)
 
     /** Order : new,Order list,modify*/
-    app.post('/order', authorize, create_an_order)
-    app.put('/order', update_an_order)
-    app.get('/order', authorize, get_all_order)
-    app.get('/order/:orderId', find_an_order)
-    app.get('/order/user/:userId', get_all_order_by_userId)
+    const orderRouter = express.Router()
+    orderRouter.post('/', create_an_order)
+    orderRouter.put('/', update_an_order)
+    orderRouter.get('/', get_all_order)
+    orderRouter.get('/:orderId', find_an_order)
+    orderRouter.get('/user/:userId', get_all_order_by_userId)
+
+    app.use('/order', authorize, orderRouter)
 }
