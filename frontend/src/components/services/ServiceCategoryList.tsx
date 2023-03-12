@@ -1,5 +1,6 @@
 'use client'
 
+import { useAuth } from '@/contexts/auth-context'
 import { getServiceCategory } from '@/utils/api/services'
 import { Box, HStack, SimpleGrid, Stack, Text } from '@chakra-ui/react'
 import Link from 'next/link'
@@ -12,6 +13,7 @@ export default function ServiceCategoryList() {
         'serviceCategory',
         getServiceCategory,
     )
+
     return (
         <>
             <div className="space-y-4">
@@ -24,6 +26,7 @@ export default function ServiceCategoryList() {
 }
 
 function ServiceListHeader() {
+    const { user } = useAuth()
     return (
         <>
             <div className="w-full">
@@ -37,10 +40,12 @@ function ServiceListHeader() {
                             under these categoris we are serving services
                         </Text>
                     </Stack>
-                    <RouterButton
-                        link="dashboard/service/create-category"
-                        name="create"
-                    />
+                    {user?.role === 'admin' && (
+                        <RouterButton
+                            link="dashboard/service/create-category"
+                            name="create"
+                        />
+                    )}
                 </HStack>
             </div>
         </>

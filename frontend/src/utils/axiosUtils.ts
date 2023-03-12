@@ -8,7 +8,7 @@ let token
 if (typeof window !== 'undefined') {
     const user = window.localStorage.getItem('user')
     if (user) {
-        token = JSON.parse(user).token
+        token = JSON.parse(user)?.token
     }
 }
 // Alter defaults after instance has been created

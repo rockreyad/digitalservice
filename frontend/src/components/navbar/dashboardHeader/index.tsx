@@ -24,7 +24,7 @@ export default function DashboardHeader() {
 
     //Call the custom hook to use the SidebarContext
     const { setToggleSidebar } = useSidebar()
-    const { logout } = useAuth()
+    const { logout, user } = useAuth()
     const router = usePathname()
     return (
         <div className="p-2">
@@ -88,7 +88,9 @@ export default function DashboardHeader() {
                                 />
                             </MenuButton>
                             <MenuList>
-                                <MenuGroup title="Reyad Hasan">
+                                <MenuGroup
+                                    title={`${user?.firstName} ${user?.lastName}`}
+                                >
                                     <MenuItem>My Account</MenuItem>
                                     <MenuItem>Payments </MenuItem>
                                 </MenuGroup>

@@ -12,13 +12,17 @@ import { AiOutlineUser } from 'react-icons/ai'
 
 import Link from 'next/link'
 import { useSidebar } from '@/contexts/SidebarContext'
+import { useAuth } from '@/contexts/auth-context'
 export default function Sidebar() {
+    const { user } = useAuth()
+
     //Sidebar Menu
-    const menus = [
+    let navMenu = [
         { name: 'dashboard', link: '/dashboard', icon: MdOutlineDashboard },
         { name: 'order', link: '/dashboard/order', icon: AiOutlineBarChart },
         {
             name: 'user',
+            access: 'admin',
             link: '/dashboard/user',
             icon: AiOutlineUser,
             submenu: [
@@ -42,11 +46,13 @@ export default function Sidebar() {
         },
         {
             name: 'profit',
+            access: 'admin',
             link: '/dashboard/payment',
             icon: MdOutlinePriceChange,
         },
         {
             name: 'analytics',
+            access: 'admin',
             link: '/dashboard/analytics',
             icon: TbReportAnalytics,
             margin: true,
@@ -59,6 +65,9 @@ export default function Sidebar() {
             margin: true,
         },
     ]
+    if (user?.role !== 'admin') {
+        navMenu = navMenu.filter((item) => item.access !== 'admin')
+    }
 
     //Call the custom hook to use the SidebarContext
     const { toggleSidebar, setToggleSidebar } = useSidebar()
@@ -78,7 +87,7 @@ export default function Sidebar() {
                     />
                 </div>
                 <div className="mt-4 flex flex-col gap-4 relative">
-                    {menus?.map((menu, i) => (
+                    {navMenu?.map((menu, i) => (
                         <Link
                             href={menu?.link}
                             key={i}

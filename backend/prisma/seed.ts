@@ -9,7 +9,8 @@ async function main() {
         update: {},
         create: {
             email: 'admin@gmail.com',
-            password: 'admin',
+            password:
+                '$2b$10$ioXNQ8oDKUQT9WZvHih28.dExM4DSn8SHXtscbOjltK8MM6WJhy4C',
             firstName: 'Admin',
             lastName: 'Admin',
             phone: '0123456789',
@@ -32,7 +33,8 @@ async function main() {
         update: {},
         create: {
             email: 'user@gmail.com',
-            password: 'user',
+            password:
+                '$2b$10$ioXNQ8oDKUQT9WZvHih28.dExM4DSn8SHXtscbOjltK8MM6WJhy4C',
             firstName: 'User',
             lastName: 'User',
             phone: '0123456789',
