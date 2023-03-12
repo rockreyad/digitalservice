@@ -45,8 +45,10 @@ export default function ServiceList({ data }: { data: ServiceResponse }) {
 
 import { HStack, Stack, Text } from '@chakra-ui/react'
 import RouterButton from '../Button/RouterButton'
+import { useAuth } from '@/contexts/auth-context'
 
 function ServiceListHeader() {
+    const { user } = useAuth()
     return (
         <>
             <div className="w-full">
@@ -60,10 +62,12 @@ function ServiceListHeader() {
                             service we&apos;re providing
                         </Text>
                     </Stack>
-                    <RouterButton
-                        link="dashboard/service/create"
-                        name="create"
-                    />
+                    {user?.role === 'admin' && (
+                        <RouterButton
+                            link="dashboard/service/create"
+                            name="create"
+                        />
+                    )}
                 </HStack>
             </div>
         </>

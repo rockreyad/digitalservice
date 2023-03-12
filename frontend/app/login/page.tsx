@@ -22,8 +22,9 @@ import { FaUserAlt, FaLock } from 'react-icons/fa'
 
 import { useMutation, useQueryClient } from 'react-query'
 import { useRouter } from 'next/navigation'
-import { loginUser } from '@/utils/api/user'
+import { loginUser, UserLoginError } from '@/utils/api/user'
 import { useAuth } from '@/contexts/auth-context'
+import { AuthResponse, AuthUserInfo } from 'types/user'
 
 const CFaUserAlt = chakra(FaUserAlt)
 const CFaLock = chakra(FaLock)
@@ -37,18 +38,25 @@ export default function Login() {
     const { setCurrentUser, isAuthenticated } = useAuth()
 
     const [user, setUser] = useState({
-        email: '',
-        password: '',
+        email: 'admin@gmail.com',
+        password: '102030',
     })
 
     const queryClient = useQueryClient()
     const router = useRouter()
 
-    const { mutate, isSuccess, isError, data } = useMutation(loginUser, {
-        onSuccess: () => {
-            queryClient.invalidateQueries('user')
+    const { mutate, isSuccess, isError, error, data, isLoading } = useMutation(
+        loginUser,
+        {
+            onSuccess: () => {
+                queryClient.invalidateQueries('user')
+            },
         },
-    })
+    )
+
+    const loginError = (error as UserLoginError)?.message
+        ? (error as UserLoginError).message
+        : 'Something went wrong'
 
     const handleShowClick = () => setShowPassword(!showPassword)
 
@@ -74,11 +82,11 @@ export default function Login() {
 
     useEffect(() => {
         if (isAuthenticated) {
-            router.push('/dashboard')
+            router.push('/')
         }
         if (isSuccess) {
-            setCurrentUser(data?.data as any)
-            router.push('/')
+            const userdata = data as AuthResponse
+            setCurrentUser(userdata?.data as AuthUserInfo)
         }
     }, [isSuccess, router, data, isAuthenticated, setCurrentUser])
 
@@ -117,7 +125,7 @@ export default function Login() {
                                         ml="2"
                                     >
                                         <Text textColor={'red.400'}>
-                                            Something went wrong!
+                                            {loginError}
                                         </Text>
                                     </Box>
                                 </FormControl>
@@ -189,7 +197,7 @@ export default function Login() {
                                 colorScheme="teal"
                                 width="full"
                             >
-                                Login
+                                {isLoading ? 'Loading...' : 'Login'}
                             </Button>
                         </Stack>
                     </form>

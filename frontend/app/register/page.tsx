@@ -1,6 +1,6 @@
 'use client'
 import React, { useEffect } from 'react'
-import { createUser } from '@/utils/api/user'
+import { createUser, UserLoginError } from '@/utils/api/user'
 import {
     Box,
     Button,
@@ -18,6 +18,8 @@ import { useState } from 'react'
 
 import { useMutation, useQueryClient } from 'react-query'
 import { useRouter } from 'next/navigation'
+import { useAuth } from '@/contexts/auth-context'
+import { AuthResponse, AuthUserInfo } from 'types/user'
 
 export const metadata = {
     title: 'Registration on Digital Web Service',
@@ -35,11 +37,18 @@ export default function Register() {
 
     const queryClient = useQueryClient()
     const router = useRouter()
-    const { mutate, isSuccess, isError, data } = useMutation(createUser, {
-        onSuccess: () => {
-            queryClient.invalidateQueries('user')
+    const { isAuthenticated, setCurrentUser } = useAuth()
+    const { mutate, isSuccess, isLoading, isError, error, data } = useMutation(
+        createUser,
+        {
+            onSuccess: () => {
+                queryClient.invalidateQueries('user')
+            },
         },
-    })
+    )
+    const RegistrationError = (error as UserLoginError)?.message
+        ? (error as UserLoginError).message
+        : 'Something went wrong'
 
     //mutate the inputfiled data
     function handleChange(
@@ -64,7 +73,15 @@ export default function Register() {
         mutate(user)
     }
 
-    useEffect(() => {}, [isSuccess, router, data])
+    useEffect(() => {
+        if (isAuthenticated) {
+            router.push('/dashboard')
+        }
+        if (isSuccess) {
+            const userdata = data as AuthResponse
+            setCurrentUser(userdata?.data as AuthUserInfo)
+        }
+    }, [isSuccess, router, data, isAuthenticated, setCurrentUser])
 
     return (
         <>
@@ -139,9 +156,34 @@ export default function Register() {
                                     spacing={6}
                                 >
                                     {isError ? (
-                                        <Text fontSize="sm" color="gray.500">
-                                            &quot;Something went wrong&quot;
-                                        </Text>
+                                        <FormControl>
+                                            <Box
+                                                fontWeight="semibold"
+                                                letterSpacing="wide"
+                                                fontSize="xs"
+                                                textTransform="uppercase"
+                                                ml="2"
+                                            >
+                                                <Text textColor={'red.400'}>
+                                                    {RegistrationError}
+                                                </Text>
+                                            </Box>
+                                        </FormControl>
+                                    ) : null}
+                                    {isSuccess ? (
+                                        <FormControl>
+                                            <Box
+                                                fontWeight="semibold"
+                                                letterSpacing="wide"
+                                                fontSize="xs"
+                                                textTransform="uppercase"
+                                                ml="2"
+                                            >
+                                                <Text textColor={'green.500'}>
+                                                    {data?.message}
+                                                </Text>
+                                            </Box>
+                                        </FormControl>
                                     ) : null}
 
                                     <SimpleGrid columns={6} spacing={6}>
@@ -358,7 +400,7 @@ export default function Register() {
                                         }}
                                         fontWeight="md"
                                     >
-                                        Save
+                                        {isLoading ? 'Loading...' : 'sign up'}
                                     </Button>
                                 </Box>
                             </chakra.form>

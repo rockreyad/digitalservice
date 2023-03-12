@@ -10,12 +10,14 @@ export type User = {
 export type AuthResponse = {
     status: boolean
     message: string
-    data?: {
-        userId: string
-        role: string
-        firstName: string
-        lastName: string
-        token: string
-        expiresIn: string
-    }
+    data?: AuthUserInfo
+}
+
+export interface AuthUserInfo {
+    userId: string
+    role: string
+    firstName: string
+    lastName: string
+    token: string
+    expiresIn: string
 }

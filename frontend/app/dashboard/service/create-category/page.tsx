@@ -1,6 +1,14 @@
+'use client'
 import CreateCategoryForm from '@/components/forms/CreateCategoryForm'
+import { useAuth } from '@/contexts/auth-context'
+import React from 'react'
 
 export default function CreateCategoryPage() {
+    const { user } = useAuth()
+
+    React.useEffect(() => {
+        if (user?.role !== 'admin') window.location.replace('/dashboard')
+    }, [user?.role])
     return (
         <>
             <div>

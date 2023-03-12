@@ -31,16 +31,20 @@ export default function routes(app: Express) {
     })
 
     /** Service : new,Service list,modify*/
-    app.get('/service', find_all_services)
-    app.post('/service', new_service)
-    app.put('/service', update_a_service)
+    const serviceRouter = express.Router()
+    serviceRouter.get('/', find_all_services)
+    serviceRouter.post('/', new_service)
+    serviceRouter.put('/', update_a_service)
+    app.use('/service', serviceRouter)
 
     /** Authentication : Login , Register */
     app.post('/login', signInWithEmailAndPassword)
     app.post('/register', RegisterAnUserWithEmailAndPassword)
 
     /** User : User list, User details, User modify */
-    app.get('/user', all_users)
+    const userRouter = express.Router()
+    userRouter.get('/', all_users)
+    app.use('/user', authorize, userRouter)
 
     /** Service Category : new,Service list by Category,modify*/
     app.get('/service/category', find_all_category)
