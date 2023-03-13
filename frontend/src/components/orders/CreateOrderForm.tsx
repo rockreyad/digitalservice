@@ -1,12 +1,13 @@
 'use client'
 
 import { useAuth } from '@/contexts/auth-context'
-import { createOrder, OrderError } from '@/utils/api/order'
+import { createOrder } from '@/utils/api/order'
 import { getService } from '@/utils/api/services'
 import { Box, FormControl, Select, Text } from '@chakra-ui/react'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
+import { OrderError } from 'types/order'
 import { ServiceResponse } from 'types/service'
 import OrderItem from './OrderItem'
 
@@ -196,6 +197,7 @@ export default function CreateOrderForm() {
                                     <option value={1}>pending</option>
                                     <option value={2}>delivered</option>
                                     <option value={3}>complete</option>
+                                    <option value={4}>fraud</option>
                                 </Select>
                             </div>
                         )}

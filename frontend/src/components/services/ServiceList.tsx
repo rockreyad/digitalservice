@@ -20,6 +20,7 @@ export default function ServiceList({ data }: { data: ServiceResponse }) {
                     <Thead>
                         <Tr>
                             <Th>Name</Th>
+                            <Th>Price</Th>
                             <Th>Status</Th>
                         </Tr>
                     </Thead>
@@ -28,6 +29,7 @@ export default function ServiceList({ data }: { data: ServiceResponse }) {
                             ? data?.data.map((service, index) => (
                                   <Tr key={index}>
                                       <Td>{service.title}</Td>
+                                      <Td>{service.price}</Td>
                                       <Td>
                                           {service.status
                                               ? 'active'

@@ -11,6 +11,7 @@ async function create_order({
     price: number
     orderItems: {
         serviceId: number
+        itemPrice: number
     }[]
 }) {
     const order = await prisma.order.create({
@@ -67,7 +68,27 @@ async function find_order_by_orderId({ id }: { id: number }) {
             id,
         },
         include: {
-            orderItems: true,
+            orderItems: {
+                select: {
+                    service: {
+                        select: {
+                            title: true,
+                        },
+                    },
+                },
+            },
+            user: {
+                select: {
+                    firstName: true,
+                    lastName: true,
+                    email: true,
+                },
+            },
+            status: {
+                select: {
+                    name: true,
+                },
+            },
         },
     })
     return order

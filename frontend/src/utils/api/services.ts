@@ -8,15 +8,18 @@ export async function addService({
     title,
     description,
     categoryId,
+    price,
 }: {
     title: string
     description: string
     categoryId: number
+    price: number
 }) {
     //send the request with axios
     const res = await axios.post(`http://localhost:4000/service`, {
         title,
         description,
+        price,
         categoryId,
     })
 

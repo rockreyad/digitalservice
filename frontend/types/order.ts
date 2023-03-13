@@ -4,13 +4,24 @@ export type OrderResponse = {
     data?: Order[]
 }
 
-export type Order = {
+export type OrderViewResponse = {
+    status: boolean
+    message: string
+    data?: Order
+}
+
+export interface OrderError {
+    message: string
+}
+
+export interface Order {
     orderId: number
     price?: number
     user: {
         firstName: string
         lastName: string
-        user_id: string
+        email?: string
+        user_id?: string
     }
     orderItems: {
         service: {
