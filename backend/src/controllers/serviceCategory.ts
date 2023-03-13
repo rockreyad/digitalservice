@@ -229,6 +229,7 @@ const find_all_services_by_category = async (req: Request, res: Response) => {
                 return {
                     serviceId: item.id,
                     title: item.title,
+                    price: item.price,
                     status: item.status,
                     description: item.description,
                 }

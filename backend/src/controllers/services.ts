@@ -13,9 +13,9 @@ import {
 
 const new_service = async (req: Request, res: Response) => {
     try {
-        const { title, description, categoryId } = req.body
+        const { title, description, categoryId, price } = req.body
 
-        if (!title || !description || !categoryId) {
+        if (!title || !description || !categoryId || !price) {
             //Response: Mandatory fields are missing
             return res.status(400).json({
                 status: false,
@@ -26,6 +26,7 @@ const new_service = async (req: Request, res: Response) => {
         let serviceData = {
             title,
             description,
+            price: Number(price),
             categoryId: Number(categoryId),
         }
 

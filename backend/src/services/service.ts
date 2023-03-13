@@ -3,16 +3,19 @@ import prisma from '../config/prisma'
 async function create_service({
     title,
     description,
+    price,
     categoryId,
 }: {
     title: string
     description: string
     categoryId: number
+    price: number
 }) {
     const service = await prisma.service.create({
         data: {
             title,
             description,
+            price,
             categoryId: categoryId,
             status: true,
         },

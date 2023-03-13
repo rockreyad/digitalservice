@@ -150,7 +150,7 @@ const get_all_order = async (req: Request, res: Response) => {
 
 //find an order by userId
 const find_an_order = async (req: Request, res: Response) => {
-    const { orderId } = req.body
+    const { orderId } = req.params
 
     if (!orderId) {
         //Response: Mandatory fields are missing
@@ -162,9 +162,9 @@ const find_an_order = async (req: Request, res: Response) => {
         id: Number(orderId),
     }
     try {
-        const foundOrder = await find_order_by_orderId(OrderData)
+        const order = await find_order_by_orderId(OrderData)
 
-        if (!foundOrder) {
+        if (!order) {
             //Response: Order not found
             return res
                 .status(404)
@@ -175,11 +175,13 @@ const find_an_order = async (req: Request, res: Response) => {
             status: true,
             message: 'Order found successfully',
             data: {
-                orderId: foundOrder.id,
-                userId: foundOrder.userId,
-                statusId: foundOrder.statusId,
-                price: foundOrder.price,
-                orderItems: foundOrder.orderItems,
+                orderId: order.id,
+                user: order.user,
+                statusId: order.statusId,
+                statusType: order.status.name,
+                price: order.price,
+                orderItems: order.orderItems,
+                createAt: dayjs(order.createdAt).format('YYYY-MM-DD'),
             },
         }
         //Response: Order found successfully

@@ -9,6 +9,7 @@ export default function CreateServiceForm() {
     const [services, setServices] = useState({
         title: String(''),
         description: String(''),
+        price: Number(''),
         categoryId: Number(''),
         status: Boolean(true),
     })
@@ -124,6 +125,28 @@ export default function CreateServiceForm() {
                                         )
                                     })}
                             </Select>
+                        </div>
+
+                        {/* Price field  */}
+                        <div className="">
+                            <label
+                                className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                                htmlFor="service-name"
+                            >
+                                Price
+                            </label>
+                            <input
+                                className="appearance-none block w-full bg-transparent  text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                                id="service-name"
+                                type="number"
+                                onChange={handleChange}
+                                value={services.price}
+                                name="price"
+                                placeholder="0"
+                            />
+                            <p className="text-gray-600 text-xs italic">
+                                Make it free keep 0 as price
+                            </p>
                         </div>
                         {/* Status Field */}
                         <div className="w-full">

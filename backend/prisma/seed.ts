@@ -58,8 +58,46 @@ async function main() {
         update: {},
         create: {
             id: 1,
-            name: 'Pending',
+            name: 'pending',
             description: 'order is pending',
+        },
+    })
+
+    const orderStatusDelivered = await prisma.orderStatus.upsert({
+        where: { id: 2 },
+        update: {},
+        create: {
+            id: 2,
+            name: 'delivered',
+            description: 'order is delivered',
+        },
+    })
+
+    const orderStatusComplete = await prisma.orderStatus.upsert({
+        where: { id: 3 },
+        update: {},
+        create: {
+            id: 3,
+            name: 'complete',
+            description: 'order is complete',
+        },
+    })
+    const orderStatusFraud = await prisma.orderStatus.upsert({
+        where: { id: 4 },
+        update: {},
+        create: {
+            id: 4,
+            name: 'fraud',
+            description: 'order is fraud',
+        },
+    })
+    const orderStatusProcessing = await prisma.orderStatus.upsert({
+        where: { id: 5 },
+        update: {},
+        create: {
+            id: 5,
+            name: 'processing',
+            description: 'order is Processing',
         },
     })
 
@@ -69,8 +107,9 @@ async function main() {
         update: {},
         create: {
             id: 1,
-            name: 'Pending',
-            description: 'Payment is pending',
+            name: 'pending',
+            description:
+                'This is a payment that has begun, but is not complete.  An example of this is someone who has filled out the checkout form and then gone to PayPal for payment.  We have the record of sale, but they haven’t completed their payment yet',
         },
     })
     const paymentStatusFailed = await prisma.paymentStatus.upsert({
@@ -78,8 +117,29 @@ async function main() {
         update: {},
         create: {
             id: 2,
-            name: 'Failled',
-            description: 'Payment is Failled',
+            name: 'failled',
+            description:
+                'This is a payment where the payment process failed, whether it be a credit card rejection or some other error.',
+        },
+    })
+    const paymentStatusComplete = await prisma.paymentStatus.upsert({
+        where: { id: 3 },
+        update: {},
+        create: {
+            id: 3,
+            name: 'complete',
+            description:
+                'This is a payment that has been paid and the product delivered to the customer',
+        },
+    })
+    const paymentStatusRefunded = await prisma.paymentStatus.upsert({
+        where: { id: 4 },
+        update: {},
+        create: {
+            id: 4,
+            name: 'refunded',
+            description:
+                'This is a payment where money has been transferred back to the customer and the customer no longer has access to the product.',
         },
     })
 
@@ -89,8 +149,27 @@ async function main() {
         update: {},
         create: {
             id: 1,
-            name: 'Cash',
+            name: 'cash',
             description: 'Cash payment',
+        },
+    })
+    const paymentMethodCard = await prisma.paymentMethod.upsert({
+        where: { id: 2 },
+        update: {},
+        create: {
+            id: 2,
+            name: 'debit card',
+            description:
+                'Debit card transactions can be declined if you do not have enough money in your account',
+        },
+    })
+    const paymentMethodMobileBanks = await prisma.paymentMethod.upsert({
+        where: { id: 3 },
+        update: {},
+        create: {
+            id: 3,
+            name: 'mobile banks',
+            description: 'Bkash, Nagad,Rocket, SureCash, Ucash',
         },
     })
 
@@ -108,36 +187,44 @@ async function main() {
                     {
                         service: {
                             create: {
-                                title: 'Service 1',
-                                description: 'Service 1 description',
+                                title: 'Custom website design and development',
+                                description:
+                                    'Create a professional custom website for your business with the latest web technologies (AngularJS, ReactJS and more).',
                                 category: {
                                     create: {
-                                        name: 'Category 1',
-                                        description: 'Category 1 description',
+                                        name: 'Web design and development',
+                                        description:
+                                            'Create stunning websites with powerful functionality',
                                     },
                                 },
+                                price: parseFloat('100.27'),
                             },
                         },
+                        itemPrice: 0,
                     },
                     {
                         service: {
                             create: {
-                                title: 'Service 2',
-                                description: 'Service 2 description',
+                                title: 'Search Engine Optimization (SEO)',
+                                description:
+                                    'improving the quality and quantity of website traffic to a website or a web page from search engines',
                                 category: {
                                     create: {
-                                        name: 'Category 2',
-                                        description: 'Category 2 description',
+                                        name: 'Digital Marketing',
+                                        description:
+                                            'Boost online visibility and drive traffic to your website',
                                     },
                                 },
+                                price: parseFloat('450.81'),
                             },
                         },
+                        itemPrice: 0,
                     },
                 ],
             },
             payment: {
                 create: {
-                    paymentAmount: parseFloat('100.67'),
+                    paymentAmount: parseFloat('230.99'),
                     paymentStatusId: 1,
                     paymentMethodId: 1,
                 },

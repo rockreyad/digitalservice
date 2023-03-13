@@ -1,5 +1,5 @@
 import axios from '../../utils/axiosUtils'
-import { OrderResponse } from 'types/order'
+import { OrderError, OrderResponse, OrderViewResponse } from 'types/order'
 import { AxiosError } from 'axios'
 
 export async function getOrders() {
@@ -7,8 +7,19 @@ export async function getOrders() {
     return res.data as OrderResponse
 }
 
-export interface OrderError {
-    message: string
+export async function getOrderById({
+    queryKey,
+}: any): Promise<OrderViewResponse> {
+    const [orderId] = queryKey
+    try {
+        const res = await axios.get(`/order/${orderId}`)
+        return res.data as OrderViewResponse
+    } catch (error: unknown) {
+        if (error instanceof AxiosError) {
+            throw error.response?.data
+        }
+        throw error
+    }
 }
 
 export async function createOrder({

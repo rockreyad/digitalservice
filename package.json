@@ -9,7 +9,7 @@
         "start": "concurrently --names \"Backend,Frontend\" -c \"bgBlue.bold,bgGreen.bold\" \"npm run server:dev\" \"npm run app:dev\"",
         "start:prod": "concurrently --names \"Backend,Frontend\" -c \"bgBlue.bold,bgGreen.bold\" \"npm run server:start\" \"npm run app:start\"",
         "prepare": "husky install",
-        "server:dev": "cd backend && npm run postinstall",
+        "server:dev": "cd backend && npm run dev",
         "server:start": "cd backend && npm run start",
         "server:build": "cd backend && npm run postinstall",
         "app:dev": "cd frontend && npm run dev",
