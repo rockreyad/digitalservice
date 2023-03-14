@@ -1,4 +1,6 @@
+import { UserListResponse } from './../../../types/user'
 import axios, { AxiosError } from 'axios'
+import axiosConfig from '../axiosUtils'
 import { AuthResponse, User } from 'types/user'
 
 export async function createUser(user: User) {
@@ -27,6 +29,19 @@ export async function loginUser(user: {
         })
 
         return response.data as AuthResponse
+    } catch (error: unknown) {
+        if (error instanceof AxiosError) {
+            throw error.response?.data
+        }
+        throw error
+    }
+}
+
+export async function getUserList(): Promise<UserListResponse> {
+    try {
+        const response = await axiosConfig.get('http://localhost:4000/user')
+
+        return response.data as UserListResponse
     } catch (error: unknown) {
         if (error instanceof AxiosError) {
             throw error.response?.data

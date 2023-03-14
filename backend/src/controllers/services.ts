@@ -83,6 +83,7 @@ const find_all_services = async (req: Request, res: Response) => {
                 return {
                     serviceId: service.id,
                     title: service.title,
+                    price: service.price,
                     description: service.description,
                     status: service.status,
                 }
