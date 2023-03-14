@@ -21,3 +21,17 @@ export interface AuthUserInfo {
     token: string
     expiresIn: string
 }
+
+export type UserInfo = {
+    userId: string
+    firstName: string
+    lastName: string
+    email: string
+    phone: string
+}
+
+export interface UserListResponse {
+    status: boolean
+    message: string
+    data?: UserInfo[]
+}
