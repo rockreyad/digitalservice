@@ -13,6 +13,7 @@ import { AiOutlineUser } from 'react-icons/ai'
 import Link from 'next/link'
 import { useSidebar } from '@/contexts/SidebarContext'
 import { useAuth } from '@/contexts/auth-context'
+import { Box } from '@chakra-ui/react'
 export default function Sidebar() {
     const { user } = useAuth()
 
@@ -28,7 +29,7 @@ export default function Sidebar() {
             submenu: [
                 {
                     name: 'client list',
-                    link: '/client-list',
+                    link: '/',
                     icon: AiOutlineUser,
                 },
                 {
@@ -39,7 +40,7 @@ export default function Sidebar() {
             ],
         },
         {
-            name: 'Payment',
+            name: 'payment',
             link: '/dashboard/payment',
             icon: MdPayments,
             margin: true,
@@ -47,20 +48,20 @@ export default function Sidebar() {
         {
             name: 'profit',
             access: 'admin',
-            link: '/dashboard/payment',
+            link: '/',
             icon: MdOutlinePriceChange,
         },
         {
             name: 'analytics',
             access: 'admin',
-            link: '/dashboard/analytics',
+            link: '/',
             icon: TbReportAnalytics,
             margin: true,
         },
         { name: 'service', link: '/dashboard/service', icon: RiStackLine },
         {
             name: 'Setting',
-            link: '/setting',
+            link: '/',
             icon: RiSettings4Line,
             margin: true,
         },
@@ -74,8 +75,9 @@ export default function Sidebar() {
 
     return (
         <section className="flex gap-6">
-            <div
-                className={`bg-[#0e0e0e] min-h-screen ${
+            <Box
+                bgColor="#5118EB"
+                className={`min-h-screen ${
                     toggleSidebar ? 'w-72' : 'w-16'
                 } duration-500 text-gray-100 px-4`}
             >
@@ -93,7 +95,7 @@ export default function Sidebar() {
                             key={i}
                             className={` ${
                                 menu?.margin && 'mt-5'
-                            } group flex items-center text-sm  gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md`}
+                            } group flex items-center text-sm  gap-3.5 font-medium p-2 hover:bg-gray-600 rounded-md`}
                         >
                             <div>
                                 {React.createElement(menu?.icon, {
@@ -121,7 +123,7 @@ export default function Sidebar() {
                         </Link>
                     ))}
                 </div>
-            </div>
+            </Box>
         </section>
     )
 }

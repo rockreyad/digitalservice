@@ -3,6 +3,7 @@ import { Request, Response } from 'express'
 import {
     all_order,
     create_order,
+    find_all_order_status,
     find_order_by_orderId,
     find_order_by_userId,
     update_order,
@@ -199,7 +200,7 @@ const find_an_order = async (req: Request, res: Response) => {
 
 //Get all order by userId
 const get_all_order_by_userId = async (req: Request, res: Response) => {
-    const { userId } = req.body
+    const { userId } = req.params
     if (!userId) {
         //Response: Mandatory fields are missing
         return res
@@ -214,7 +215,7 @@ const get_all_order_by_userId = async (req: Request, res: Response) => {
     try {
         const foundOrders = await find_order_by_userId(OrderData)
 
-        if (!foundOrders) {
+        if (foundOrders.length < 1) {
             //Response: Order not found
             return res
                 .status(404)
@@ -240,10 +241,40 @@ const get_all_order_by_userId = async (req: Request, res: Response) => {
     } catch (error) {}
 }
 
+//Get all Order Status
+const get_all_order_status = async (req: Request, res: Response) => {
+    try {
+        const foundOrderStatus = await find_all_order_status()
+
+        if (foundOrderStatus.length < 1) {
+            //Response: Order Status not found
+            return res
+                .status(404)
+                .json({ status: false, message: 'Order Status not found' })
+        }
+
+        let response = {
+            status: true,
+            message: 'Order Status found successfully',
+            data: foundOrderStatus.map((orderStatus: any) => {
+                return {
+                    statusId: orderStatus.id,
+                    name: orderStatus.name,
+                    description: orderStatus.description,
+                }
+            }),
+        }
+
+        //Response: Order Status found successfully
+        return res.status(200).json(response)
+    } catch (error) {}
+}
+
 export {
     create_an_order,
     get_all_order,
     update_an_order,
     find_an_order,
     get_all_order_by_userId,
+    get_all_order_status,
 }

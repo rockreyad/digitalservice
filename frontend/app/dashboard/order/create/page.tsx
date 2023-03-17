@@ -1,6 +1,10 @@
 import CreateOrderForm from '@/components/orders/CreateOrderForm'
 
-export default function CreateOrder() {
+export const metadata = {
+    title: 'Create an Order | Dashboard' as string,
+}
+
+export default function CreateOrderPage() {
     return (
         <>
             <div className="p-2 space-y-4">

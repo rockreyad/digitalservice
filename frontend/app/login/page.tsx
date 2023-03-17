@@ -12,13 +12,13 @@ import {
     chakra,
     Box,
     Link,
-    Avatar,
     FormControl,
     FormHelperText,
     InputRightElement,
     Text,
 } from '@chakra-ui/react'
 import { FaUserAlt, FaLock } from 'react-icons/fa'
+import NextLink from 'next/link'
 
 import { useMutation, useQueryClient } from 'react-query'
 import { useRouter } from 'next/navigation'
@@ -95,19 +95,25 @@ export default function Login() {
             flexDirection="column"
             width="100wh"
             height="100vh"
-            backgroundColor="gray.200"
+            bgGradient={'linear(to-r, primary.500, primary.300)'}
             justifyContent="center"
             alignItems="center"
         >
             <Stack
                 flexDir="column"
                 mb="2"
+                spacing={4}
                 justifyContent="center"
                 alignItems="center"
             >
-                <Avatar bg="teal.500" />
-                <Heading color="teal.400">Welcome</Heading>
-                <Box minW={{ base: '90%', md: '468px' }}>
+                <Heading
+                    fontSize={['4xl', '4xl', '5xl']}
+                    textTransform={'uppercase'}
+                    color="white"
+                >
+                    user Login
+                </Heading>
+                <Box py={'10'} minW={{ base: '90%', md: '468px' }}>
                     <form onSubmit={handleSubmit}>
                         <Stack
                             spacing={4}
@@ -194,7 +200,7 @@ export default function Login() {
                                 borderRadius={0}
                                 type="submit"
                                 variant="solid"
-                                colorScheme="teal"
+                                colorScheme="primary"
                                 width="full"
                             >
                                 {isLoading ? 'Loading...' : 'Login'}
@@ -203,9 +209,9 @@ export default function Login() {
                     </form>
                 </Box>
             </Stack>
-            <Box>
+            <Box display="flex" gap={5}>
                 New to us?
-                <Link color="teal.500" href="/register">
+                <Link as={NextLink} color="white" href="/register">
                     Sign Up
                 </Link>
             </Box>

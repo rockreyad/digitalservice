@@ -1,5 +1,10 @@
 import axios from '../../utils/axiosUtils'
-import { OrderError, OrderResponse, OrderViewResponse } from 'types/order'
+import {
+    OrderError,
+    OrderResponse,
+    OrderStatusResponse,
+    OrderViewResponse,
+} from 'types/order'
 import { AxiosError } from 'axios'
 
 export async function getOrders() {
@@ -31,7 +36,7 @@ export async function createOrder({
     userId: string
     statusId: number
     price: number
-    orderItems: { serviceId: number }[]
+    orderItems: { serviceId: number; itemPrice: number }[]
 }): Promise<OrderResponse | OrderError> {
     try {
         const res = await axios.post(`/order`, {
@@ -41,6 +46,18 @@ export async function createOrder({
             orderItems,
         })
         return res.data as OrderResponse
+    } catch (error: unknown) {
+        if (error instanceof AxiosError) {
+            throw error.response?.data
+        }
+        throw error
+    }
+}
+
+export async function getOrderStatus(): Promise<OrderStatusResponse> {
+    try {
+        const res = await axios.get(`/order/status`)
+        return res.data as OrderStatusResponse
     } catch (error: unknown) {
         if (error instanceof AxiosError) {
             throw error.response?.data

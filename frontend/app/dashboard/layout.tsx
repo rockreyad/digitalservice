@@ -27,7 +27,7 @@ export default function DashboardLayout({
                 {/* Main Sidebar for navigates  */}
                 <Sidebar />
             </nav>
-            <div className="w-full bg-[#F4F7FE]">
+            <div className="w-full bg-[#F9F6EE]">
                 {/* Header : breadcrumb,profile,logout */}
 
                 <DashboardHeader />

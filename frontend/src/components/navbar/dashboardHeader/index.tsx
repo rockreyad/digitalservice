@@ -2,6 +2,7 @@
 
 import {
     Avatar,
+    Box,
     Menu,
     MenuButton,
     MenuDivider,
@@ -28,7 +29,10 @@ export default function DashboardHeader() {
     const router = usePathname()
     return (
         <div className="p-2">
-            <div className="py-4 px-2 bg-[#1294ff3b] flex justify-between rounded-2xl">
+            <Box
+                bgColor={'white'}
+                className="py-4 px-2 flex justify-between rounded-2xl"
+            >
                 <div className="flex flex-col space-y-1">
                     <p className="text-gray-500 space-x-1">
                         <span className="text-sm font-light"> Pages</span> /
@@ -83,7 +87,7 @@ export default function DashboardHeader() {
                             <MenuButton as="button">
                                 <Avatar
                                     size="sm"
-                                    name="Dan Abrahmov"
+                                    name={`${user?.firstName} ${user?.lastName}`}
                                     src="https://bit.ly/dan-abramov"
                                 />
                             </MenuButton>
@@ -91,13 +95,30 @@ export default function DashboardHeader() {
                                 <MenuGroup
                                     title={`${user?.firstName} ${user?.lastName}`}
                                 >
-                                    <MenuItem>My Account</MenuItem>
-                                    <MenuItem>Payments </MenuItem>
-                                </MenuGroup>
-                                <MenuDivider />
-                                <MenuGroup title="Help">
-                                    <MenuItem>Docs</MenuItem>
-                                    <MenuItem onClick={() => logout()}>
+                                    <MenuDivider />
+                                    <MenuItem
+                                        textColor={'gray.700'}
+                                        fontWeight={'medium'}
+                                        fontSize={'smaller'}
+                                        _hover={{
+                                            bg(theme) {
+                                                return theme.colors.gray[100]
+                                            },
+                                        }}
+                                    >
+                                        My Account
+                                    </MenuItem>
+                                    <MenuItem
+                                        textColor={'gray.700'}
+                                        fontWeight={'medium'}
+                                        fontSize={'smaller'}
+                                        _hover={{
+                                            bg(theme) {
+                                                return theme.colors.gray[100]
+                                            },
+                                        }}
+                                        onClick={() => logout()}
+                                    >
                                         Logout
                                     </MenuItem>
                                 </MenuGroup>
@@ -105,7 +126,7 @@ export default function DashboardHeader() {
                         </Menu>
                     </div>
                 </div>
-            </div>
+            </Box>
         </div>
     )
 }

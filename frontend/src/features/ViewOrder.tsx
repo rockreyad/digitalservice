@@ -3,6 +3,7 @@ import { getOrderById } from '@/utils/api/order'
 import { AddIcon, ExternalLinkIcon } from '@chakra-ui/icons'
 import {
     Badge,
+    Flex,
     IconButton,
     ListItem,
     Menu,
@@ -116,7 +117,7 @@ function CustomerCart({
     orderItems,
     orderSummary,
 }: {
-    orderItems: { service: { title: string } }[]
+    orderItems: { service: { title: string }; itemPrice: number }[]
     orderSummary: number
 }) {
     return (
@@ -132,13 +133,22 @@ function CustomerCart({
                     <UnorderedList className="p-2">
                         {orderItems?.map((item, index) => (
                             <ListItem key={index}>
-                                <Text
-                                    fontSize={'small'}
-                                    fontWeight={'medium'}
-                                    color={'GrayText'}
-                                >
-                                    {item?.service?.title}
-                                </Text>
+                                <Flex justify={'space-between'}>
+                                    <Text
+                                        fontSize={'small'}
+                                        fontWeight={'medium'}
+                                        color={'GrayText'}
+                                    >
+                                        {item?.service?.title}
+                                    </Text>
+                                    <Text>
+                                        {item.itemPrice === 0 ? (
+                                            'Free'
+                                        ) : (
+                                            <>{item?.itemPrice}৳</>
+                                        )}
+                                    </Text>
+                                </Flex>
                             </ListItem>
                         ))}
                     </UnorderedList>
@@ -156,15 +166,15 @@ function CustomerInfo({
 }) {
     return (
         <>
-            <div className="bg-white p-4 h-fit">
+            <div className="bg-white p-4 h-fit space-y-4">
                 <div className="">
                     <h1 className="text-xl font-medium">
                         Customer Information
                     </h1>
 
-                    <div className="flex justify-between">
+                    <div className="flex justify-between py-4">
                         <p>Customer Name</p>
-                        <p>{`${user.firstName} ${user.firstName}`}</p>
+                        <p>{`${user.firstName} ${user.lastName}`}</p>
                     </div>
                     <div className="flex justify-between">
                         <p>Customer Email</p>
@@ -183,22 +193,24 @@ function CustomerInfo({
 function OrderSummary({ price }: { price: number }) {
     return (
         <>
-            <div className="bg-white p-4 rounded-md ">
+            <div className="bg-white p-4 rounded-md space-y-4">
                 <h1 className="text-xl font-medium">Summary</h1>
 
                 <div>
                     <div className="flex justify-between">
                         <p>Subtotal</p>
-                        <p>₦ 0.00</p>
+                        <p>৳ 0.00</p>
                     </div>
                     <div className="flex justify-between">
                         <p>Tax</p>
-                        <p>₦ 0.00</p>
+                        <p>৳ 0.00</p>
                     </div>
                     <hr />
-                    <div className="flex justify-between">
-                        <p>Total</p>
-                        <p>₦ {price}</p>
+                    <div className="flex justify-between py-4">
+                        <p className="font-semibold text-lg">Total</p>
+                        <p className="font-semibold text-lg">
+                            ৳ {price.toFixed(2)}
+                        </p>
                     </div>
                 </div>
             </div>

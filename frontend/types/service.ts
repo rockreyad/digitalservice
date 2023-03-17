@@ -6,7 +6,6 @@ export type Service = {
     status: boolean
     createdAt?: string
     updatedAt?: string
-    isFree?: boolean
 }
 
 export type ServiceResponse = {

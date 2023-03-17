@@ -20,6 +20,7 @@ import {
     find_an_order,
     get_all_order,
     get_all_order_by_userId,
+    get_all_order_status,
     update_an_order,
 } from '../controllers/order'
 
@@ -59,6 +60,12 @@ export default function routes(app: Express) {
     orderRouter.get('/', get_all_order)
     orderRouter.get('/:orderId', find_an_order)
     orderRouter.get('/user/:userId', get_all_order_by_userId)
+
+    /** Order Status: all OrderStatus */
+    const orderStatusRouter = express.Router()
+    orderStatusRouter.get('/', get_all_order_status)
+
+    app.use('/order/status', orderStatusRouter)
 
     app.use('/order', authorize, orderRouter)
 }

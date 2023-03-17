@@ -1,5 +1,6 @@
 'use client'
 
+import { Button } from '@chakra-ui/react'
 import { useRouter } from 'next/navigation'
 
 //primary Button type
@@ -11,11 +12,12 @@ type RouterButtonProps = {
 export default function RouterButton({ name, link }: RouterButtonProps) {
     const router = useRouter()
     return (
-        <button
-            className="px-2 py-1 bg-black text-white hover:bg-white hover:text-black border border-black rounded"
+        <Button
+            bgColor={'primary.500'}
+            color={'white'}
             onClick={() => router.push(`/${link}`)}
         >
             {name}
-        </button>
+        </Button>
     )
 }

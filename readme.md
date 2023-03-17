@@ -1,4 +1,4 @@
-# Digial Marketing Service Portal
+# Digital Marketing Service Portal
 
 Digital Web Services “DWS” is a leading IT outsourcing company with specialization in software development, Application development, website designing and digital marketing services. Here we are always working for effective solutions and optimum results at suitable cost so that everyone can increase their business revenue online.
 

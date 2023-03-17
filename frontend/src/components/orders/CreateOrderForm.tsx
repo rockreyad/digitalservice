@@ -6,9 +6,13 @@ import { getService } from '@/utils/api/services'
 import { getUserList } from '@/utils/api/user'
 import {
     Box,
+    Button,
     FormControl,
+    FormLabel,
+    Input,
+    InputGroup,
+    InputLeftElement,
     Select,
-    Switch,
     Table,
     TableContainer,
     Tbody,
@@ -20,11 +24,12 @@ import {
 } from '@chakra-ui/react'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
-import { GoDiffAdded, GoDiffRemoved } from 'react-icons/go'
+import { GoDiffRemoved } from 'react-icons/go'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { OrderError } from 'types/order'
 import { Service, ServiceResponse } from 'types/service'
 import { UserListResponse } from 'types/user'
+import { OrderItem } from './OrderItem'
 
 export default function CreateOrderForm() {
     const { user } = useAuth()
@@ -32,20 +37,29 @@ export default function CreateOrderForm() {
         userId: user?.role === 'admin' ? String('') : (user?.userId as string),
         statusId: user?.role === 'admin' ? Number('') : Number(1),
         price: Number(''),
-        orderItems: Array<{ serviceId: number }>(),
+        orderItems: Array<{ serviceId: number; itemPrice: number }>(),
     })
+
+    //selected services
+    const [selectedServices, setSelectedServices] = useState<Service[]>([])
+
+    //total service price for OrderItems Array
+    const totalServicePrice = selectedServices.reduce(
+        (acc, service) => acc + service.price,
+        0,
+    )
+    React.useEffect(() => {
+        setOrder((prevOrder) => ({
+            ...prevOrder,
+            orderItems: selectedServices.map((service) => ({
+                serviceId: service.serviceId!,
+                itemPrice: service.price,
+            })),
+            price: totalServicePrice,
+        }))
+    }, [selectedServices, totalServicePrice])
+
     const router = useRouter()
-
-    //mutate the inputfiled data
-    function handleChange(
-        e:
-            | React.ChangeEvent<HTMLInputElement>
-            | React.ChangeEvent<HTMLTextAreaElement>
-            | React.ChangeEvent<HTMLSelectElement>,
-    ) {
-        setOrder({ ...order, [e.target.name]: e.target.value })
-    }
-
     const queryClient = useQueryClient()
 
     //get The services and users
@@ -61,6 +75,27 @@ export default function CreateOrderForm() {
         },
     )
 
+    //if the order is created successfully redirect to the order page
+    React.useEffect(() => {
+        isSuccess ? router.push('/dashboard/order') : null
+    }, [isSuccess, router])
+
+    //Error message
+    const OrderError = (error as OrderError)?.message
+        ? (error as OrderError).message
+        : 'Something went wrong'
+
+    //mutate the inputfiled data
+    function handleChange(
+        e:
+            | React.ChangeEvent<HTMLInputElement>
+            | React.ChangeEvent<HTMLTextAreaElement>
+            | React.ChangeEvent<HTMLSelectElement>
+            | React.ChangeEvent<HTMLInputElement>,
+    ) {
+        setOrder({ ...order, [e.target.name]: e.target.value })
+    }
+
     //validation and send data to backend
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -69,33 +104,7 @@ export default function CreateOrderForm() {
         console.log(order)
     }
 
-    React.useEffect(() => {
-        //if the order is created successfully redirect to the order page
-        isSuccess ? router.push('/dashboard/order') : null
-    }, [isSuccess, router])
-
-    const OrderError = (error as OrderError)?.message
-        ? (error as OrderError).message
-        : 'Something went wrong'
-
-    //if the Service is Free
-
-    const [selectedServices, setSelectedServices] = useState<Service[]>([])
-
-    const customPrice = (
-        e: React.ChangeEvent<HTMLInputElement>,
-        id: number | undefined,
-    ) => {
-        if (!id) {
-            return
-        }
-        const service = selectedServices.map((service) =>
-            service.serviceId === id
-                ? { ...service, isFree: e.target.checked }
-                : service,
-        )
-        setSelectedServices(service)
-    }
+    //remove services from selected services
     const removeService = (serviceId: number | undefined) => {
         if (!serviceId) {
             return
@@ -106,9 +115,27 @@ export default function CreateOrderForm() {
         )
         setSelectedServices(newServices)
     }
+
+    const handlePriceChange = (
+        e: React.ChangeEvent<HTMLInputElement>,
+        id: number | undefined,
+    ) => {
+        if (!id) {
+            return
+        }
+
+        const service = selectedServices.map((service) =>
+            service.serviceId === id
+                ? { ...service, price: Number(e.target.value) }
+                : service,
+        )
+
+        setSelectedServices(service)
+    }
+
     return (
         <>
-            <div className="">
+            <div className="lg:h-screen">
                 <form onSubmit={handleSubmit} className="w-full">
                     {isError ? (
                         <FormControl>
@@ -144,12 +171,13 @@ export default function CreateOrderForm() {
                             {user?.role === 'admin' && (
                                 <div className="w-full px-3 mb-6 md:mb-0">
                                     <div className="bg-white p-2 rounded">
-                                        <label
-                                            className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                                        <FormLabel
+                                            color={'primary.500'}
+                                            className="block uppercase tracking-wide  text-xs font-bold mb-2"
                                             htmlFor="service-description"
                                         >
                                             Select Customer
-                                        </label>
+                                        </FormLabel>
                                         <Select
                                             value={order.userId}
                                             onChange={handleChange}
@@ -172,9 +200,12 @@ export default function CreateOrderForm() {
                             {/* Selected Services */}
                             <div className="w-full px-3 mb-6 md:mb-0">
                                 <div className="bg-white p-2 rounded">
-                                    <h1 className="block uppercase tracking-wide text-gray-700 text-xs font-bold p-1">
+                                    <FormLabel
+                                        color={'primary.500'}
+                                        className="block uppercase tracking-wide  text-xs font-bold p-1"
+                                    >
                                         Selected Services
-                                    </h1>
+                                    </FormLabel>
                                     {selectedServices.length > 0 ? (
                                         <TableContainer>
                                             <Table size="sm">
@@ -182,7 +213,6 @@ export default function CreateOrderForm() {
                                                     <Tr>
                                                         <Th>name</Th>
                                                         <Th isNumeric>price</Th>
-                                                        <Th>free</Th>
                                                         <Th>cart</Th>
                                                     </Tr>
                                                 </Thead>
@@ -206,29 +236,53 @@ export default function CreateOrderForm() {
                                                                     </Text>
                                                                 </Td>
                                                                 <Td isNumeric>
+                                                                    {/* if the
+                                                                    user is
+                                                                    admin then
+                                                                    he can
+                                                                    change the
+                                                                    price */}
+                                                                    {user?.role ===
+                                                                    'admin' ? (
+                                                                        <InputGroup>
+                                                                            <InputLeftElement color="gray.300">
+                                                                                &#2547;
+                                                                            </InputLeftElement>
+
+                                                                            <Input
+                                                                                type={
+                                                                                    'number'
+                                                                                }
+                                                                                name="price"
+                                                                                onChange={(
+                                                                                    e,
+                                                                                ) =>
+                                                                                    handlePriceChange(
+                                                                                        e,
+                                                                                        service?.serviceId,
+                                                                                    )
+                                                                                }
+                                                                                value={
+                                                                                    service.price
+                                                                                }
+                                                                                size="sm"
+                                                                            />
+                                                                        </InputGroup>
+                                                                    ) : (
+                                                                        <>
+                                                                            <Text>
+                                                                                {'&#2547;' +
+                                                                                    service.price}
+                                                                            </Text>
+                                                                        </>
+                                                                    )}
                                                                     <Text
                                                                         fontSize={
                                                                             'smaller'
                                                                         }
-                                                                    >
-                                                                        {service.isFree
-                                                                            ? 0
-                                                                            : service.price}
-                                                                    </Text>
+                                                                    ></Text>
                                                                 </Td>
-                                                                <Td>
-                                                                    <Switch
-                                                                        onChange={(
-                                                                            e,
-                                                                        ) =>
-                                                                            customPrice(
-                                                                                e,
-                                                                                service?.serviceId,
-                                                                            )
-                                                                        }
-                                                                        size="sm"
-                                                                    />
-                                                                </Td>
+
                                                                 <Td>
                                                                     <GoDiffRemoved
                                                                         className="cursor-pointer hover:bg-black hover:text-white"
@@ -260,12 +314,13 @@ export default function CreateOrderForm() {
                             {user?.role === 'admin' && (
                                 <div className="w-full px-3 mb-6 md:mb-0">
                                     <div className="bg-white p-2 rounded">
-                                        <label
-                                            className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                                        <FormLabel
+                                            color={'primary.500'}
+                                            className="block uppercase tracking-wide  text-xs font-bold mb-2"
                                             htmlFor="service-description"
                                         >
                                             Order Status
-                                        </label>
+                                        </FormLabel>
                                         <Select
                                             value={order.statusId}
                                             onChange={handleChange}
@@ -284,107 +339,68 @@ export default function CreateOrderForm() {
                             {/* Price Field */}
                             <div className="w-full px-3  mb-6 md:mb-0">
                                 <div className="bg-white p-2 rounded">
-                                    <label
-                                        className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                                    <FormLabel
+                                        color="primary.500"
+                                        className="block uppercase tracking-wide  text-xs font-bold mb-2"
                                         htmlFor="service-description"
                                     >
                                         Order price
-                                    </label>
+                                    </FormLabel>
 
-                                    <input
+                                    <Input
+                                        disabled
+                                        hidden
+                                        textColor={'black'}
                                         type={'number'}
                                         {...(user?.role === 'user' && {
                                             disabled: true,
                                         })}
                                         className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                                         id="service-description"
-                                        onChange={handleChange}
-                                        value={order.price}
+                                        value={totalServicePrice}
                                         name="price"
                                         placeholder="price"
                                     />
+
+                                    <Text fontSize={'lg'} as="b">
+                                        &#2547;{' '}
+                                        {parseFloat(
+                                            String(totalServicePrice),
+                                        ).toFixed(2)}
+                                    </Text>
                                 </div>
                             </div>
                         </div>
                         {/* Select service Item */}
                         <div className="md:w-3/5 px-3 mb-6 md:mb-0">
                             <div className="bg-white p-2 rounded">
-                                <label
-                                    className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                                <FormLabel
+                                    color={'primary.500'}
+                                    className="block uppercase tracking-wide  text-xs font-bold mb-2"
                                     htmlFor="service-description"
                                 >
                                     Service List
-                                </label>
+                                </FormLabel>
 
                                 <OrderItem
                                     setSelectedServices={setSelectedServices}
+                                    selectedServices={selectedServices}
                                     data={services as ServiceResponse}
                                 />
                             </div>
                         </div>
                     </div>
-
-                    <button
-                        className="bg-black py-1 px-6 rounded text-white capitalize"
+                    {/* Submit button */}
+                    <Button
+                        bgColor={'primary.500'}
+                        color={'white'}
                         type="submit"
                         disabled={isLoading}
                     >
                         {isLoading ? 'loading...' : 'submit'}
-                    </button>
+                    </Button>
                 </form>
             </div>
         </>
-    )
-}
-
-const OrderItem = ({
-    data,
-    setSelectedServices,
-}: {
-    data: ServiceResponse
-    setSelectedServices: React.Dispatch<React.SetStateAction<Service[]>>
-}) => {
-    return (
-        <div>
-            <TableContainer>
-                <Table size={['sm']}>
-                    <Thead>
-                        <Tr>
-                            <Th>name</Th>
-                            <Th isNumeric>price</Th>
-                            <Th>cart</Th>
-                        </Tr>
-                    </Thead>
-                    <Tbody>
-                        {data?.data?.map((service) => (
-                            <Tr key={service.serviceId}>
-                                <Td>
-                                    <Text fontSize={'smaller'}>
-                                        {service.title}
-                                    </Text>
-                                </Td>
-                                <Td isNumeric>
-                                    <Text fontSize={'smaller'}>
-                                        {service.price}
-                                    </Text>
-                                </Td>
-
-                                <Td>
-                                    <GoDiffAdded
-                                        className="cursor-pointer hover:bg-black hover:text-white"
-                                        onClick={() =>
-                                            setSelectedServices((prev) => [
-                                                ...prev,
-                                                service,
-                                            ])
-                                        }
-                                    />
-                                </Td>
-                            </Tr>
-                        ))}
-                    </Tbody>
-                </Table>
-            </TableContainer>
-        </div>
     )
 }

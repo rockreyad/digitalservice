@@ -55,7 +55,13 @@ export default function Navbar() {
                                 <chakra.span ml="1">🍫</chakra.span>
                                 <VisuallyHidden>Project-D</VisuallyHidden>
                             </chakra.a>
-                            <chakra.h1 fontSize="xl" fontWeight="medium" ml="2">
+                            <chakra.h1
+                                color={'primary.500'}
+                                fontSize="xl"
+                                fontWeight="bold"
+                                ml="2"
+                                fontFamily={'heading'}
+                            >
                                 Project-D
                             </chakra.h1>
                         </Flex>
@@ -81,7 +87,7 @@ export default function Navbar() {
                                         onClick={() =>
                                             router.push('/dashboard')
                                         }
-                                        color={'blue.500'}
+                                        color={'primary.500'}
                                         variant={'outline'}
                                         size={'sm'}
                                     >
@@ -92,7 +98,7 @@ export default function Navbar() {
                                 <>
                                     <Button
                                         onClick={() => router.push('/login')}
-                                        color={'green.500'}
+                                        color={'primary.500'}
                                         variant={'outline'}
                                         size={'sm'}
                                     >

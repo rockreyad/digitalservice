@@ -27,7 +27,21 @@ export interface Order {
         service: {
             title: string
         }[]
+        itemPrice: number
     }
     statusType: string
+    statusId: number
     createAt: string
+}
+
+export type OrderStatus = {
+    statusId: number
+    name: string
+    description?: string
+}
+
+export type OrderStatusResponse = {
+    status: boolean
+    message: string
+    data?: OrderStatus[]
 }

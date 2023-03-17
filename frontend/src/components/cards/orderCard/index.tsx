@@ -37,10 +37,10 @@ export default function OrderCard() {
 function StatsCard({ data }: { data: any }) {
     return (
         <div className="">
-            <Box rounded={'md'} bg="white" w="100%" p={3} color="black">
+            <Box rounded={'md'} bg="white" w="100%" p={3} color="gray.600">
                 <div className="flex flex-col">
                     <Text
-                        textColor={'gray.400'}
+                        textColor={'primary.400'}
                         fontWeight={'semibold'}
                         fontSize="x-small"
                     >

@@ -75,6 +75,7 @@ async function find_order_by_orderId({ id }: { id: number }) {
                             title: true,
                         },
                     },
+                    itemPrice: true,
                 },
             },
             user: {
@@ -144,10 +145,16 @@ async function all_order() {
     return order
 }
 
+async function find_all_order_status() {
+    const orderStatus = await prisma.orderStatus.findMany()
+    return orderStatus
+}
+
 export {
     create_order,
     all_order,
     update_order,
     find_order_by_userId,
     find_order_by_orderId,
+    find_all_order_status,
 }
