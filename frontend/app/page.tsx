@@ -1,5 +1,6 @@
 import Navbar from '@/components/navbar/Navbar'
 import FooterAdmin from '@/components/footer/FooterAdmin'
+import HomePage from '@/components/homepage'
 
 export const metadata = {
     title: 'Landing Page of Digital Services',
@@ -11,10 +12,8 @@ export default function Home() {
             <div>
                 {/* Top Header */}
                 <Navbar />
-                <p className="h-screen">
-                    A Landing page Will be here for Guest , user & admin
-                </p>
 
+                <HomePage />
                 {/* Footer */}
                 <FooterAdmin />
             </div>

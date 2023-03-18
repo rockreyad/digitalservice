@@ -123,16 +123,10 @@ model PaymentStatus{
   id Int @id @default(autoincrement())
   name String
   description String?
-  payment Payment[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model PaymentMethod{
-  id Int @id @default(autoincrement())
-  name String
-  description String?
-  payment Payment[]
+  mobileBanking MobileBanking[]
+  cashPayment CashPayment[]
+  bank Bank[]
+  debitCard DebitCard[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -141,12 +135,66 @@ model Payment{
   id Int @id @default(autoincrement())
   orderId Int
   order Order @relation(fields: [orderId], references: [id])
-  paymentStatusId Int
-  paymentStatus PaymentStatus @relation(fields: [paymentStatusId], references: [id])
-  paymentAmount Float
-  paymentMethodId Int
-  paymentMethod PaymentMethod @relation(fields: [paymentMethodId], references: [id])
+  cashPayment CashPayment?
+  bank Bank?
+  debitCard DebitCard?
+  mobileBanking MobileBanking?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
+model CashPayment {
+  id Int @id @default(autoincrement())
+  paymentId Int @unique
+  payment Payment @relation(fields: [paymentId], references: [id])
+  amount Float
+  status Int
+  paymentStatus PaymentStatus @relation(fields: [status], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model MobileBanking{
+  id Int @id @default(autoincrement())
+  paymentId Int @unique
+  payment Payment @relation(fields: [paymentId], references: [id])
+  bank_name String
+  account_holder_name String
+  account_number String
+  trxId String
+  amount Float
+  status Int
+  paymentStatus PaymentStatus @relation(fields: [status], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Bank{
+  id Int @id @default(autoincrement())
+  paymentId Int @unique
+  payment Payment @relation(fields: [paymentId], references: [id])
+  name String
+  account_holder_name String
+  account_number String
+  account_type String
+  amount Float
+  status Int
+  paymentStatus PaymentStatus @relation(fields: [status], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model DebitCard{
+  id Int @id @default(autoincrement())
+  paymentId Int @unique
+  payment Payment @relation(fields: [paymentId], references: [id])
+  name String
+  card_number String
+  cvv String
+  exp_date String
+  amount Float
+  status Int
+  paymentStatus PaymentStatus @relation(fields: [status], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

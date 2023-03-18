@@ -143,44 +143,14 @@ async function main() {
         },
     })
 
-    //upsert PaymentMethod
-    const paymentMethodCash = await prisma.paymentMethod.upsert({
-        where: { id: 1 },
-        update: {},
-        create: {
-            id: 1,
-            name: 'cash',
-            description: 'Cash payment',
-        },
-    })
-    const paymentMethodCard = await prisma.paymentMethod.upsert({
-        where: { id: 2 },
-        update: {},
-        create: {
-            id: 2,
-            name: 'debit card',
-            description:
-                'Debit card transactions can be declined if you do not have enough money in your account',
-        },
-    })
-    const paymentMethodMobileBanks = await prisma.paymentMethod.upsert({
-        where: { id: 3 },
-        update: {},
-        create: {
-            id: 3,
-            name: 'mobile banks',
-            description: 'Bkash, Nagad,Rocket, SureCash, Ucash',
-        },
-    })
-
-    //upsert an Order with OrderItem
+    //upsert an Order with OrderItem and Payment with mobileBanking
     const order = await prisma.order.upsert({
         where: { id: 1 },
         update: {},
         create: {
             id: 1,
             userId: user.user_id,
-            price: parseFloat('100.67'),
+            price: parseFloat('5020.67'),
             statusId: 1,
             orderItems: {
                 create: [
@@ -200,7 +170,7 @@ async function main() {
                                 price: parseFloat('100.27'),
                             },
                         },
-                        itemPrice: 0,
+                        itemPrice: 390,
                     },
                     {
                         service: {
@@ -218,30 +188,24 @@ async function main() {
                                 price: parseFloat('450.81'),
                             },
                         },
-                        itemPrice: 0,
+                        itemPrice: 120,
                     },
                 ],
             },
             payment: {
                 create: {
-                    paymentAmount: parseFloat('230.99'),
-                    paymentStatusId: 1,
-                    paymentMethodId: 1,
+                    mobileBanking: {
+                        create: {
+                            bank_name: 'bKash',
+                            account_holder_name: 'Rahim',
+                            account_number: '01700000000',
+                            trxId: '1234567890',
+                            amount: parseFloat('1500'),
+                            status: 3,
+                        },
+                    },
                 },
             },
-        },
-    })
-
-    //Upsert a payment
-    const payment = await prisma.payment.upsert({
-        where: { id: 1 },
-        update: {},
-        create: {
-            id: 1,
-            paymentAmount: parseFloat('100.67'),
-            paymentStatusId: 1,
-            paymentMethodId: 1,
-            orderId: order.id,
         },
     })
 

@@ -61,7 +61,7 @@ export default function PaymentTable() {
                             <Td>May 19 2023</Td>
                             <Td>PayPal</Td>
                             <Td>Lorem ipsum dolor sit.</Td>
-                            <Td>100৳</Td>
+                            <Td>{Number(100).toFixed(2)}৳</Td>
                             <Td>Completed</Td>
                             <Td>...</Td>
                         </Tr>
