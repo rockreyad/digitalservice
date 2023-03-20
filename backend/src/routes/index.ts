@@ -25,6 +25,11 @@ import {
 } from '../controllers/order'
 
 import { authorize } from '../middlewares/auth'
+import {
+    create_a_payment,
+    find_all_order_payments,
+    find_all_payments,
+} from '../controllers/payment'
 
 export default function routes(app: Express) {
     app.get('/', (req: Request, res: Response) => {
@@ -60,12 +65,17 @@ export default function routes(app: Express) {
     orderRouter.get('/', get_all_order)
     orderRouter.get('/:orderId', find_an_order)
     orderRouter.get('/user/:userId', get_all_order_by_userId)
+    app.use('/order', authorize, orderRouter)
 
     /** Order Status: all OrderStatus */
     const orderStatusRouter = express.Router()
     orderStatusRouter.get('/', get_all_order_status)
-
     app.use('/order/status', orderStatusRouter)
 
-    app.use('/order', authorize, orderRouter)
+    /** Payment: */
+    const paymentRouter = express.Router()
+    paymentRouter.post('/', create_a_payment)
+    paymentRouter.get('/:orderId', find_all_order_payments)
+    paymentRouter.get('/', find_all_payments)
+    app.use('/payment', authorize, paymentRouter)
 }

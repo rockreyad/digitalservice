@@ -14,6 +14,8 @@ import {
     Select,
 } from '@chakra-ui/react'
 
+import React from 'react'
+
 const paymentMoney = [500, 1000, 2000, 5000, 10000]
 
 export default function PaymentForm() {
@@ -35,17 +37,17 @@ export default function PaymentForm() {
                     <FormControl>
                         <FormLabel>Amount</FormLabel>
                         <NumberInput
-                            format={(
-                                value: string | number | null | undefined,
-                            ) => `${value}`}
+                            format={(value: string | number) => `BDT ${value}`}
                             value={amount}
                             max={10000}
                             min={100}
                             onChange={(valueString) =>
-                                setAmount(parseInt(valueString))
+                                setAmount(
+                                    valueString ? parseInt(valueString) : 0,
+                                )
                             }
                         >
-                            <NumberInputField value={amount} />
+                            <NumberInputField />
                             <NumberInputStepper>
                                 <NumberIncrementStepper />
                                 <NumberDecrementStepper />

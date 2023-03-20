@@ -4,6 +4,7 @@ import {
     Badge,
     Box,
     Button,
+    Center,
     Table,
     Tbody,
     Td,
@@ -21,6 +22,7 @@ import { useAuth } from '@/contexts/auth-context'
 import { MdPayment } from 'react-icons/md'
 import OrderTableFilter from '@/components/orders/OrderTableFilter'
 import React from 'react'
+import Loading from '@/components/loading'
 
 export default function OrderTable() {
     const { data, isLoading, isError } = useQuery('orders', getOrders)
@@ -49,9 +51,11 @@ export default function OrderTable() {
 
             {/* Order Table */}
             {isLoading ? (
-                <div>
-                    <p>Loading...</p>
-                </div>
+                <Center>
+                    <Box>
+                        <Loading width={120} height={120} />
+                    </Box>
+                </Center>
             ) : (
                 <div className="w-full">
                     <Box overflow={'scroll'}>
