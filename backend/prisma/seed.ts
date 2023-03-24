@@ -1,4 +1,5 @@
 import prisma from '../src/config/prisma'
+import generateInvoice from '../src/helpers/GenerateInvoice'
 
 async function main() {
     // Create a new user
@@ -149,6 +150,7 @@ async function main() {
         update: {},
         create: {
             id: 1,
+            invoiceId: generateInvoice(1),
             userId: user.user_id,
             price: parseFloat('5020.67'),
             statusId: 1,

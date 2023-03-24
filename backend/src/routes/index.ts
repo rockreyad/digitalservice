@@ -70,7 +70,7 @@ export default function routes(app: Express) {
     /** Order Status: all OrderStatus */
     const orderStatusRouter = express.Router()
     orderStatusRouter.get('/', get_all_order_status)
-    app.use('/order/status', orderStatusRouter)
+    app.use('/order-status', orderStatusRouter)
 
     /** Payment: */
     const paymentRouter = express.Router()
