@@ -3,6 +3,7 @@ import express, { Express, NextFunction, Request, Response } from 'express'
 
 import { config } from './config'
 import routes from './routes'
+import Logger from './utils/Logger'
 
 dotenv.config()
 
@@ -23,14 +24,27 @@ app.use((req: Request, res: Response, next: NextFunction) => {
     if (req.method == 'OPTIONS') {
         res.header('Acess-Control-Allow-Methods', 'PUT,POST,GET,PATCH,DELETE')
 
-        return res.status(200).json({})
+        return res.status(200).json({
+            message: 'OK',
+        })
     }
+    /** Log the client request */
+    Logger.incoming(
+        `METHOD: [${req.method}] - URL: [${req.url}] - IP: [${req.socket.remoteAddress}]`,
+    )
+
+    res.on('finish', () => {
+        /** Log the server response */
+        Logger.response(
+            `METHOD: [${req.method}] - URL: [${req.url}] - IP: [${req.socket.remoteAddress}] - STATUS: [${res.statusCode}]`,
+        )
+    })
+
     next()
 })
 
 app.listen(port, () => {
-    console.log(`⚡️[server]: Server is running at http://localhost:${port}`)
-
+    Logger.info(`⚡: Server is running at https://localhost:${port}`)
     /** Routes Index */
     routes(app)
 })

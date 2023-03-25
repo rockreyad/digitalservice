@@ -250,14 +250,14 @@ export const GlobeIcon = createIcon({
                 stroke="currentColor"
                 fill="transparent"
                 d="M11.25 2.109a9.14 9.14 0 100 18.281 9.14 9.14 0 000-18.281z"
-                stroke-width=".75"
+                strokeWidth=".75"
                 stroke-miterlimit="10"
             />
             <path
                 stroke="currentColor"
                 fill="transparent"
                 d="M11.25 2.109C8.698 2.109 6.3 6.2 6.3 11.249c0 5.048 2.4 9.14 4.951 9.14 2.552 0 4.951-4.092 4.951-9.14 0-5.048-2.399-9.14-4.95-9.14z"
-                stroke-width=".75"
+                strokeWidth=".75"
                 stroke-miterlimit="10"
             />
             <path
@@ -269,7 +269,7 @@ export const GlobeIcon = createIcon({
                 stroke="currentColor"
                 fill="transparent"
                 d="M5.156 5.156C6.836 6.349 8.952 7.06 11.25 7.06c2.298 0 4.414-.711 6.094-1.904M17.344 17.344c-1.68-1.193-3.796-1.904-6.094-1.904-2.298 0-4.413.711-6.094 1.904"
-                stroke-width=".75"
+                strokeWidth=".75"
                 stroke-linecap="round"
                 stroke-linejoin="round"
             />
@@ -277,7 +277,7 @@ export const GlobeIcon = createIcon({
                 stroke="currentColor"
                 fill="transparent"
                 d="M11.25 2.109v18.28M20.39 11.249H2.11"
-                stroke-width=".75"
+                strokeWidth=".75"
                 stroke-miterlimit="10"
             />
         </g>
@@ -613,7 +613,7 @@ export const DashCurveUp = createIcon({
             <path
                 d="M1 21v0C41.269-4.626 92.731-4.626 133 21v0"
                 stroke="currentColor"
-                stroke-width="2"
+                strokeWidth="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 stroke-dasharray="6 6"
@@ -634,7 +634,7 @@ export const DashCurveDown = createIcon({
             <path
                 d="M1 1v0c40.269 25.626 91.731 25.626 132 0v0"
                 stroke="currentColor"
-                stroke-width="2"
+                strokeWidth="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 stroke-dasharray="6 6"
@@ -656,7 +656,7 @@ export const ButtonLeft = createIcon({
             <path
                 d="M1 9.024A5 5 0 0 1 5.606 4.04l32-2.531A5 5 0 0 1 43 6.493v16.014a5 5 0 0 1-5.394 4.984l-32-2.53A5 5 0 0 1 1 19.975V9.024Z"
                 stroke="currentColor"
-                stroke-width="2"
+                strokeWidth="2"
             />
         </g>
     ),
@@ -675,7 +675,7 @@ export const ButtonRight = createIcon({
             <path
                 d="M43 9.024a5 5 0 0 0-4.606-4.984l-32-2.531A5 5 0 0 0 1 6.493v16.014a5 5 0 0 0 5.394 4.984l32-2.53A5 5 0 0 0 43 19.975V9.024Z"
                 stroke="currentColor"
-                stroke-width="2"
+                strokeWidth="2"
             />
         </svg>
     ),

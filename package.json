@@ -1,7 +1,7 @@
 {
     "name": "digitalserviceportal",
     "version": "1.0.0",
-    "description": "",
+    "description": "Digital Web Services is a leading IT outsourcing company for website designing, SEO services, software development, digital marketing, etc",
     "main": "index.js",
     "scripts": {
         "build": "npm run server:build && npm run app:build",
@@ -28,7 +28,10 @@
         "type": "git",
         "url": "git+https://github.com/rockreyad/digitalservice"
     },
-    "keywords": [],
+    "keywords": [
+        "digitalservice",
+        "digital marketing"
+    ],
     "author": "Md. Mahamud Hasan",
     "license": "ISC",
     "bugs": {

@@ -3,11 +3,13 @@ import prisma from '../config/prisma'
 async function create_order({
     userId,
     statusId,
+    invoiceId = 'abc',
     price = 0,
     orderItems,
 }: {
     userId: string
     statusId: number
+    invoiceId: string
     price: number
     orderItems: {
         serviceId: number
@@ -19,6 +21,7 @@ async function create_order({
             userId,
             statusId,
             price,
+            invoiceId,
             orderItems: {
                 create: orderItems,
             },
@@ -98,9 +101,11 @@ async function find_order_by_orderId({ id }: { id: number }) {
 async function update_order({
     id,
     statusId,
+    invoiceId,
 }: {
     id: number
-    statusId: number
+    statusId?: number
+    invoiceId?: string
 }) {
     const order = await prisma.order.update({
         where: {
@@ -108,6 +113,7 @@ async function update_order({
         },
         data: {
             statusId,
+            invoiceId,
         },
         include: {
             orderItems: true,

@@ -96,7 +96,7 @@ const signInWithEmailAndPassword = async (req: Request, res: Response) => {
         }
         let userData = {
             email,
-            password,
+            password: String(password),
         }
 
         const user = await login_user(userData)

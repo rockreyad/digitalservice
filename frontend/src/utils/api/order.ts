@@ -54,9 +54,11 @@ export async function createOrder({
     }
 }
 
+//Order Status
+
 export async function getOrderStatus(): Promise<OrderStatusResponse> {
     try {
-        const res = await axios.get(`/order/status`)
+        const res = await axios.get(`/order-status`)
         return res.data as OrderStatusResponse
     } catch (error: unknown) {
         if (error instanceof AxiosError) {

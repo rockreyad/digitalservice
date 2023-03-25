@@ -4,6 +4,9 @@ import HomePage from '@/components/homepage'
 
 export const metadata = {
     title: 'Landing Page of Digital Services',
+    keywords: 'Digital Services, Digital Services in Bangladesh',
+    authors: [{ name: 'Mahamud Hasan', portfolio: 'https://hasan.narc.dev' }],
+    publisher: 'Ztrois Tech & Marketing',
 }
 
 export default function Home() {

@@ -1,5 +1,6 @@
 import dayjs from 'dayjs'
 import { Request, Response } from 'express'
+import generateInvoice from '../helpers/GenerateInvoice'
 import {
     all_order,
     create_order,
@@ -29,6 +30,7 @@ const create_an_order = async (req: Request, res: Response) => {
                 ? String(userId)
                 : String(requestUser.userId),
         statusId: Number(statusId),
+        invoiceId: `INV-${dayjs().format('YYYYMMDDHHmmss')}`,
         price: Number(price),
         orderItems,
     }
@@ -36,12 +38,19 @@ const create_an_order = async (req: Request, res: Response) => {
     try {
         const createdOrder = await create_order(OrderData)
 
+        //update the order with the invoice number
+        await update_order({
+            id: createdOrder.id,
+            invoiceId: generateInvoice(createdOrder.id),
+        })
+
         let response = {
             status: true,
             message: 'Order created successfully',
             data: {
                 orderId: createdOrder.id,
                 userId: createdOrder.userId,
+                invoiceId: createdOrder.invoiceId,
                 statusId: createdOrder.statusId,
                 price: createdOrder.price,
                 orderItems: createdOrder.orderItems,
@@ -128,6 +137,7 @@ const get_all_order = async (req: Request, res: Response) => {
                 return {
                     orderId: order.id,
                     user: order.user,
+                    invoiceId: order.invoiceId,
                     statusId: order.statusId,
                     statusType: order.status.name,
                     price: order.price,
@@ -179,6 +189,7 @@ const find_an_order = async (req: Request, res: Response) => {
                 orderId: order.id,
                 user: order.user,
                 statusId: order.statusId,
+                invoiceId: order.invoiceId,
                 statusType: order.status.name,
                 price: order.price,
                 orderItems: order.orderItems,

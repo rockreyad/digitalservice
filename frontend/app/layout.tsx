@@ -12,6 +12,13 @@ const montserrat = Montserrat({
     variable: '--font-montserrat',
 })
 
+export const metadata = {
+    title: {
+        default: 'Project D',
+        template: '%s | Project D',
+    },
+}
+
 export default function RootLayout({
     children,
 }: {

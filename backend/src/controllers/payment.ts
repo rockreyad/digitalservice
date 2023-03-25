@@ -7,7 +7,12 @@ import {
     find_all_payment_for_an_order,
     new_payment,
 } from '../services/payment'
-import { pay_by_mobile_banking } from '../services/paymentMethod'
+import {
+    pay_by_bank,
+    pay_by_cash,
+    pay_by_debit_card,
+    pay_by_mobile_banking,
+} from '../services/paymentMethod'
 
 function getErrorStatus(error: any) {
     return error.status || 500
@@ -39,13 +44,30 @@ const create_a_payment = async (req: Request, res: Response) => {
                 .json({ status: false, message: 'Payment not created' })
         }
 
-        //payment pay by mobile banking
+        //payment method
         let paymentMethod: any
         switch (payment?.paymentMethod) {
+            case 'cash':
+                paymentMethod = await pay_by_cash({
+                    paymentId: createPayment.id,
+                    cashPayment: payment?.cashPayment,
+                })
             case 'mobile_banking':
                 paymentMethod = await pay_by_mobile_banking({
                     paymentId: createPayment.id,
                     mobileBanking: payment?.mobileBanking,
+                })
+                break
+            case 'debit_card':
+                paymentMethod = await pay_by_debit_card({
+                    paymentId: createPayment.id,
+                    debitCard: payment?.debitCard,
+                })
+                break
+            case 'bank':
+                paymentMethod = await pay_by_bank({
+                    paymentId: createPayment.id,
+                    bank: payment?.bank,
                 })
                 break
             default:
@@ -62,11 +84,6 @@ const create_a_payment = async (req: Request, res: Response) => {
         let response = {
             status: true,
             message: 'Payment created successfully',
-            data: {
-                paymentId: createPayment.id,
-                orderId: createPayment.orderId,
-                paymentMethod: paymentMethod,
-            },
         }
 
         //Response: Payment created successfully
