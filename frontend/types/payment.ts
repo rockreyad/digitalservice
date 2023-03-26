@@ -44,3 +44,16 @@ export type Payment = {
     debitCard?: DebitCardPayment
     bank?: BankPayment
 }
+
+export type PaymentsForOrderResponse = {
+    status: Boolean
+    message: string
+    data: {
+        id: number
+        orderId: number
+        cashPayment: null | CashPayment
+        bank: null | BankPayment
+        debitCard: null | DebitCardPayment
+        mobileBanking: null | MobileBankingPayment
+    }[]
+}

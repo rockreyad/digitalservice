@@ -2,9 +2,11 @@ import prisma from '../config/prisma'
 
 async function pay_by_mobile_banking({
     paymentId,
+    amount,
     mobileBanking,
 }: {
     paymentId: number
+    amount: number
     mobileBanking: {
         account_holder_name: string
         account_number: string
@@ -24,7 +26,7 @@ async function pay_by_mobile_banking({
                     account_holder_name: mobileBanking?.account_holder_name,
                     account_number: mobileBanking?.account_number,
                     bank_name: mobileBanking?.bank_name,
-                    amount: mobileBanking?.amount,
+                    amount: amount,
                     trxId: mobileBanking?.trxId,
                     paymentStatus: {
                         connect: {
@@ -41,9 +43,11 @@ async function pay_by_mobile_banking({
 
 async function pay_by_debit_card({
     paymentId,
+    amount,
     debitCard,
 }: {
     paymentId: number
+    amount: number
     debitCard: {
         name: string
         card_number: string
@@ -64,7 +68,7 @@ async function pay_by_debit_card({
                     card_number: debitCard?.card_number,
                     cvv: debitCard?.cvv,
                     exp_date: debitCard?.exp_date,
-                    amount: debitCard?.amount,
+                    amount: amount,
                     paymentStatus: {
                         connect: {
                             id: debitCard?.paymentStatus,
@@ -80,9 +84,11 @@ async function pay_by_debit_card({
 
 async function pay_by_cash({
     paymentId,
+    amount,
     cashPayment,
 }: {
     paymentId: number
+    amount: number
     cashPayment: {
         amount: number
         paymentStatus: number
@@ -95,7 +101,7 @@ async function pay_by_cash({
         data: {
             cashPayment: {
                 create: {
-                    amount: cashPayment?.amount,
+                    amount: amount,
                     paymentStatus: {
                         connect: {
                             id: cashPayment?.paymentStatus,
@@ -111,9 +117,11 @@ async function pay_by_cash({
 
 async function pay_by_bank({
     paymentId,
+    amount,
     bank,
 }: {
     paymentId: number
+    amount: number
     bank: {
         account_holder_name: string
         account_number: string
@@ -134,7 +142,7 @@ async function pay_by_bank({
                     account_number: bank?.account_number,
                     account_type: bank?.account_type,
                     name: bank?.name,
-                    amount: bank?.amount,
+                    amount: amount,
                     paymentStatus: {
                         connect: {
                             id: bank?.paymentStatus,

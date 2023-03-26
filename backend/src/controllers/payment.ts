@@ -34,8 +34,66 @@ const create_a_payment = async (req: Request, res: Response) => {
     }
 
     try {
+        //total price of the order
         //find the order by id
+        const order = await find_order_by_orderId({ id: payData.orderId })
 
+        if (!order) {
+            //Response: Order not found
+            return res
+                .status(400)
+                .json({ status: false, message: 'Order not found' })
+        }
+        //find all the payment for an order
+        const allPayment = await find_all_payment_for_an_order({
+            orderId: payData.orderId,
+        })
+
+        //total amount paid for the order
+        let totalAmountPaid = 0
+        allPayment.forEach((payment) => {
+            if (payment.cashPayment?.amount) {
+                totalAmountPaid += payment.cashPayment.amount
+            }
+            if (payment.bank?.amount) {
+                totalAmountPaid += payment.bank.amount
+            }
+            if (payment.debitCard?.amount) {
+                totalAmountPaid += payment.debitCard.amount
+            }
+            if (payment.mobileBanking?.amount) {
+                totalAmountPaid += payment.mobileBanking.amount
+            }
+        })
+        let duePrice = order?.price! - totalAmountPaid
+
+        if (duePrice <= 0) {
+            //Response: Order already paid
+            return res
+                .status(400)
+                .json({ status: false, message: 'Order already paid' })
+        }
+
+        if (
+            Number(payData.payment.amount) >= duePrice ||
+            (duePrice < 1 && duePrice > 0)
+        ) {
+            //change the paymentStatus to Complete
+
+            if (payData.payment.cashPayment) {
+                payData.payment.cashPayment.paymentStatus = 3
+            }
+            if (payData.payment.bank) {
+                payData.payment.bank.paymentStatus = 3
+            }
+            if (payData.payment.debitCard) {
+                payData.payment.debitCard.paymentStatus = 3
+            }
+            if (payData.payment.mobileBanking) {
+                payData.payment.mobileBanking.paymentStatus = 3
+            }
+        }
+        //create a new payment
         const createPayment = await new_payment({ orderId: payData.orderId })
         if (!createPayment) {
             //Response: Payment not created
@@ -50,23 +108,28 @@ const create_a_payment = async (req: Request, res: Response) => {
             case 'cash':
                 paymentMethod = await pay_by_cash({
                     paymentId: createPayment.id,
+                    amount: Number(payment?.amount),
                     cashPayment: payment?.cashPayment,
                 })
+                break
             case 'mobile_banking':
                 paymentMethod = await pay_by_mobile_banking({
                     paymentId: createPayment.id,
+                    amount: Number(payment?.amount),
                     mobileBanking: payment?.mobileBanking,
                 })
                 break
             case 'debit_card':
                 paymentMethod = await pay_by_debit_card({
                     paymentId: createPayment.id,
+                    amount: Number(payment?.amount),
                     debitCard: payment?.debitCard,
                 })
                 break
             case 'bank':
                 paymentMethod = await pay_by_bank({
                     paymentId: createPayment.id,
+                    amount: Number(payment?.amount),
                     bank: payment?.bank,
                 })
                 break

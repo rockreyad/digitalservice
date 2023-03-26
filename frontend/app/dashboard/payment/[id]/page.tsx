@@ -7,8 +7,7 @@ export const metadata = {
 export default function PaymentPage({ params }: { params: { id: string } }) {
     return (
         <>
-            Payment Page of {params.id}
-            <PaymentForm />
+            <PaymentForm orderId={Number(params.id)} />
         </>
     )
 }
