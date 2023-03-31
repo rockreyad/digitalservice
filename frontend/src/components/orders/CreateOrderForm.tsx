@@ -271,8 +271,10 @@ export default function CreateOrderForm() {
                                                                     ) : (
                                                                         <>
                                                                             <Text>
-                                                                                {'&#2547;' +
-                                                                                    service.price}
+                                                                                &#2547;
+                                                                                {
+                                                                                    service.price
+                                                                                }
                                                                             </Text>
                                                                         </>
                                                                     )}

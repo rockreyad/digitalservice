@@ -49,6 +49,16 @@ async function find_all_payment_for_an_order({ orderId }: { orderId: number }) {
 async function all_payment() {
     const payment = await prisma.payment.findMany({
         include: {
+            order: {
+                select: {
+                    user: {
+                        select: {
+                            firstName: true,
+                            lastName: true,
+                        },
+                    },
+                },
+            },
             cashPayment: {
                 include: {
                     paymentStatus: true,
@@ -83,6 +93,16 @@ async function all_user_payments({ userId }: { userId: string }) {
             },
         },
         include: {
+            order: {
+                select: {
+                    user: {
+                        select: {
+                            firstName: true,
+                            lastName: true,
+                        },
+                    },
+                },
+            },
             cashPayment: {
                 include: {
                     paymentStatus: true,
@@ -109,9 +129,41 @@ async function all_user_payments({ userId }: { userId: string }) {
     return payment
 }
 
+async function find_payment_by_id({ id }: { id: number }) {
+    const payment = await prisma.payment.findUnique({
+        where: {
+            id,
+        },
+        include: {
+            cashPayment: {
+                include: {
+                    paymentStatus: true,
+                },
+            },
+            bank: {
+                include: {
+                    paymentStatus: true,
+                },
+            },
+            debitCard: {
+                include: {
+                    paymentStatus: true,
+                },
+            },
+            mobileBanking: {
+                include: {
+                    paymentStatus: true,
+                },
+            },
+        },
+    })
+
+    return payment
+}
 export {
     new_payment,
     find_all_payment_for_an_order,
     all_payment,
     all_user_payments,
+    find_payment_by_id,
 }

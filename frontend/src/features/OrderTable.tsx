@@ -8,7 +8,6 @@ import {
     Table,
     Tbody,
     Td,
-    Text,
     Th,
     Thead,
     Tr,
@@ -58,7 +57,7 @@ export default function OrderTable() {
                 </Center>
             ) : (
                 <div className="w-full">
-                    <Box overflow={'scroll'}>
+                    <Box>
                         <Table
                             variant="striped"
                             colorScheme="whiteAlpha"
@@ -78,17 +77,11 @@ export default function OrderTable() {
                                 </Tr>
                             </Thead>
                             <Tbody>
-                                {isLoading ? (
-                                    <Tr>
-                                        <Td>Loading...</Td>
-                                    </Tr>
-                                ) : null}
                                 {isError ? (
                                     <Tr>
                                         <Td>Something went wrong!</Td>
                                     </Tr>
                                 ) : null}
-
                                 {data?.data && data.data?.length > 0 ? (
                                     <>
                                         {data.data
@@ -211,9 +204,11 @@ export default function OrderTable() {
                                             ))}
                                     </>
                                 ) : (
-                                    <Box paddingBlock={'10'}>
-                                        <Text>No Order Found</Text>
-                                    </Box>
+                                    <Tr>
+                                        <Td colSpan={7} textAlign={'center'}>
+                                            No Data Found
+                                        </Td>
+                                    </Tr>
                                 )}
                             </Tbody>
                         </Table>

@@ -29,6 +29,7 @@ import {
     create_a_payment,
     find_all_order_payments,
     find_all_payments,
+    get_payment_details,
 } from '../controllers/payment'
 
 export default function routes(app: Express) {
@@ -77,5 +78,6 @@ export default function routes(app: Express) {
     paymentRouter.post('/', create_a_payment)
     paymentRouter.get('/:orderId', find_all_order_payments)
     paymentRouter.get('/', find_all_payments)
+    paymentRouter.get('/transaction/:transactionId', get_payment_details)
     app.use('/payment', authorize, paymentRouter)
 }

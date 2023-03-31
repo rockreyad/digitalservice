@@ -54,7 +54,7 @@ export default function Sidebar() {
         {
             name: 'analytics',
             access: 'admin',
-            link: '/',
+            link: '/dashboard/analytics',
             icon: TbReportAnalytics,
             margin: true,
         },

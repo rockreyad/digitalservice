@@ -1,4 +1,5 @@
 //create a new payment for an order
+import dayjs from 'dayjs'
 import { Request, Response } from 'express'
 import { find_order_by_orderId, find_order_by_userId } from '../services/order'
 import {
@@ -6,6 +7,7 @@ import {
     all_user_payments,
     find_all_payment_for_an_order,
     new_payment,
+    find_payment_by_id,
 } from '../services/payment'
 import {
     pay_by_bank,
@@ -252,12 +254,12 @@ const find_all_payments = async (req: Request, res: Response) => {
         let payment
         if (role !== 'admin') {
             //find all the payment for a user
-            payment = await all_user_payments(userId)
+            payment = await all_user_payments({ userId })
         } else {
             //find all the payment
             payment = await all_payment()
         }
-        if (!payment) {
+        if (!payment || payment.length <= 0) {
             //Response: Payment not found
             return res
                 .status(400)
@@ -267,7 +269,40 @@ const find_all_payments = async (req: Request, res: Response) => {
         let response = {
             status: true,
             message: `${payment.length} payment found`,
-            data: payment,
+            data: payment.map((item) => {
+                return {
+                    transactionId: item.id,
+                    username: `${item.order.user.firstName} ${item.order.user.lastName}`,
+                    paymentType: item.mobileBanking
+                        ? item.mobileBanking.bank_name
+                        : item.bank
+                        ? 'Bank'
+                        : item.debitCard
+                        ? 'Debit Card'
+                        : item.cashPayment
+                        ? 'Cash'
+                        : null,
+                    amount: item.bank
+                        ? item.bank.amount
+                        : item.mobileBanking
+                        ? item.mobileBanking.amount
+                        : item.cashPayment
+                        ? item.cashPayment.amount
+                        : item.debitCard
+                        ? item.debitCard.amount
+                        : null,
+                    date: dayjs(item.createdAt).format('YYYY-MM-DD'),
+                    status: item.bank
+                        ? item.bank.paymentStatus.name
+                        : item.mobileBanking
+                        ? item.mobileBanking.paymentStatus.name
+                        : item.cashPayment
+                        ? item.cashPayment.paymentStatus.name
+                        : item.debitCard
+                        ? item.debitCard.paymentStatus.name
+                        : null,
+                }
+            }),
         }
 
         //Response: Payment found successfully
@@ -285,4 +320,66 @@ const find_all_payments = async (req: Request, res: Response) => {
     }
 }
 
-export { create_a_payment, find_all_order_payments, find_all_payments }
+//get specific payment details by id
+const get_payment_details = async (req: Request, res: Response) => {
+    const { transactionId } = req.params
+
+    try {
+        if (!transactionId) {
+            //Response: Mandatory fields are missing
+            return res
+                .status(400)
+                .json({ status: false, message: 'Missing required fields' })
+        }
+
+        //find the payment by id
+        const payment = await find_payment_by_id({ id: Number(transactionId) })
+        if (!payment) {
+            //Response: Payment not found
+            return res
+                .status(400)
+                .json({ status: false, message: 'Payment not found' })
+        }
+
+        let response = {
+            status: true,
+            message: 'Payment found successfully',
+            data: {
+                paymentType: payment.mobileBanking
+                    ? 'mobile_banking'
+                    : payment.cashPayment
+                    ? 'cash'
+                    : payment.debitCard
+                    ? 'debit_card'
+                    : payment.bank
+                    ? 'bank'
+                    : null,
+                transactionDetails:
+                    payment.mobileBanking ||
+                    payment.cashPayment ||
+                    payment.debitCard ||
+                    payment.bank,
+            },
+        }
+
+        //Response: Payment found successfully
+        return res.status(200).json(response)
+    } catch (error: unknown) {
+        let status: number = getErrorStatus(error)
+
+        let responseData = {
+            status: false,
+            message: error,
+        }
+
+        //Response: Error
+        res.status(status || 500).json(responseData)
+    }
+}
+
+export {
+    create_a_payment,
+    find_all_order_payments,
+    find_all_payments,
+    get_payment_details,
+}
