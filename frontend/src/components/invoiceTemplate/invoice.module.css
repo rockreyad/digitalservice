@@ -1,0 +1,83 @@
+.invoice {
+    font-family: 'Roboto', sans-serif;
+    background-color: #fff;
+    width: 600px;
+}
+
+.h1 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.p {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    table-layout: fixed;
+}
+
+.thead th:nth-child(1) {
+    width: 30%;
+}
+
+.thead th:nth-child(2) {
+    width: 20%;
+}
+
+.thead th:nth-child(3) {
+    width: 15%;
+}
+
+.thead th:nth-child(4) {
+    width: 35%;
+}
+
+.th,
+.td {
+    border: 1px solid gray;
+    padding: 0.5rem;
+    text-align: left;
+}
+
+.th {
+    background-color: #f2f2f2;
+}
+
+p.total {
+    font-size: 1.5rem;
+    margin-top: 1rem;
+}
+
+.invoice_view {
+    display: flex;
+    justify-content: center;
+    align-items: top;
+}
+
+.invoice__header {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+}
+
+.invoice__logo {
+    width: 80px;
+    height: 100px;
+}
+
+.invoice__company {
+    text-align: right;
+}
+
+.invoice__customer {
+}
+
+.invoice__table {
+    margin-top: 2rem;
+}

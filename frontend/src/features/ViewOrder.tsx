@@ -13,6 +13,7 @@ import {
     Text,
     UnorderedList,
 } from '@chakra-ui/react'
+import Link from 'next/link'
 import React from 'react'
 
 import { BsThreeDots } from 'react-icons/bs'
@@ -106,7 +107,11 @@ function OrderHeader({
                     />
                     <MenuList>
                         <MenuItem icon={<AddIcon />}>Update Order</MenuItem>
-                        <MenuItem icon={<ExternalLinkIcon />}>Print</MenuItem>
+                        <Link prefetch href={'/dashboard/order/invoice/'}>
+                            <MenuItem icon={<ExternalLinkIcon />}>
+                                Print
+                            </MenuItem>
+                        </Link>
                     </MenuList>
                 </Menu>
             </header>
