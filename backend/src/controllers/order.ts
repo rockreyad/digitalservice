@@ -281,6 +281,17 @@ const get_all_order_status = async (req: Request, res: Response) => {
     } catch (error) {}
 }
 
+const get_invoice_details = async (req: Request, res: Response) => {
+    //check if the user has an order
+    const { invoiceId } = req.params
+    if (!invoiceId) {
+        //Response: Mandatory fields are missing
+        return res
+            .status(400)
+            .json({ status: false, message: 'Missing required fields' })
+    }
+}
+
 export {
     create_an_order,
     get_all_order,
@@ -288,4 +299,5 @@ export {
     find_an_order,
     get_all_order_by_userId,
     get_all_order_status,
+    get_invoice_details,
 }

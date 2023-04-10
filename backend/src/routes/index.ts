@@ -21,6 +21,7 @@ import {
     get_all_order,
     get_all_order_by_userId,
     get_all_order_status,
+    get_invoice_details,
     update_an_order,
 } from '../controllers/order'
 
@@ -65,6 +66,7 @@ export default function routes(app: Express) {
     orderRouter.put('/', update_an_order)
     orderRouter.get('/', get_all_order)
     orderRouter.get('/:orderId', find_an_order)
+    orderRouter.get('/invoice/:invoiceId', get_invoice_details)
     orderRouter.get('/user/:userId', get_all_order_by_userId)
     app.use('/order', authorize, orderRouter)
 
