@@ -15,7 +15,9 @@ export async function getOrders() {
 export async function getOrderById({
     queryKey,
 }: any): Promise<OrderViewResponse> {
-    const [orderId] = queryKey
+    // eslint-disable-next-line no-unused-vars
+    const [_, orderId] = queryKey
+
     try {
         const res = await axios.get(`/order/${orderId}`)
         return res.data as OrderViewResponse

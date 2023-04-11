@@ -21,7 +21,7 @@ import { useQuery } from 'react-query'
 
 const OrderInfo = ({ orderId }: { orderId: string }) => {
     const { data, isSuccess, isLoading, isError } = useQuery(
-        [orderId],
+        ['order', orderId],
         getOrderById,
     )
     return (
@@ -107,7 +107,10 @@ function OrderHeader({
                     />
                     <MenuList>
                         <MenuItem icon={<AddIcon />}>Update Order</MenuItem>
-                        <Link prefetch href={'/dashboard/order/invoice/'}>
+                        <Link
+                            prefetch
+                            href={`/dashboard/order/invoice/${orderId}`}
+                        >
                             <MenuItem icon={<ExternalLinkIcon />}>
                                 Print
                             </MenuItem>

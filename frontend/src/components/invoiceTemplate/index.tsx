@@ -21,6 +21,10 @@ import {
     Thead,
     Tr,
 } from '@chakra-ui/react'
+import { useQuery } from 'react-query'
+import { getInvoice } from '@/utils/api/invoice'
+import { Invoice } from 'types/invoice'
+import Loading from '../loading'
 
 const companyInformation = {
     name: 'Ztrios Tech & Marketing',
@@ -54,18 +58,80 @@ function convertHTMLToPDF() {
     })
 }
 
-export default function InvoiceView() {
+export default function InvoiceView({ orderId }: { orderId: string }) {
+    const {
+        data: invoice,
+        isSuccess,
+        isLoading,
+        isError,
+    } = useQuery(['invoice', orderId], getInvoice)
+    console.log('invoice', invoice)
     return (
         <div className="space-y-4">
-            <div className="flex justify-end">
-                <InvoiceDownloadBtn convert={convertHTMLToPDF} />
-            </div>
-            <InvoiceTemplate />
+            {isLoading ? (
+                <Center>
+                    <Loading />
+                </Center>
+            ) : (
+                <>
+                    {isSuccess && invoice.data ? (
+                        <>
+                            <div className="flex justify-end">
+                                <InvoiceDownloadBtn
+                                    convert={convertHTMLToPDF}
+                                />
+                            </div>
+                            <InvoiceTemplate data={invoice?.data!} />
+                        </>
+                    ) : <>
+                          {isError && (
+                              <Center>
+                                  <Text
+                                      fontSize={'3xl'}
+                                      fontWeight={'bold'}
+                                      textTransform={'lowercase'}
+                                      color={'red.500'}
+                                  >
+                                      Something went wrong
+                                  </Text>
+                              </Center>
+                          )}
+                      </> ? (
+                        <>
+                            <NoInvoiceFound />
+                        </>
+                    ) : (
+                        <></>
+                    )}
+                </>
+            )}
         </div>
     )
 }
 
-function InvoiceTemplate() {
+//invoice Template component will be used in invoiceView component to render invoice pdf
+function InvoiceTemplate({ data }: { data: Invoice }) {
+    const {
+        orderItems,
+        customer,
+        invoiceDate,
+        invoiceId,
+        paymentMethod,
+        totalAmount,
+    } = data
+
+    let totalPayment = 0
+    let dueAmount = 0
+
+    // console.log('paymentMethod', paymentMethod)
+
+    // sum up total payment amount
+    for (const payment of paymentMethod) {
+        totalPayment += payment.amount
+    }
+
+    // calculate due amount
+    dueAmount = totalAmount - totalPayment
     return (
         <div id="invoice-template" className={styles.invoice}>
             <div className={styles.invoice_view}>
@@ -93,10 +159,10 @@ function InvoiceTemplate() {
                             />
                             <Box>
                                 <Text paddingBlock={'2'} fontWeight={'bold'}>
-                                    {customerInformation.name}
+                                    {customer.name}
                                 </Text>
                                 <Text>{customerInformation.address}</Text>
-                                <Text>{customerInformation.contact}</Text>
+                                <Text>{customer.phone}</Text>
                             </Box>
                         </Flex>
                         <Box
@@ -122,14 +188,14 @@ function InvoiceTemplate() {
                                         >
                                             Invoice No :
                                             <span className="font-bold uppercase px-2">
-                                                # INV202304021
+                                                # {invoiceId}
                                             </span>
                                         </Text>
                                         <Text
                                             fontSize={'medium'}
                                             textTransform={'lowercase'}
                                         >
-                                            Date Preiod: 12/12/2023
+                                            Date Preiod: {invoiceDate}
                                         </Text>
                                     </Stack>
                                 </div>
@@ -144,21 +210,15 @@ function InvoiceTemplate() {
                                         </Tr>
                                     </Thead>
                                     <Tbody>
-                                        <Tr>
-                                            <Td>1</Td>
-                                            <Td>millimetres (mm)</Td>
-                                            <Td isNumeric>25.4</Td>
-                                        </Tr>
-                                        <Tr>
-                                            <Td>2</Td>
-                                            <Td>centimetres (cm)</Td>
-                                            <Td isNumeric>30.48</Td>
-                                        </Tr>
-                                        <Tr>
-                                            <Td>3</Td>
-                                            <Td>metres (m)</Td>
-                                            <Td isNumeric>0.91444</Td>
-                                        </Tr>
+                                        {orderItems.map((item, index) => (
+                                            <Tr key={index}>
+                                                <Td>{item.serviceId}</Td>
+                                                <Td>{item.serviceName}</Td>
+                                                <Td isNumeric>
+                                                    {item.servicePrice}
+                                                </Td>
+                                            </Tr>
+                                        ))}
                                     </Tbody>
                                     <Tfoot className="border-t-2 border-black">
                                         <Tr>
@@ -173,13 +233,129 @@ function InvoiceTemplate() {
                                                     <span className="text-xl px-1">
                                                         ৳
                                                     </span>
-                                                    13,400.00
+                                                    {Number(
+                                                        totalAmount,
+                                                    ).toFixed(2)}
                                                 </Text>
                                             </Th>
                                         </Tr>
                                     </Tfoot>
                                 </Table>
                             </TableContainer>
+                            <Flex
+                                justifyContent={'space-between'}
+                                paddingBlock={'4'}
+                            >
+                                {/* sample table of payment data */}
+                                <Box
+                                    as="div"
+                                    className="space-y-2"
+                                    w={'fit-content'}
+                                    paddingBlock={'2'}
+                                    paddingInline={'2'}
+                                    bgColor={'AppWorkspace'}
+                                >
+                                    <Text
+                                        fontSize={'medium'}
+                                        textTransform={'capitalize'}
+                                        color={'blackAlpha.700'}
+                                    >
+                                        Payment Method :
+                                    </Text>
+
+                                    <TableContainer>
+                                        <Table size="sm">
+                                            <Thead>
+                                                <Tr>
+                                                    <Th className="w-4">#</Th>
+                                                    <Th>method</Th>
+                                                    <Th isNumeric>amount</Th>
+                                                </Tr>
+                                            </Thead>
+                                            <Tbody>
+                                                {paymentMethod.map(
+                                                    (item, index) => (
+                                                        <Tr key={index}>
+                                                            <Td>{index}</Td>
+                                                            <Td>{item.name}</Td>
+                                                            <Td isNumeric>
+                                                                {item.amount}
+                                                            </Td>
+                                                        </Tr>
+                                                    ),
+                                                )}
+                                            </Tbody>
+                                        </Table>
+                                    </TableContainer>
+                                </Box>
+
+                                {/* due amount and total payment amount */}
+                                {totalAmount - totalPayment > 0 ? (
+                                    <Box
+                                        as="div"
+                                        className="space-y-2"
+                                        w={'fit-content'}
+                                        paddingBlock={'2'}
+                                        paddingInline={'2'}
+                                        bgColor={'AppWorkspace'}
+                                    >
+                                        <Text
+                                            fontSize={'medium'}
+                                            textTransform={'capitalize'}
+                                            color={'blackAlpha.700'}
+                                        >
+                                            Payment Status :
+                                        </Text>
+
+                                        <TableContainer>
+                                            <Table size="sm">
+                                                <Tbody>
+                                                    <Tr>
+                                                        <Td>Total Payment</Td>
+                                                        <Td isNumeric>
+                                                            <Text
+                                                                fontWeight={
+                                                                    'bold'
+                                                                }
+                                                                color={
+                                                                    'green.500'
+                                                                }
+                                                            >
+                                                                {totalPayment}
+                                                            </Text>
+                                                        </Td>
+                                                    </Tr>
+                                                    <Tr>
+                                                        <Td>Due Amount</Td>
+                                                        <Td isNumeric>
+                                                            <Text
+                                                                fontWeight={
+                                                                    'bold'
+                                                                }
+                                                                color={
+                                                                    'red.500'
+                                                                }
+                                                            >
+                                                                {dueAmount}
+                                                            </Text>
+                                                        </Td>
+                                                    </Tr>
+                                                </Tbody>
+                                            </Table>
+                                        </TableContainer>
+                                    </Box>
+                                ) : (
+                                    <Text
+                                        fontWeight={'extrabold'}
+                                        fontSize={'6xl'}
+                                        color={'green.500'}
+                                        textTransform={'uppercase'}
+                                    >
+                                        Paid
+                                    </Text>
+                                )}
+                            </Flex>
+
                             <Divider
                                 colorScheme="black"
                                 orientation="horizontal"
@@ -201,6 +377,29 @@ function InvoiceTemplate() {
                         </Center>
                     </Box>
                 </Box>
+            </div>
+        </div>
+    )
+}
+
+//No invoice found
+function NoInvoiceFound() {
+    return (
+        <div className="flex justify-center items-center h-screen">
+            <div className="flex flex-col justify-center items-center">
+                <Image
+                    width="100"
+                    height="100"
+                    src="/ztrios.png"
+                    alt="Ztrios"
+                />
+                <Text
+                    fontSize={'4xl'}
+                    fontWeight={'extrabold'}
+                    textTransform={'lowercase'}
+                >
+                    Invoice not found
+                </Text>
             </div>
         </div>
     )

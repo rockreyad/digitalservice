@@ -1,11 +1,10 @@
-'use client'
 import InvoiceView from '@/components/invoiceTemplate'
 
-export default function Page() {
+export default function Page({ params }: { params: { id: string } }) {
     return (
         <>
             <div>
-                <InvoiceView />
+                <InvoiceView orderId={params.id} />
             </div>
         </>
     )

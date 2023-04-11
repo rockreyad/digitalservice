@@ -4,8 +4,8 @@ export default function Loading({
     width = 240,
     height = 240,
 }: {
-    width: number
-    height: number
+    width?: number
+    height?: number
 }) {
     return (
         <>
