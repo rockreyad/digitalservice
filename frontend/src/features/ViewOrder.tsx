@@ -21,7 +21,7 @@ import { useQuery } from 'react-query'
 
 const OrderInfo = ({ orderId }: { orderId: string }) => {
     const { data, isSuccess, isLoading, isError } = useQuery(
-        ['order', orderId],
+        ['orderId', orderId],
         getOrderById,
     )
     return (

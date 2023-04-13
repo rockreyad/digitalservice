@@ -84,7 +84,10 @@ export default function PaymentForm({ orderId }: { orderId: number }) {
         },
     )
 
-    const { data: totalOrderPrice } = useQuery([orderId], getOrderById)
+    const { data: totalOrderPrice } = useQuery(
+        ['orderId', orderId],
+        getOrderById,
+    )
 
     let totalPaid = 0
 

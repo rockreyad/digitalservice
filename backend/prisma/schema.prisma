@@ -2,200 +2,196 @@ generator client {
   provider = "prisma-client-js"
 }
 
-
-// MySQL Connector
-// datasource db {
-//   provider = "mysql"
-//   url      = env("DATABASE_URL")
-// }
-
-// SQLite Connector
+// POstgresql Connector
 datasource db {
-  provider = "sqlite" // data source connector
-  url      = env("DATABASE_URL") // path to the database file
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
+// SQLite Connector
+// datasource db {
+//   provider = "sqlite" // data source connector
+//   url      = env("DATABASE_URL") // path to the database file
+// }
+
 model User {
-  user_id   String   @id @default(uuid())
+  user_id   String    @id @default(uuid())
   firstName String
   lastName  String
-  phone     String   
-  email     String   @unique
+  phone     String
+  email     String    @unique
   password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   address   Address[]
   role      Role[]
   order     Order[]
 }
 
-
-model Address{
-  id Int @id @default(autoincrement())
-  userId String
-  user User @relation(fields: [userId], references: [user_id])
-  address String?
-  city String?
-  state String?
-  country String?
+model Address {
+  id        Int      @id @default(autoincrement())
+  userId    String
+  user      User     @relation(fields: [userId], references: [user_id])
+  address   String?
+  city      String?
+  state     String?
+  country   String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-
 model Role {
-  id        Int      @id @default(autoincrement())
-  user      User     @relation(fields: [userId], references: [user_id])
-  userId    String
-  role RoleDescription @relation(fields: [roleDescriptionId], references: [id])
+  id                Int             @id @default(autoincrement())
+  user              User            @relation(fields: [userId], references: [user_id])
+  userId            String
+  role              RoleDescription @relation(fields: [roleDescriptionId], references: [id])
   roleDescriptionId Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
 }
 
 model RoleDescription {
-  id        Int      @id @default(autoincrement())
-  role_name String   @unique
+  id          Int      @id @default(autoincrement())
+  role_name   String   @unique
   description String?
-  role      Role[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  role        Role[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model Service {
-  id          Int      @id @default(autoincrement())
+  id          Int             @id @default(autoincrement())
   title       String
-  status      Boolean? @default(false)
+  status      Boolean?        @default(false)
   price       Float
   description String?
-  categoryId Int
+  categoryId  Int
   category    ServiceCategory @relation(fields: [categoryId], references: [id])
-  OrderItem OrderItem[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  OrderItem   OrderItem[]
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
 }
 
 model ServiceCategory {
-  id          Int      @id @default(autoincrement())
-  name       String
+  id          Int       @id @default(autoincrement())
+  name        String
   description String?
-  service      Service[]
+  service     Service[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model OrderItem {
+  id        Int      @id @default(autoincrement())
+  orderId   Int
+  order     Order    @relation(fields: [orderId], references: [id])
+  serviceId Int
+  itemPrice Float
+  service   Service  @relation(fields: [serviceId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Order {
+  id         Int         @id @default(autoincrement())
+  invoiceId  String      @unique
+  userId     String
+  user       User        @relation(fields: [userId], references: [user_id])
+  orderItems OrderItem[]
+  price      Float
+  payment    Payment[]
+  statusId   Int
+  status     OrderStatus @relation(fields: [statusId], references: [id])
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+}
+
+model OrderStatus {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  order       Order[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
 
-
-model OrderItem{
-  id Int @id @default(autoincrement())
-  orderId Int
-  order Order @relation(fields: [orderId], references: [id])
-  serviceId Int
-  itemPrice Float
-  service Service @relation(fields: [serviceId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Order{
-  id Int @id @default(autoincrement())
-  invoiceId String @unique
-  userId String
-  user User @relation(fields: [userId], references: [user_id])
-  orderItems OrderItem[]
-  price Float
-  payment   Payment[]
-  statusId Int
-  status OrderStatus @relation(fields: [statusId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model OrderStatus{
-  id Int @id @default(autoincrement())
-  name String
-  description String?
-  order Order[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-
-model PaymentStatus{
-  id Int @id @default(autoincrement())
-  name String
-  description String?
+model PaymentStatus {
+  id            Int             @id @default(autoincrement())
+  name          String
+  description   String?
   mobileBanking MobileBanking[]
-  cashPayment CashPayment[]
-  bank Bank[]
-  debitCard DebitCard[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  cashPayment   CashPayment[]
+  bank          Bank[]
+  debitCard     DebitCard[]
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
 }
 
-model Payment{
-  id Int @id @default(autoincrement())
-  orderId Int
-  order Order @relation(fields: [orderId], references: [id])
-  cashPayment CashPayment?
-  bank Bank?
-  debitCard DebitCard?
+model Payment {
+  id            Int            @id @default(autoincrement())
+  orderId       Int
+  order         Order          @relation(fields: [orderId], references: [id])
+  cashPayment   CashPayment?
+  bank          Bank?
+  debitCard     DebitCard?
   mobileBanking MobileBanking?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
 }
 
 model CashPayment {
-  id Int @id @default(autoincrement())
-  paymentId Int @unique
-  payment Payment @relation(fields: [paymentId], references: [id])
-  amount Float
-  status Int
+  id            Int           @id @default(autoincrement())
+  paymentId     Int           @unique
+  payment       Payment       @relation(fields: [paymentId], references: [id])
+  amount        Float
+  status        Int
   paymentStatus PaymentStatus @relation(fields: [status], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
 }
 
-model MobileBanking{
-  id Int @id @default(autoincrement())
-  paymentId Int @unique
-  payment Payment @relation(fields: [paymentId], references: [id])
-  bank_name String
+model MobileBanking {
+  id                  Int           @id @default(autoincrement())
+  paymentId           Int           @unique
+  payment             Payment       @relation(fields: [paymentId], references: [id])
+  bank_name           String
   account_holder_name String
-  account_number String
-  trxId String
-  amount Float
-  status Int
-  paymentStatus PaymentStatus @relation(fields: [status], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  account_number      String
+  trxId               String
+  amount              Float
+  status              Int
+  paymentStatus       PaymentStatus @relation(fields: [status], references: [id])
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
 }
 
-model Bank{
-  id Int @id @default(autoincrement())
-  paymentId Int @unique
-  payment Payment @relation(fields: [paymentId], references: [id])
-  name String
+model Bank {
+  id                  Int           @id @default(autoincrement())
+  paymentId           Int           @unique
+  payment             Payment       @relation(fields: [paymentId], references: [id])
+  name                String
   account_holder_name String
-  account_number String
-  account_type String
-  amount Float
-  status Int
-  paymentStatus PaymentStatus @relation(fields: [status], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  account_number      String
+  account_type        String
+  amount              Float
+  status              Int
+  paymentStatus       PaymentStatus @relation(fields: [status], references: [id])
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
 }
 
-model DebitCard{
-  id Int @id @default(autoincrement())
-  paymentId Int @unique
-  payment Payment @relation(fields: [paymentId], references: [id])
-  name String
-  card_number String
-  cvv String
-  exp_date String
-  amount Float
-  status Int
+model DebitCard {
+  id            Int           @id @default(autoincrement())
+  paymentId     Int           @unique
+  payment       Payment       @relation(fields: [paymentId], references: [id])
+  name          String
+  card_number   String
+  cvv           String
+  exp_date      String
+  amount        Float
+  status        Int
   paymentStatus PaymentStatus @relation(fields: [status], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
 }

@@ -39,7 +39,8 @@
     },
     "homepage": "https://github.com/rockreyad/digitalservice#readme",
     "dependencies": {
-        "concurrently": "^7.6.0"
+        "concurrently": "^7.6.0",
+        "react-datepicker": "^4.11.0"
     },
     "devDependencies": {
         "eslint": "^8.35.0",

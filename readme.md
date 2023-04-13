@@ -22,9 +22,20 @@ Set the following environment variable to `backend` directory. Also, an example 
 
 ```bash
 SERVER_PORT=4000
-#DATABASE_URL="mysql://username:password@localhost:port/testdatabase"
-DATABASE_URL="file:./dev.db"
+
+# PostgreSQL connection string used for migrations
+DIRECT_URL="postgres://postgres:[YOUR-PASSWORD]@db.[YOUR-PROJECT-REF].supabase.co:5432/postgres"
+
+# PostgreSQL connection string with pgBouncer config — used by Prisma Client
+DATABASE_URL="postgres://postgres:[YOUR-PASSWORD]@db.[YOUR-PROJECT-REF].supabase.co:6543/postgres?pgbouncer=true"
+
+JWT_KEY="any random string cryptographically secure"
+JWT_EXPIRES_IN="1d"
+BCRYPT_SALT_OR_ROUNDS=10
+# DATABASE_URL="file:./dev.db"
 ```
+
+Read the supabase docs [Configure Conncection](https://supabase.com/docs/guides/integrations/prisma#step-2-testing-the-connection)
 
 Set the following environment variable to `frontend` directory. Also, an example file is given with the name of `.env.example`:
 
@@ -79,7 +90,7 @@ And frontend server will be run at [http://localhost:3000](http://localhost:3000
 
 **Server:** Node, Express
 
-**Database:** Prisma(MySQL)
+**Database:** Prisma(postgres)
 
 **Type Check:** Typescript
 
