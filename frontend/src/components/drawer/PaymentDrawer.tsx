@@ -1,25 +1,30 @@
 'use client'
-import React, { useRef } from 'react'
+import React, { useState, useRef } from 'react'
 import {
+    Box,
     Button,
     Drawer,
     DrawerBody,
     DrawerCloseButton,
     DrawerContent,
-    DrawerFooter,
+    // DrawerFooter,
     DrawerHeader,
     DrawerOverlay,
+    Flex,
+    // Stack,
     Table,
     TableContainer,
     Tbody,
     Td,
+    Text,
     Th,
     Thead,
     Tr,
+    useColorModeValue,
     useDisclosure,
 } from '@chakra-ui/react'
-import { useQuery } from 'react-query'
-import { get_payment_details } from '@/utils/api/payment'
+import { useMutation, useQuery } from 'react-query'
+import { get_payment_details, update_payment_status } from '@/utils/api/payment'
 import {
     BankPayment,
     CashPayment,
@@ -32,10 +37,30 @@ export function PaymentDrawer({ transactionId }: { transactionId: number }) {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const btnRef = useRef()
 
+    const [paymentStatus, setPaymentStatus] = useState('1')
+
+    const handlePaymentStatusChange = (value: string) => {
+        setPaymentStatus(value)
+    }
+
     const { data, isLoading, isError } = useQuery(
         ['transaction', transactionId],
         () => get_payment_details({ transactionId }),
     )
+    const { mutate, isLoading: loading } = useMutation(
+        'update_payment_status',
+        update_payment_status,
+    )
+
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
+
+        console.log('paymentStatus', paymentStatus)
+        mutate({
+            paymentId: transactionId,
+            paymentStatusId: Number(paymentStatus),
+        })
+    }
 
     return (
         <>
@@ -64,18 +89,43 @@ export function PaymentDrawer({ transactionId }: { transactionId: number }) {
                             loading={isLoading}
                             error={isError}
                         />
+                        <Box
+                            as="div"
+                            fontWeight="medium"
+                            fontSize="sm"
+                            marginBlock={'4'}
+                            padding={'4'}
+                            bgColor={'AppWorkspace'}
+                        >
+                            <h1>Payment Status</h1>
+                            <form onSubmit={handleSubmit}>
+                                <PaymentStatusRadio
+                                    value={paymentStatus}
+                                    onChange={handlePaymentStatusChange}
+                                />
+                                <button
+                                    className="bg-rose-400"
+                                    type="submit"
+                                    disabled={loading}
+                                >
+                                    Update Payment Status
+                                </button>
+                            </form>
+                        </Box>
                     </DrawerBody>
-                    <DrawerFooter>
+                    {/* <DrawerFooter>
                         <Button variant="outline" mr={3} onClick={onClose}>
                             Cancel
                         </Button>
                         <Button colorScheme="blue">Save</Button>
-                    </DrawerFooter>
+                    </DrawerFooter> */}
                 </DrawerContent>
             </Drawer>
         </>
     )
 }
+
+import { Radio, RadioGroup } from '@chakra-ui/react'
 
 const ViewTransaction = ({
     transaction,
@@ -270,3 +320,49 @@ const Bank = ({ transaction }: { transaction: BankPayment }) => {
         </TableContainer>
     )
 }
+
+function PaymentStatusRadio({
+    value,
+    onChange,
+}: {
+    value: string
+    onChange: (value: string) => void
+}) {
+    const [paymentStatus, setPaymentStatus] = useState(String(value))
+    const radioTextColor = useColorModeValue('gray.800', 'gray.200')
+
+    const handlePaymentStatusChange = (value: string) => {
+        setPaymentStatus(value)
+        console.log(value)
+        if (onChange) {
+            onChange(value)
+        }
+    }
+
+    return (
+        <RadioGroup value={paymentStatus} onChange={handlePaymentStatusChange}>
+            <Flex
+                direction={{ base: 'column', lg: 'row' }}
+                rounded="md"
+                p={2}
+                justify={{ base: 'space-around', md: 'center' }}
+            >
+                {['pending', 'failed', 'complete', 'refunded'].map(
+                    (status, index) => (
+                        <Radio
+                            key={index}
+                            value={String(index + 1)}
+                            colorScheme="blue"
+                        >
+                            <Text fontWeight="medium" color={radioTextColor}>
+                                {status.toUpperCase()}
+                            </Text>
+                        </Radio>
+                    ),
+                )}
+            </Flex>
+        </RadioGroup>
+    )
+}
+
+export default PaymentStatusRadio

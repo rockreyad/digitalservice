@@ -160,10 +160,50 @@ async function find_payment_by_id({ id }: { id: number }) {
 
     return payment
 }
+
+async function update_payment_status({
+    paymentId,
+    paymentStatusId,
+}: {
+    paymentId: number
+    paymentStatusId: number
+}) {
+    const payment = await prisma.payment.update({
+        where: {
+            id: paymentId,
+        },
+        data: {
+            cashPayment: {
+                update: {
+                    status: paymentStatusId,
+                },
+            },
+            bank: {
+                update: {
+                    status: paymentStatusId,
+                },
+            },
+            debitCard: {
+                update: {
+                    status: paymentStatusId,
+                },
+            },
+            mobileBanking: {
+                update: {
+                    status: paymentStatusId,
+                },
+            },
+        },
+    })
+
+    return payment
+}
+
 export {
     new_payment,
     find_all_payment_for_an_order,
     all_payment,
     all_user_payments,
     find_payment_by_id,
+    update_payment_status,
 }

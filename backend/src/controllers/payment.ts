@@ -8,6 +8,7 @@ import {
     find_all_payment_for_an_order,
     new_payment,
     find_payment_by_id,
+    update_payment_status,
 } from '../services/payment'
 import {
     pay_by_bank,
@@ -377,9 +378,71 @@ const get_payment_details = async (req: Request, res: Response) => {
     }
 }
 
+//update payment status
+const update_payment_status_by_id = async (req: Request, res: Response) => {
+    const { transactionId } = req.params
+    const { paymentStatusId } = req.body
+
+    try {
+        if (!transactionId || !paymentStatusId) {
+            //Response: Mandatory fields are missing
+            return res
+                .status(400)
+                .json({ status: false, message: 'Missing required fields' })
+        }
+
+        //find the payment by id
+        const payment = await find_payment_by_id({ id: Number(transactionId) })
+
+        if (!payment) {
+            //Response: Payment not found
+            return res
+                .status(400)
+                .json({ status: false, message: 'Payment not found' })
+        }
+
+        //update payment status
+        //FIX THIS ERROR LATER
+        //Error : Payemnt could not have all the payment method to update the status
+        // @ts-ignore
+
+        const updatedPayment = await update_payment_status({
+            paymentId: Number(transactionId),
+            paymentStatusId: Number(paymentStatusId),
+        })
+
+        if (!updatedPayment) {
+            //Response: Payment not found
+            return res
+                .status(400)
+                .json({ status: false, message: 'Payment not found' })
+        }
+
+        let response = {
+            status: true,
+            message: 'Payment status updated successfully',
+            data: updatedPayment,
+        }
+
+        //Response: Payment found successfully
+        return res.status(200).json(response)
+    } catch (error: unknown) {
+        let status: number = getErrorStatus(error)
+
+        let responseData = {
+            status: false,
+            message: error,
+        }
+
+        //Response: Error
+        res.status(status || 500).json(responseData)
+    }
+}
+
 export {
     create_a_payment,
     find_all_order_payments,
     find_all_payments,
     get_payment_details,
+    update_payment_status_by_id,
 }

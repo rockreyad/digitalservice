@@ -22,6 +22,7 @@ import { MdPayment } from 'react-icons/md'
 import OrderTableFilter from '@/components/orders/OrderTableFilter'
 import React from 'react'
 import Loading from '@/components/loading'
+import { Order } from 'types/order'
 
 export default function OrderTable() {
     const { data, isLoading, isError } = useQuery('orders', getOrders)
@@ -96,111 +97,10 @@ export default function OrderTable() {
                                                 }
                                             })
                                             .map((order, index) => (
-                                                <Tr
-                                                    color={'gray.800'}
-                                                    bgColor="white"
+                                                <TableRow
                                                     key={index}
-                                                >
-                                                    <Td
-                                                        color={'blue'}
-                                                        isNumeric
-                                                    >
-                                                        {order.orderId}
-                                                    </Td>
-
-                                                    {user?.role === 'admin' ? (
-                                                        <Td>
-                                                            {order.user
-                                                                .firstName +
-                                                                ' ' +
-                                                                order.user
-                                                                    .lastName}
-                                                        </Td>
-                                                    ) : null}
-                                                    <Td>{order.createAt}</Td>
-                                                    <Td>
-                                                        <Badge
-                                                            px={'3'}
-                                                            py="1"
-                                                            rounded="sm"
-                                                            colorScheme={
-                                                                order.statusType ===
-                                                                'delivered'
-                                                                    ? 'green'
-                                                                    : order.statusType ===
-                                                                      'complete'
-                                                                    ? 'blue'
-                                                                    : order.statusType ===
-                                                                      'fraud'
-                                                                    ? 'red'
-                                                                    : order.statusType ===
-                                                                      'pending'
-                                                                    ? 'orange'
-                                                                    : 'gray'
-                                                            }
-                                                        >
-                                                            {order.statusType}
-                                                        </Badge>
-                                                    </Td>
-                                                    <Td isNumeric>
-                                                        {order.price?.toFixed(
-                                                            2,
-                                                        )}{' '}
-                                                        &#2547;
-                                                    </Td>
-                                                    <Td className="space-x-2 items-center">
-                                                        <Link
-                                                            href={`/dashboard/order/${order.orderId}`}
-                                                            className="font-light text-gray-500 scale-110 transition  ease-in-out duration-500 hover:text-gray-700"
-                                                        >
-                                                            <Button
-                                                                size={'xs'}
-                                                                colorScheme={
-                                                                    'gray'
-                                                                }
-                                                                className="space-x-1"
-                                                            >
-                                                                <CiRead className="" />
-                                                                <p> view</p>
-                                                            </Button>
-                                                        </Link>
-                                                        {order.statusType !==
-                                                            'fraud' &&
-                                                        order.statusType !==
-                                                            'complete' &&
-                                                        order?.price! >= 0 ? (
-                                                            <Link
-                                                                href={`/dashboard/payment/${order.orderId}`}
-                                                                className="font-light text-gray-500 scale-110 transition  ease-in-out duration-500 hover:text-gray-700"
-                                                            >
-                                                                <Button
-                                                                    size={'xs'}
-                                                                    colorScheme={
-                                                                        'gray'
-                                                                    }
-                                                                    className="space-x-1"
-                                                                >
-                                                                    <MdPayment className="" />
-                                                                    <p> pay</p>
-                                                                </Button>
-                                                            </Link>
-                                                        ) : null}
-
-                                                        {user?.role ===
-                                                        'admin' ? (
-                                                            <Button
-                                                                size={'xs'}
-                                                                colorScheme={
-                                                                    'primary'
-                                                                }
-                                                                className="space-x-1"
-                                                            >
-                                                                <FaRegEdit className="" />
-                                                                <p> edit</p>
-                                                            </Button>
-                                                        ) : null}
-                                                    </Td>
-                                                </Tr>
+                                                    order={order}
+                                                />
                                             ))}
                                     </>
                                 ) : (
@@ -216,5 +116,86 @@ export default function OrderTable() {
                 </div>
             )}
         </>
+    )
+}
+
+// Table Row Data Component
+const TableRow = ({ order }: { order: Order }) => {
+    const { user } = useAuth()
+    return (
+        <Tr color={'gray.800'} bgColor="white">
+            <Td color={'blue'} isNumeric>
+                {order.orderId}
+            </Td>
+
+            {user?.role === 'admin' ? (
+                <Td>{order.user.firstName + ' ' + order.user.lastName}</Td>
+            ) : null}
+            <Td>{order.createAt}</Td>
+            <Td>
+                <Badge
+                    px={'3'}
+                    py="1"
+                    rounded="sm"
+                    colorScheme={
+                        order.statusType === 'delivered'
+                            ? 'green'
+                            : order.statusType === 'complete'
+                            ? 'blue'
+                            : order.statusType === 'fraud'
+                            ? 'red'
+                            : order.statusType === 'pending'
+                            ? 'orange'
+                            : 'gray'
+                    }
+                >
+                    {order.statusType}
+                </Badge>
+            </Td>
+            <Td isNumeric>{order.price?.toFixed(2)} &#2547;</Td>
+            <Td className="space-x-2 items-center">
+                <Link
+                    href={`/dashboard/order/${order.orderId}`}
+                    className="font-light text-gray-500 scale-110 transition  ease-in-out duration-500 hover:text-gray-700"
+                >
+                    <Button
+                        size={'xs'}
+                        colorScheme={'gray'}
+                        className="space-x-1"
+                    >
+                        <CiRead className="" />
+                        <p> view</p>
+                    </Button>
+                </Link>
+                {order.statusType !== 'fraud' &&
+                order.statusType !== 'complete' &&
+                order?.price! >= 0 ? (
+                    <Link
+                        href={`/dashboard/payment/${order.orderId}`}
+                        className="font-light text-gray-500 scale-110 transition  ease-in-out duration-500 hover:text-gray-700"
+                    >
+                        <Button
+                            size={'xs'}
+                            colorScheme={'gray'}
+                            className="space-x-1"
+                        >
+                            <MdPayment className="" />
+                            <p> pay</p>
+                        </Button>
+                    </Link>
+                ) : null}
+
+                {user?.role === 'admin' ? (
+                    <Button
+                        size={'xs'}
+                        colorScheme={'primary'}
+                        className="space-x-1"
+                    >
+                        <FaRegEdit className="" />
+                        <p> edit</p>
+                    </Button>
+                ) : null}
+            </Td>
+        </Tr>
     )
 }

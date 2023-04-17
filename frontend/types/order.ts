@@ -16,21 +16,22 @@ export interface OrderError {
 
 export interface Order {
     orderId: number
-    price?: number
     user: {
         firstName: string
         lastName: string
         email?: string
         user_id?: string
     }
+    invoiceId: string
+    price?: number
+    statusType: string
+    statusId: number
     orderItems: {
         service: {
             title: string
         }[]
-        itemPrice: number
+        itemPrice?: number
     }
-    statusType: string
-    statusId: number
     createAt: string
 }
 

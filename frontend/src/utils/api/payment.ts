@@ -62,3 +62,23 @@ export async function get_payment_details({
         throw error
     }
 }
+
+export async function update_payment_status({
+    paymentId,
+    paymentStatusId,
+}: {
+    paymentId: number
+    paymentStatusId: number
+}) {
+    try {
+        const res = await axios.patch(`/payment/${paymentId}`, {
+            paymentStatusId,
+        })
+        return res.data
+    } catch (error: unknown) {
+        if (error instanceof AxiosError) {
+            throw error.response?.data
+        }
+        throw error
+    }
+}

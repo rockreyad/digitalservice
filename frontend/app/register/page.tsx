@@ -4,12 +4,13 @@ import { createUser, UserLoginError } from '@/utils/api/user'
 import {
     Box,
     Button,
+    Flex,
     FormControl,
-    FormLabel,
-    GridItem,
     Heading,
     Input,
-    SimpleGrid,
+    InputGroup,
+    InputLeftElement,
+    InputRightElement,
     Stack,
     Text,
     chakra,
@@ -20,9 +21,21 @@ import { useMutation, useQueryClient } from 'react-query'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/auth-context'
 import { AuthResponse, AuthUserInfo } from 'types/user'
+import Link from 'next/link'
+import { FaUserAlt, FaLock, FaPhoneAlt } from 'react-icons/fa'
+import { MdEmail } from 'react-icons/md'
+
+const CFaUserAlt = chakra(FaUserAlt)
+const CFaLock = chakra(FaLock)
+const CMdEmail = chakra(MdEmail)
+const CFaPhoneAlt = chakra(FaPhoneAlt)
 
 export const metadata = {
     title: 'Registration on Digital Web Service',
+}
+
+interface PasswordVisibility {
+    [key: string]: boolean
 }
 
 export default function Register() {
@@ -34,6 +47,17 @@ export default function Register() {
         password: '',
         repeatPassword: '',
     })
+    const [showPassword, setShowPassword] = useState<PasswordVisibility>({
+        password: false,
+        repeatPassword: false,
+    })
+
+    const handleShowClick = (buttonName: string) => {
+        setShowPassword((prevShowPassword) => ({
+            ...prevShowPassword,
+            [buttonName]: !prevShowPassword[buttonName], // toggle the value
+        }))
+    }
 
     const queryClient = useQueryClient()
     const router = useRouter()
@@ -84,331 +108,279 @@ export default function Register() {
     }, [isSuccess, router, data, isAuthenticated, setCurrentUser])
 
     return (
-        <>
-            <Box
-                bg="#edf3f8"
-                _dark={{
-                    bg: '#111',
-                }}
-                p={10}
+        <Flex
+            flexDirection="column"
+            width="100wh"
+            height="100vh"
+            bgGradient={'linear(to-r, primary.500, primary.300)'}
+            justifyContent="center"
+            alignItems="center"
+        >
+            <Stack
+                flexDir="column"
+                mb="2"
+                spacing={4}
+                justifyContent="center"
+                alignItems="center"
             >
-                <Box mt={[10, 0]}>
-                    <SimpleGrid
-                        display={{
-                            base: 'initial',
-                            md: 'grid',
-                        }}
-                        columns={{
-                            md: 3,
-                        }}
-                        spacing={{
-                            md: 6,
-                        }}
-                    >
-                        <GridItem
-                            colSpan={{
-                                md: 1,
-                            }}
+                <Heading
+                    fontSize={['4xl', '4xl', '5xl']}
+                    textTransform={'uppercase'}
+                    color="white"
+                >
+                    user Registration
+                </Heading>
+                <Box py={'10'} minW={{ base: '90%', md: '468px' }}>
+                    <form onSubmit={handleSubmit}>
+                        <Stack
+                            spacing={4}
+                            p="1rem"
+                            backgroundColor="whiteAlpha.900"
+                            boxShadow="md"
                         >
-                            <Box px={[4, 0]}>
-                                <Heading
-                                    fontSize="lg"
-                                    fontWeight="medium"
-                                    lineHeight="6"
-                                >
-                                    Personal Information
-                                </Heading>
-                                <Text
-                                    mt={1}
-                                    fontSize="sm"
-                                    color="gray.600"
-                                    _dark={{
-                                        color: 'gray.400',
-                                    }}
-                                >
-                                    Please be carefully fill the form
-                                </Text>
-                            </Box>
-                        </GridItem>
-                        <GridItem
-                            mt={[5, null, 0]}
-                            colSpan={{
-                                md: 2,
-                            }}
-                        >
-                            <chakra.form
-                                method="POST"
-                                shadow="base"
-                                onSubmit={handleSubmit}
-                                rounded={[null, 'md']}
-                                overflow={{
-                                    sm: 'hidden',
-                                }}
-                            >
-                                <Stack
-                                    px={4}
-                                    py={5}
-                                    p={[null, 6]}
-                                    bg="white"
-                                    _dark={{
-                                        bg: '#141517',
-                                    }}
-                                    spacing={6}
-                                >
-                                    {isError ? (
-                                        <FormControl>
-                                            <Box
-                                                fontWeight="semibold"
-                                                letterSpacing="wide"
-                                                fontSize="xs"
-                                                textTransform="uppercase"
-                                                ml="2"
-                                            >
-                                                <Text textColor={'red.400'}>
-                                                    {RegistrationError}
-                                                </Text>
-                                            </Box>
-                                        </FormControl>
-                                    ) : null}
-                                    {isSuccess ? (
-                                        <FormControl>
-                                            <Box
-                                                fontWeight="semibold"
-                                                letterSpacing="wide"
-                                                fontSize="xs"
-                                                textTransform="uppercase"
-                                                ml="2"
-                                            >
-                                                <Text textColor={'green.500'}>
-                                                    {data?.message}
-                                                </Text>
-                                            </Box>
-                                        </FormControl>
-                                    ) : null}
-
-                                    <SimpleGrid columns={6} spacing={6}>
-                                        <FormControl
-                                            as={GridItem}
-                                            colSpan={[6, 3]}
-                                        >
-                                            <FormLabel
-                                                htmlFor="first_name"
-                                                fontSize="sm"
-                                                fontWeight="md"
-                                                color="gray.700"
-                                                _dark={{
-                                                    color: 'gray.50',
-                                                }}
-                                            >
-                                                First name
-                                            </FormLabel>
-                                            <Input
-                                                type="text"
-                                                name="firstName"
-                                                id="first_name"
-                                                autoComplete="given-name"
-                                                mt={1}
-                                                focusBorderColor="brand.400"
-                                                shadow="sm"
-                                                size="sm"
-                                                w="full"
-                                                rounded="md"
-                                                required
-                                                onChange={handleChange}
-                                                value={user.firstName}
-                                            />
-                                        </FormControl>
-
-                                        <FormControl
-                                            as={GridItem}
-                                            colSpan={[6, 3]}
-                                        >
-                                            <FormLabel
-                                                htmlFor="last_name"
-                                                fontSize="sm"
-                                                fontWeight="md"
-                                                color="gray.700"
-                                                _dark={{
-                                                    color: 'gray.50',
-                                                }}
-                                            >
-                                                Last name
-                                            </FormLabel>
-                                            <Input
-                                                type="text"
-                                                name="lastName"
-                                                id="last_name"
-                                                autoComplete="family-name"
-                                                mt={1}
-                                                focusBorderColor="brand.400"
-                                                shadow="sm"
-                                                size="sm"
-                                                w="full"
-                                                rounded="md"
-                                                required
-                                                value={user.lastName}
-                                                onChange={handleChange}
-                                            />
-                                        </FormControl>
-
-                                        <FormControl
-                                            as={GridItem}
-                                            colSpan={[6, 4]}
-                                        >
-                                            <FormLabel
-                                                htmlFor="email_address"
-                                                fontSize="sm"
-                                                fontWeight="md"
-                                                color="gray.700"
-                                                _dark={{
-                                                    color: 'gray.50',
-                                                }}
-                                            >
-                                                Email address
-                                            </FormLabel>
-                                            <Input
-                                                type="text"
-                                                name="email"
-                                                id="email_address"
-                                                autoComplete="email"
-                                                mt={1}
-                                                focusBorderColor="brand.400"
-                                                shadow="sm"
-                                                size="sm"
-                                                w="full"
-                                                rounded="md"
-                                                required
-                                                value={user.email}
-                                                onChange={handleChange}
-                                            />
-                                        </FormControl>
-
-                                        <FormControl
-                                            as={GridItem}
-                                            colSpan={[6, 4]}
-                                        >
-                                            <FormLabel
-                                                htmlFor="phone"
-                                                fontSize="sm"
-                                                fontWeight="md"
-                                                color="gray.700"
-                                                _dark={{
-                                                    color: 'gray.50',
-                                                }}
-                                            >
-                                                Phone
-                                            </FormLabel>
-                                            <Input
-                                                type="text"
-                                                name="phone"
-                                                id="phone"
-                                                autoComplete="phone"
-                                                mt={1}
-                                                focusBorderColor="brand.400"
-                                                shadow="sm"
-                                                size="sm"
-                                                w="full"
-                                                rounded="md"
-                                                required
-                                                value={user.phone}
-                                                onChange={handleChange}
-                                            />
-                                        </FormControl>
-
-                                        <FormControl
-                                            as={GridItem}
-                                            colSpan={[6, 4]}
-                                        >
-                                            <FormLabel
-                                                htmlFor="email_address"
-                                                fontSize="sm"
-                                                fontWeight="md"
-                                                color="gray.700"
-                                                _dark={{
-                                                    color: 'gray.50',
-                                                }}
-                                            >
-                                                Password
-                                            </FormLabel>
-                                            <Input
-                                                type="text/password"
-                                                name="password"
-                                                id="password"
-                                                autoComplete="password"
-                                                mt={1}
-                                                focusBorderColor="brand.400"
-                                                shadow="sm"
-                                                size="sm"
-                                                w="full"
-                                                rounded="md"
-                                                required
-                                                value={user.password}
-                                                onChange={handleChange}
-                                            />
-                                        </FormControl>
-                                        <FormControl
-                                            as={GridItem}
-                                            colSpan={[6, 4]}
-                                        >
-                                            <FormLabel
-                                                htmlFor="repeat_password"
-                                                fontSize="sm"
-                                                fontWeight="md"
-                                                color="gray.700"
-                                                _dark={{
-                                                    color: 'gray.50',
-                                                }}
-                                            >
-                                                Password
-                                            </FormLabel>
-                                            <Input
-                                                type="text/password"
-                                                name="repeatPassword"
-                                                id="repeatPassword"
-                                                autoComplete="password"
-                                                mt={1}
-                                                focusBorderColor="brand.400"
-                                                shadow="sm"
-                                                size="sm"
-                                                w="full"
-                                                rounded="md"
-                                                required
-                                                value={user.repeatPassword}
-                                                onChange={handleChange}
-                                            />
-                                        </FormControl>
-                                    </SimpleGrid>
-                                </Stack>
-                                <Box
-                                    px={{
-                                        base: 4,
-                                        sm: 6,
-                                    }}
-                                    py={3}
-                                    bg="gray.50"
-                                    _dark={{
-                                        bg: '#121212',
-                                    }}
-                                    textAlign="right"
-                                >
-                                    <Button
-                                        className="bg-green-400"
-                                        type="submit"
-                                        colorScheme="green.100"
-                                        _focus={{
-                                            shadow: '',
-                                        }}
-                                        fontWeight="md"
+                            {isError ? (
+                                <FormControl>
+                                    <Box
+                                        fontWeight="semibold"
+                                        letterSpacing="wide"
+                                        fontSize="xs"
+                                        textTransform="uppercase"
+                                        ml="2"
                                     >
-                                        {isLoading ? 'Loading...' : 'sign up'}
-                                    </Button>
-                                </Box>
-                            </chakra.form>
-                        </GridItem>
-                    </SimpleGrid>
+                                        <Text textColor={'red.400'}>
+                                            {RegistrationError}
+                                        </Text>
+                                    </Box>
+                                </FormControl>
+                            ) : null}
+                            {isSuccess ? (
+                                <FormControl>
+                                    <Box
+                                        fontWeight="semibold"
+                                        letterSpacing="wide"
+                                        fontSize="xs"
+                                        textTransform="uppercase"
+                                        ml="2"
+                                    >
+                                        <Text textColor={'green.500'}>
+                                            {data?.message}
+                                        </Text>
+                                    </Box>
+                                </FormControl>
+                            ) : null}
+
+                            <FormControl>
+                                <InputGroup>
+                                    <InputLeftElement pointerEvents="none">
+                                        <CFaUserAlt color="gray.300" />
+                                    </InputLeftElement>
+                                    <Input
+                                        type="text"
+                                        name="firstName"
+                                        id="first_name"
+                                        placeholder="First Name"
+                                        autoComplete="firstName"
+                                        mt={1}
+                                        focusBorderColor="brand.400"
+                                        shadow="sm"
+                                        size="sm"
+                                        w="full"
+                                        rounded="md"
+                                        required
+                                        onChange={handleChange}
+                                        value={user.firstName}
+                                    />
+                                </InputGroup>
+                            </FormControl>
+
+                            <FormControl>
+                                <InputGroup>
+                                    <InputLeftElement
+                                        pointerEvents="none"
+                                        color="gray.300"
+                                    >
+                                        <CFaUserAlt color="gray.300" />
+                                    </InputLeftElement>
+                                    <Input
+                                        type="text"
+                                        name="lastName"
+                                        id="last_name"
+                                        placeholder="Last Name"
+                                        autoComplete="lastName"
+                                        mt={1}
+                                        focusBorderColor="brand.400"
+                                        shadow="sm"
+                                        size="sm"
+                                        w="full"
+                                        rounded="md"
+                                        required
+                                        value={user.lastName}
+                                        onChange={handleChange}
+                                    />
+                                </InputGroup>
+                            </FormControl>
+
+                            <FormControl>
+                                <InputGroup>
+                                    <InputLeftElement
+                                        pointerEvents="none"
+                                        color="gray.300"
+                                    >
+                                        <CMdEmail color="gray.300" />
+                                    </InputLeftElement>
+                                    <Input
+                                        type="text"
+                                        name="email"
+                                        id="email_address"
+                                        placeholder="Email Address"
+                                        autoComplete="email"
+                                        mt={1}
+                                        focusBorderColor="brand.400"
+                                        shadow="sm"
+                                        size="sm"
+                                        w="full"
+                                        rounded="md"
+                                        required
+                                        value={user.email}
+                                        onChange={handleChange}
+                                    />
+                                </InputGroup>
+                            </FormControl>
+
+                            <FormControl>
+                                <InputGroup>
+                                    <InputLeftElement
+                                        pointerEvents="none"
+                                        color="gray.300"
+                                    >
+                                        <CFaPhoneAlt color="gray.300" />
+                                    </InputLeftElement>
+                                    <Input
+                                        type="text"
+                                        name="phone"
+                                        id="phone"
+                                        placeholder="Phone Number"
+                                        autoComplete="phone"
+                                        mt={1}
+                                        focusBorderColor="brand.400"
+                                        shadow="sm"
+                                        size="sm"
+                                        w="full"
+                                        rounded="md"
+                                        required
+                                        value={user.phone}
+                                        onChange={handleChange}
+                                    />
+                                </InputGroup>
+                            </FormControl>
+
+                            <FormControl>
+                                <InputGroup>
+                                    <InputLeftElement
+                                        pointerEvents="none"
+                                        color="gray.300"
+                                    >
+                                        <CFaLock color="gray.300" />
+                                    </InputLeftElement>
+                                    <Input
+                                        type={
+                                            showPassword.password
+                                                ? 'text'
+                                                : 'password'
+                                        }
+                                        name="password"
+                                        id="password"
+                                        placeholder="Password"
+                                        autoComplete="password"
+                                        mt={1}
+                                        focusBorderColor="brand.400"
+                                        shadow="sm"
+                                        size="sm"
+                                        w="full"
+                                        rounded="md"
+                                        required
+                                        value={user.password}
+                                        onChange={handleChange}
+                                    />
+                                    <InputRightElement width="4.5rem">
+                                        <Button
+                                            h="1.75rem"
+                                            size="sm"
+                                            onClick={() =>
+                                                handleShowClick('password')
+                                            }
+                                        >
+                                            {showPassword.password
+                                                ? 'Hide'
+                                                : 'Show'}
+                                        </Button>
+                                    </InputRightElement>
+                                </InputGroup>
+                            </FormControl>
+                            <FormControl>
+                                <InputGroup>
+                                    <InputLeftElement
+                                        pointerEvents="none"
+                                        color="gray.300"
+                                    >
+                                        <CFaLock color="gray.300" />
+                                    </InputLeftElement>
+                                    <Input
+                                        type={
+                                            showPassword.repeatPassword
+                                                ? 'text'
+                                                : 'password'
+                                        }
+                                        name="repeatPassword"
+                                        id="repeatPassword"
+                                        placeholder="Repeat Password"
+                                        autoComplete="password"
+                                        mt={1}
+                                        focusBorderColor="brand.400"
+                                        shadow="sm"
+                                        size="sm"
+                                        w="full"
+                                        rounded="md"
+                                        required
+                                        value={user.repeatPassword}
+                                        onChange={handleChange}
+                                    />
+                                    <InputRightElement width="4.5rem">
+                                        <Button
+                                            h="1.75rem"
+                                            size="sm"
+                                            onClick={() =>
+                                                handleShowClick(
+                                                    'repeatPassword',
+                                                )
+                                            }
+                                        >
+                                            {showPassword.repeatPassword
+                                                ? 'Hide'
+                                                : 'Show'}
+                                        </Button>
+                                    </InputRightElement>
+                                </InputGroup>
+                            </FormControl>
+                            <Button
+                                borderRadius={0}
+                                type="submit"
+                                variant="solid"
+                                colorScheme="primary"
+                                width="full"
+                            >
+                                {isLoading ? 'Loading...' : 'Register'}
+                            </Button>
+                        </Stack>
+                    </form>
                 </Box>
+            </Stack>
+            <Box display="flex" gap={5}>
+                Already have an account?
+                <Link color="white" href="/login">
+                    Login
+                </Link>
             </Box>
-            ;
-        </>
+        </Flex>
     )
 }

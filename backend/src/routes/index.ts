@@ -30,6 +30,7 @@ import {
     find_all_order_payments,
     find_all_payments,
     get_payment_details,
+    update_payment_status_by_id,
 } from '../controllers/payment'
 import { get_invoice_details } from '../controllers/invoice'
 
@@ -83,6 +84,7 @@ export default function routes(app: Express) {
     const paymentRouter = express.Router()
     paymentRouter.post('/', create_a_payment)
     paymentRouter.get('/:orderId', find_all_order_payments)
+    paymentRouter.patch('/:transactionId', update_payment_status_by_id)
     paymentRouter.get('/', find_all_payments)
     paymentRouter.get('/transaction/:transactionId', get_payment_details)
     app.use('/payment', authorize, paymentRouter)

@@ -19,7 +19,6 @@ import {
     Modal,
     ModalContent,
     ModalHeader,
-    ModalCloseButton,
     ModalBody,
     Text,
     ModalFooter,
@@ -31,6 +30,7 @@ import { useMutation, useQuery } from 'react-query'
 import { payForOrder, totalPayment } from '@/utils/api/payment'
 import { getOrderById } from '@/utils/api/order'
 import { PaymentError } from 'types/payment'
+import { useRouter } from 'next/navigation'
 
 export default function PaymentForm({ orderId }: { orderId: number }) {
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -41,18 +41,15 @@ export default function PaymentForm({ orderId }: { orderId: number }) {
         card_number: '',
         cvv: '',
         exp_date: '',
-        amount: amount,
+        amount,
         paymentStatus: 1,
     })
-    const [cashPayment] = useState({
-        amount: amount,
-        paymentStatus: 1,
-    })
+    const [cashPayment] = useState({ amount, paymentStatus: 1 })
     const [mobileBanking, setMobileBanking] = useState({
         account_holder_name: '',
         account_number: '',
         bank_name: '',
-        amount: amount,
+        amount,
         trxId: '',
         paymentStatus: 1,
     })
@@ -61,10 +58,11 @@ export default function PaymentForm({ orderId }: { orderId: number }) {
         account_number: '',
         account_type: '',
         name: '',
-        amount: amount,
+        amount,
         paymentStatus: 1,
     })
 
+    const router = useRouter()
     const { mutate, isSuccess, isLoading, isError, error } = useMutation(
         payForOrder,
         {
@@ -77,7 +75,10 @@ export default function PaymentForm({ orderId }: { orderId: number }) {
 
     const { data: totalOrderPayment } = useQuery(
         'totalPayment',
-        () => totalPayment({ orderId: orderId }),
+        () =>
+            totalPayment({
+                orderId,
+            }),
         {
             refetchOnWindowFocus: false,
             retry: 0,
@@ -89,49 +90,44 @@ export default function PaymentForm({ orderId }: { orderId: number }) {
         getOrderById,
     )
 
-    let totalPaid = 0
+    const totalPaid =
+        // Calculate the total amount paid for the current order
+        totalOrderPayment?.data?.reduce((acc, payment) => {
+            const amount = Object.keys(payment).reduce((a, key) => {
+                let value = payment[key as keyof typeof payment]
+                if (
+                    typeof value === 'object' && // Check if the value is an object
+                    value !== null && // Check if the value is not null
+                    'amount' in value // Check if the value has an 'amount' property
+                ) {
+                    return a + value.amount // Add the 'amount' to the accumulator
+                }
+                return a
+            }, 0)
+            return acc + amount // Add the total amount paid to the accumulator
+        }, 0) ?? 0 // If there are no payments, set the total paid to 0
 
-    for (let i = 0; i < totalOrderPayment?.data?.length!; i++) {
-        if (totalOrderPayment?.data[i]?.cashPayment) {
-            totalPaid += totalOrderPayment?.data[i]?.cashPayment?.amount!
-        } else if (totalOrderPayment?.data[i].bank) {
-            totalPaid += totalOrderPayment?.data[i]?.bank?.amount!
-        } else if (totalOrderPayment?.data[i]?.debitCard) {
-            totalPaid += totalOrderPayment?.data[i]?.debitCard?.amount!
-        } else if (totalOrderPayment?.data[i]?.mobileBanking) {
-            totalPaid += totalOrderPayment.data[i].mobileBanking?.amount!
-        }
-    }
-    let due: number = Number(
-        Number(
-            Number(totalOrderPrice?.data?.price!) - Number(totalPaid),
-        ).toFixed(2),
-    )
+    const due = +(totalOrderPrice?.data?.price! - totalPaid).toFixed(2) // Calculate the remaining amount due for the current order
 
-    const paymentMoney = [500, 1000, 2000, 5000, 10000, due]
+    const paymentMoney = [500, 1000, 2000, 5000, 10000, due] // Create an array of payment amounts that includes the remaining amount due
 
     const handlePayment = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        const paymentData: any = {
-            paymentMethod,
-            amount,
-        }
-        if (paymentMethod === 'debit_card') {
-            paymentData.debitCard = debitCard
-        } else if (paymentMethod === 'cash') {
-            paymentData.cashPayment = cashPayment
-        } else if (paymentMethod === 'mobile_banking') {
-            paymentData.mobileBanking = mobileBanking
-        } else if (paymentMethod === 'bank') {
-            paymentData.bank = bank
-        }
 
+        // Create an object with the details of the payment, including the payment method and amount
         const paymentDetails = {
             orderId: orderId, // Replace with actual order ID
-            payment: paymentData,
+            payment: {
+                paymentMethod,
+                amount,
+                ...(paymentMethod === 'debit_card' && { debitCard }), // Include additional information based on the payment method selected
+                ...(paymentMethod === 'cash' && { cashPayment }),
+                ...(paymentMethod === 'mobile_banking' && { mobileBanking }),
+                ...(paymentMethod === 'bank' && { bank }),
+            },
         }
 
-        mutate(paymentDetails)
+        mutate(paymentDetails) // Send the payment data to the server using the 'mutate' function
     }
 
     //Error message
@@ -143,6 +139,7 @@ export default function PaymentForm({ orderId }: { orderId: number }) {
         <div>
             {due > 0 ? (
                 <>
+                    {/* pop up modal after hit the pay button */}
                     <Modal isCentered isOpen={isOpen} onClose={onClose}>
                         <ModalOverlay
                             bg="none"
@@ -151,11 +148,15 @@ export default function PaymentForm({ orderId }: { orderId: number }) {
                             backdropBlur="2px"
                         />
                         <ModalContent>
-                            <ModalHeader>Payment</ModalHeader>
-                            <ModalCloseButton />
+                            <ModalHeader>Notification</ModalHeader>
+                            {/* <ModalCloseButton /> */}
                             <ModalBody>
                                 {isSuccess && (
-                                    <Text color={'green.500'}>
+                                    <Text
+                                        fontSize={'2xl'}
+                                        fontWeight={'extrabold'}
+                                        color={'green.500'}
+                                    >
                                         Payment has been successfull!
                                     </Text>
                                 )}
@@ -171,7 +172,14 @@ export default function PaymentForm({ orderId }: { orderId: number }) {
                                 ) : null}
                             </ModalBody>
                             <ModalFooter>
-                                <Button onClick={onClose}>Close</Button>
+                                <Button
+                                    onClick={() => {
+                                        onClose
+                                        router.push('/dashboard/payment')
+                                    }}
+                                >
+                                    Close
+                                </Button>
                             </ModalFooter>
                         </ModalContent>
                     </Modal>
