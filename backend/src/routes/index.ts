@@ -36,19 +36,20 @@ import { get_invoice_details } from '../controllers/invoice'
 
 export default function routes(app: Express) {
     app.get('/', (req: Request, res: Response) => {
-        const welcomeMessage = 'Welcome to the DWS website!';
-        const companyDescription = 'We are a leading IT outsourcing company specializing in software development, application development, website design, and digital marketing services. Our goal is to provide effective solutions and optimum results at suitable costs, so that our clients can increase their business revenue online.';
-        const contactInformation = 'To learn more about our services or request a consultation, please visit our website or contact us at info@dws.com.';
+        const welcomeMessage = 'Welcome to the DWS website!'
+        const companyDescription =
+            'We are a leading IT outsourcing company specializing in software development, application development, website design, and digital marketing services. Our goal is to provide effective solutions and optimum results at suitable costs, so that our clients can increase their business revenue online.'
+        const contactInformation =
+            'To learn more about our services or request a consultation, please visit our website or contact us at info@dws.com.'
 
         const formattedResponse = `
           <h1>${welcomeMessage}</h1>
           <p>${companyDescription}</p>
           <p>${contactInformation}</p>
-        `;
+        `
 
-        res.send(formattedResponse);
-    });
-
+        res.send(formattedResponse)
+    })
 
     /** Authentication : Login , Register */
     app.post('/login', signInWithEmailAndPassword)

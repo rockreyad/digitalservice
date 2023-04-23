@@ -1,120 +1,119 @@
 {
     "teamMembers": [
-      {
-        "id": 1,
-        "imgUrl": "team-member-01.png",
-        "imgAlt": "",
-        "name": "Jamila Smail",
-        "position": "Co-Founder"
-      },
-      {
-        "id": 2,
-        "imgUrl": "team-member-02.jpg",
-        "imgAlt": "",
-        "name": "Farouk Dari",
-        "position": "Full Stack Developer"
-      },
-      {
-        "id": 3,
-        "imgUrl": "team-member-03.jpg",
-        "imgAlt": "",
-        "name": "Aksel Juba",
-        "position": "Graphic Designer"
-      },
-      {
-        "id": 4,
-        "imgUrl": "team-member-04.jpg",
-        "imgAlt": "",
-        "name": "Dihia Numida",
-        "position": "UI/UX Designer"
-      }
+        {
+            "id": 1,
+            "imgUrl": "team-member-01.png",
+            "imgAlt": "",
+            "name": "Jamila Smail",
+            "position": "Co-Founder"
+        },
+        {
+            "id": 2,
+            "imgUrl": "team-member-02.jpg",
+            "imgAlt": "",
+            "name": "Farouk Dari",
+            "position": "Full Stack Developer"
+        },
+        {
+            "id": 3,
+            "imgUrl": "team-member-03.jpg",
+            "imgAlt": "",
+            "name": "Aksel Juba",
+            "position": "Graphic Designer"
+        },
+        {
+            "id": 4,
+            "imgUrl": "team-member-04.jpg",
+            "imgAlt": "",
+            "name": "Dihia Numida",
+            "position": "UI/UX Designer"
+        }
     ],
     "projects": [
-      {
-        "id": 1,
-        "imgUrl": "project-01.png",
-        "spec": "UI/UX Design",
-        "project": "Delex Relay"
-      },
-      {
-        "id": 2,
-        "imgUrl": "project-02.png",
-        "spec": "Web / app Development",
-        "project": "Cooke Me"
-      },
-      {
-        "id": 3,
-        "imgUrl": "project-03.png",
-        "spec": "UI/UX Design",
-        "project": "Booking.com"
-      },
-      {
-        "id": 4,
-        "imgUrl": "project-04.png",
-        "spec": "UI/UX Design",
-        "project": "Homely"
-      },
-      {
-        "id": 5,
-        "imgUrl": "project-05.png",
-        "spec": "UI/UX Design",
-        "project": "ADOC"
-      }
+        {
+            "id": 1,
+            "imgUrl": "project-01.png",
+            "spec": "UI/UX Design",
+            "project": "Delex Relay"
+        },
+        {
+            "id": 2,
+            "imgUrl": "project-02.png",
+            "spec": "Web / app Development",
+            "project": "Cooke Me"
+        },
+        {
+            "id": 3,
+            "imgUrl": "project-03.png",
+            "spec": "UI/UX Design",
+            "project": "Booking.com"
+        },
+        {
+            "id": 4,
+            "imgUrl": "project-04.png",
+            "spec": "UI/UX Design",
+            "project": "Homely"
+        },
+        {
+            "id": 5,
+            "imgUrl": "project-05.png",
+            "spec": "UI/UX Design",
+            "project": "ADOC"
+        }
     ],
     "services": [
-      {
-        "id": 1,
-        "title": "UI/UX Design ,Web Design",
-        "description": "Making your product clean and easy to use it is the important thing for us"
-      },
-      {
-        "id": 2,
-        "title": "Web/App Development",
-        "description": "Our Team will use the top technologies to develop your product"
-      },
-      {
-        "id": 3,
-        "title": "Marketing Digital,Social Media",
-        "description": "Grow your communty with our inbound marketing and social media marketing"
-      },
-      {
-        "id": 4,
-        "title": "Brand Strategy & Art Direction",
-        "description": "Let us help you create a unique brand so your business can stand out."
-      },
-      {
-        "id": 5,
-        "title": "Visual Identity Logo Brand",
-        "description": "A logo can make a big difference and our team will help you with that"
-      },
-      {
-        "id": 6,
-        "title": "Video / Ads Production",
-        "description": "What's the best way to reach the user to gain their trust? We can produce your ads videos professionally"
-      }
+        {
+            "id": 1,
+            "title": "UI/UX Design ,Web Design",
+            "description": "Making your product clean and easy to use it is the important thing for us"
+        },
+        {
+            "id": 2,
+            "title": "Web/App Development",
+            "description": "Our Team will use the top technologies to develop your product"
+        },
+        {
+            "id": 3,
+            "title": "Marketing Digital,Social Media",
+            "description": "Grow your communty with our inbound marketing and social media marketing"
+        },
+        {
+            "id": 4,
+            "title": "Brand Strategy & Art Direction",
+            "description": "Let us help you create a unique brand so your business can stand out."
+        },
+        {
+            "id": 5,
+            "title": "Visual Identity Logo Brand",
+            "description": "A logo can make a big difference and our team will help you with that"
+        },
+        {
+            "id": 6,
+            "title": "Video / Ads Production",
+            "description": "What's the best way to reach the user to gain their trust? We can produce your ads videos professionally"
+        }
     ],
     "testimonials": [
-      {
-        "id": 1,
-        "testimonial": "They helped us develop a solution to migrate our legacy system to the latest technology, bringing security and reliability",
-        "picUrl": "testimonial-pic-01.png",
-        "name": "Smail yefsssah",
-        "role": "CEO Innova"
-      },
-      {
-        "id": 2,
-        "testimonial": "It brought a new vision to develop our brand, defining a visual identity, new marketing strategies and management of our brand on social networks",
-        "picUrl": "testimonial-pic-02.png",
-        "name": "Djamila Malak",
-        "role": "Co-Founder RobaKabyle"
-      },
-      {
-        "id": 3,
-        "testimonial": "DigitUX was very important for our company, it helped us to develop our own brand, producing institutional videos and managing our community",
-        "picUrl": "testimonial-pic-03.png",
-        "name": "Esteban Schneider",
-        "role": "CTO Ratke - Shields"
-      }
+        {
+            "id": 1,
+            "testimonial": "They helped us develop a solution to migrate our legacy system to the latest technology, bringing security and reliability",
+            "picUrl": "testimonial-pic-01.png",
+            "name": "Smail yefsssah",
+            "role": "CEO Innova"
+        },
+        {
+            "id": 2,
+            "testimonial": "It brought a new vision to develop our brand, defining a visual identity, new marketing strategies and management of our brand on social networks",
+            "picUrl": "testimonial-pic-02.png",
+            "name": "Djamila Malak",
+            "role": "Co-Founder RobaKabyle"
+        },
+        {
+            "id": 3,
+            "testimonial": "DigitUX was very important for our company, it helped us to develop our own brand, producing institutional videos and managing our community",
+            "picUrl": "testimonial-pic-03.png",
+            "name": "Esteban Schneider",
+            "role": "CTO Ratke - Shields"
+        }
     ]
-  }
-  
+}

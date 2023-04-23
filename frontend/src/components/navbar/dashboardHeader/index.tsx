@@ -26,7 +26,6 @@ import { useAuth } from '@/contexts/auth-context'
 import React from 'react'
 
 export default function DashboardHeader() {
-
     //Call the custom hook to use the SidebarContext
     const { setToggleSidebar } = useSidebar()
     const { logout, user } = useAuth()
@@ -59,7 +58,9 @@ export default function DashboardHeader() {
                                 <React.Fragment key={index}>
                                     {item !== 'dashboard' && (
                                         <Link
-                                            href={`/${pathname.slice(0, index + 1).join('/')}`}
+                                            href={`/${pathname
+                                                .slice(0, index + 1)
+                                                .join('/')}`}
                                             fontSize="sm"
                                             fontWeight="light"
                                             color="gray.500"
@@ -68,8 +69,15 @@ export default function DashboardHeader() {
                                                 color: 'gray.700',
                                             }}
                                         >
-                                            {`${item.charAt(0).toUpperCase()}${item.slice(1)} ${index !== pathname.length - 1 ? '/' : ''
-                                                }`}
+                                            {`${item
+                                                .charAt(0)
+                                                .toUpperCase()}${item.slice(
+                                                1,
+                                            )} ${
+                                                index !== pathname.length - 1
+                                                    ? '/'
+                                                    : ''
+                                            }`}
                                         </Link>
                                     )}
                                 </React.Fragment>
@@ -80,7 +88,9 @@ export default function DashboardHeader() {
                 <Flex alignItems="center" mr={{ base: 'auto', md: '2' }}>
                     <Heading as="h1" fontSize="xl" fontWeight="bold">
                         {pathname &&
-                            `${pathname[pathname.length - 1].charAt(0).toUpperCase()}${pathname[
+                            `${pathname[pathname.length - 1]
+                                .charAt(0)
+                                .toUpperCase()}${pathname[
                                 pathname.length - 1
                             ].slice(1)}`}
                     </Heading>
@@ -127,7 +137,9 @@ export default function DashboardHeader() {
                                 />
                             </MenuButton>
                             <MenuList>
-                                <MenuGroup title={`${user?.firstName} ${user?.lastName}`}>
+                                <MenuGroup
+                                    title={`${user?.firstName} ${user?.lastName}`}
+                                >
                                     <MenuDivider />
                                     <MenuItem
                                         textColor="gray.700"
@@ -159,4 +171,3 @@ export default function DashboardHeader() {
         </header>
     )
 }
-

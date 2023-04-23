@@ -2,8 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-
 .mainbody {
     -webkit-font-smoothing: antialiased;
     @apply bg-digitux-dark text-white;
-  }
+}

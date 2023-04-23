@@ -16,11 +16,10 @@ module.exports = {
                     text: '#0E0E2C',
                     grey: '#A0A4AB',
                     greySoft: '#B1B1B1',
-                    dark: '#262A31'
-                }
+                    dark: '#262A31',
+                },
             },
         },
-
     },
     plugins: [require('tailwind-scrollbar-hide')],
 }
