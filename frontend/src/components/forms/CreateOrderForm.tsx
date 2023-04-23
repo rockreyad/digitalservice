@@ -29,7 +29,7 @@ import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { OrderError } from 'types/order'
 import { Service, ServiceResponse } from 'types/service'
 import { UserListResponse } from 'types/user'
-import { OrderItem } from './OrderItem'
+import { OrderItem } from '../tables/OrderItem'
 
 export default function CreateOrderForm() {
     const { user } = useAuth()

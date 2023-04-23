@@ -2,45 +2,54 @@ import jwt from 'jsonwebtoken'
 import { Request, Response, NextFunction } from 'express'
 import { config } from '../config'
 
-export const authorize = (req: Request, res: Response, next: NextFunction) => {
+const verifyToken = (token: string) => {
     try {
-        const token = req.headers.authorization?.split(' ')[1]
-        const decode = jwt.verify(token as string, config.jwt.secret)
-        const { userId, role } = decode as any
-        let requestUser = {
-            userId,
-            role,
+        const decodedToken = jwt.verify(token, config.jwt.secret) as any
+        return {
+            userId: decodedToken.userId,
+            role: decodedToken.role,
+            permissions: decodedToken.permissions || {},
         }
-        req.body.requestUser = requestUser
-        next()
     } catch (error) {
-        res.status(401).json({ status: false, message: 'NO token provided' })
+        return null
     }
 }
 
-export const authorizeAdmin = (
-    req: Request,
-    res: Response,
-    next: NextFunction,
-) => {
-    try {
-        const token = req.headers.authorization?.split(' ')[1]
-        const decode = jwt.verify(token as string, config.jwt.secret)
-        const { userId, role } = decode as any
-        let requestUser = {
-            userId,
-            role,
-        }
-        req.body.requestUser = requestUser
-        if (requestUser.role === 'admin') {
+export const authorize =
+    ({ role, permission }: { role?: string; permission?: string }) =>
+    (req: Request, res: Response, next: NextFunction) => {
+        //Here, if req.headers.authorization is undefined, then token will be set to an empty string ('') by the nullish coalescing operator. This ensures that token always has a string value, even if req.headers.authorization is undefined.
+
+        try {
+            const token = req.headers.authorization?.split(' ')[1]
+            const requestUser = verifyToken(token as string)
+            if (!requestUser) {
+                return res
+                    .status(401)
+                    .json({ status: false, message: 'Unauthorized' })
+            }
+            if (role && requestUser.role !== role) {
+                return res.status(401).json({
+                    status: false,
+                    message: 'You are not authorized',
+                })
+            }
+
+            if (permission && !requestUser.permissions[permission]) {
+                return res.status(401).json({
+                    status: false,
+                    message: 'You are not authorized',
+                })
+            }
+
+            req.body.requestUser = requestUser
             next()
-        } else {
-            res.status(401).json({
+        } catch (error) {
+            return res.status(401).json({
                 status: false,
                 message: 'You are not authorized',
             })
         }
-    } catch (error) {
-        res.status(401).json({ status: false, message: 'NO token provided' })
     }
-}
+
+export const authorizeAdmin = authorize({ role: 'admin' })

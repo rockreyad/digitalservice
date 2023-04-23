@@ -1,11 +1,7 @@
 import axios from 'axios'
-import { useRouter } from 'next/router'
-
-const instance = axios.create({
-    baseURL: process.env.BASE_URL || 'http://localhost:4000',
-})
 
 let token: string | null = null
+
 if (typeof window !== 'undefined') {
     const user = window.localStorage.getItem('user')
     if (user) {
@@ -14,24 +10,21 @@ if (typeof window !== 'undefined') {
             // token has expired
             // refresh the token if refresh token available
             // or redirect to login page
-            const router = useRouter()
-            router.push('/login')
+            window.location.href = '/login'
         } else {
             token = storedToken
         }
     }
 }
 
-instance.interceptors.request.use((config) => {
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`
-        // add CSRF token to headers
-        const csrfToken = window.localStorage.getItem('csrfToken')
-        if (csrfToken) {
-            config.headers['X-CSRF-Token'] = csrfToken
-        }
-    }
-    return config
+const instance = axios.create({
+    baseURL: 'http://localhost:4000',
+    headers: {
+        Authorization: `Bearer ${token}`,
+        ...(typeof window !== 'undefined' && {
+            'X-CSRF-Token': window.localStorage.getItem('csrfToken'),
+        }),
+    },
 })
 
 instance.interceptors.response.use(
@@ -41,8 +34,7 @@ instance.interceptors.response.use(
             // token has expired
             // refresh the token if refresh token available
             // or redirect to login page
-            const router = useRouter()
-            router.push('/login')
+            window.location.href = '/login'
         }
         return Promise.reject(error)
     },

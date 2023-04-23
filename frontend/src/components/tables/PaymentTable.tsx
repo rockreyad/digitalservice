@@ -21,7 +21,7 @@ import {
 import React, { useState } from 'react'
 import { useQuery } from 'react-query'
 import { Dispatch, SetStateAction } from 'react'
-import { PaymentDrawer } from '@/components/drawer/PaymentDrawer'
+import { PaymentDrawer } from '@/components/drawers/PaymentDrawer'
 
 export default function PaymentTable() {
     const { data: payment, isLoading } = useQuery('payment', all_payments)
@@ -46,6 +46,7 @@ export default function PaymentTable() {
                                 <Th
                                     color={'gray.500'}
                                     textTransform="capitalize"
+                                    width={'fit-content'}
                                 >
                                     Transaction Id
                                 </Th>
@@ -53,6 +54,7 @@ export default function PaymentTable() {
                                     <Th
                                         color={'gray.500'}
                                         textTransform="capitalize"
+                                        width={'fit-content'}
                                     >
                                         Customer
                                     </Th>
@@ -61,12 +63,14 @@ export default function PaymentTable() {
                                 <Th
                                     color={'gray.500'}
                                     textTransform="capitalize"
+                                    width={'fit-content'}
                                 >
                                     Date
                                 </Th>
                                 <Th
                                     color={'gray.500'}
                                     textTransform="capitalize"
+                                    width={'fit-content'}
                                 >
                                     Payment Type
                                 </Th>
@@ -74,12 +78,14 @@ export default function PaymentTable() {
                                 <Th
                                     color={'gray.500'}
                                     textTransform="capitalize"
+                                    width={'fit-content'}
                                 >
                                     Amount
                                 </Th>
                                 <Th
                                     color={'gray.500'}
                                     textTransform="capitalize"
+                                    width={'fit-content'}
                                 >
                                     Status
                                 </Th>
@@ -162,7 +168,10 @@ export default function PaymentTable() {
                                                     </Badge>
                                                 </Td>
                                                 {user?.role === 'admin' ? (
-                                                    <Td>
+                                                    <Td
+                                                        isNumeric
+                                                        className="space-x-2 items-center"
+                                                    >
                                                         <PaymentDrawer
                                                             transactionId={
                                                                 item.transactionId

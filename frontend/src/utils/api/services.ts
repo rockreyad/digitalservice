@@ -2,7 +2,7 @@ import {
     ServiceCategoryResponse,
     ServiceResponse,
 } from './../../../types/service'
-import axios from 'axios'
+import axios from '../../utils/axiosUtils'
 
 export async function addService({
     title,
@@ -16,7 +16,7 @@ export async function addService({
     price: number
 }) {
     //send the request with axios
-    const res = await axios.post(`http://localhost:4000/service`, {
+    const res = await axios.post(`/service`, {
         title,
         description,
         price,
@@ -28,21 +28,19 @@ export async function addService({
 
 export async function getService() {
     //send the request with axios
-    const res = await axios.get(`http://localhost:4000/service`)
+    const res = await axios.get(`/service`)
     return res.data as ServiceResponse
 }
 
 export async function getServiceCategory() {
     //send the request with axios
-    const res = await axios.get(`http://localhost:4000/service/category`)
+    const res = await axios.get(`/service/category`)
     return res.data as ServiceCategoryResponse
 }
 
 export async function getServiceByCategory(categoryId: number) {
     //send the request with axios
-    const res = await axios.get(
-        `http://localhost:4000/service/category/${categoryId}`,
-    )
+    const res = await axios.get(`/service/category/${categoryId}`)
     return res.data as ServiceResponse
 }
 
@@ -53,7 +51,7 @@ export async function createCategory({
     name: string
     description: string
 }) {
-    const res = await axios.post(`http://localhost:4000/service/category`, {
+    const res = await axios.post(`/service/category`, {
         name,
         description,
     })

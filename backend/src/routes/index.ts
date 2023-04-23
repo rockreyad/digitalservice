@@ -24,7 +24,7 @@ import {
     update_an_order,
 } from '../controllers/order'
 
-import { authorize } from '../middlewares/auth'
+import { authorize, authorizeAdmin } from '../middlewares/auth'
 import {
     create_a_payment,
     find_all_order_payments,
@@ -36,15 +36,19 @@ import { get_invoice_details } from '../controllers/invoice'
 
 export default function routes(app: Express) {
     app.get('/', (req: Request, res: Response) => {
-        res.send('Express + TypeScript Server')
-    })
+        const welcomeMessage = 'Welcome to the DWS website!';
+        const companyDescription = 'We are a leading IT outsourcing company specializing in software development, application development, website design, and digital marketing services. Our goal is to provide effective solutions and optimum results at suitable costs, so that our clients can increase their business revenue online.';
+        const contactInformation = 'To learn more about our services or request a consultation, please visit our website or contact us at info@dws.com.';
 
-    /** Service : new,Service list,modify*/
-    const serviceRouter = express.Router()
-    serviceRouter.get('/', find_all_services)
-    serviceRouter.post('/', new_service)
-    serviceRouter.put('/', update_a_service)
-    app.use('/service', serviceRouter)
+        const formattedResponse = `
+          <h1>${welcomeMessage}</h1>
+          <p>${companyDescription}</p>
+          <p>${contactInformation}</p>
+        `;
+
+        res.send(formattedResponse);
+    });
+
 
     /** Authentication : Login , Register */
     app.post('/login', signInWithEmailAndPassword)
@@ -53,32 +57,41 @@ export default function routes(app: Express) {
     /** User : User list, User details, User modify */
     const userRouter = express.Router()
     userRouter.get('/', all_users)
-    app.use('/user', authorize, userRouter)
+    app.use('/user', authorize({}), userRouter)
 
     /** Service Category : new,Service list by Category,modify*/
-    app.get('/service/category', find_all_category)
-    app.get('/service/category/:categoryId', find_all_services_by_category)
-    app.post('/service/category', create_a_category)
-    app.put('/service/category', update_a_category)
+    const categoryRouter = express.Router()
+    categoryRouter.get('/category', find_all_category)
+    categoryRouter.get('/category/:categoryId', find_all_services_by_category)
+    categoryRouter.post('/category', create_a_category)
+    categoryRouter.put('/category', update_a_category)
+    app.use('/service', authorize({}), categoryRouter)
+
+    /** Service : new,Service list,modify*/
+    const serviceRouter = express.Router()
+    serviceRouter.get('/', find_all_services)
+    serviceRouter.post('/', new_service)
+    serviceRouter.put('/', update_a_service)
+    app.use('/service', serviceRouter)
 
     /** Order : new,Order list,modify*/
     const orderRouter = express.Router()
-    orderRouter.post('/', create_an_order)
-    orderRouter.put('/', update_an_order)
-    orderRouter.get('/', get_all_order)
-    orderRouter.get('/:orderId', find_an_order)
-    orderRouter.get('/user/:userId', get_all_order_by_userId)
-    app.use('/order', authorize, orderRouter)
+    orderRouter.post('/', authorize({}), create_an_order)
+    orderRouter.patch('/:orderId', authorizeAdmin, update_an_order)
+    orderRouter.get('/', authorize({}), get_all_order)
+    orderRouter.get('/:orderId', authorize({}), find_an_order)
+    orderRouter.get('/user/:userId', authorizeAdmin, get_all_order_by_userId)
+    app.use('/order', orderRouter)
 
     /** Invoice:  */
     const invoiceRouter = express.Router()
     invoiceRouter.get('/:invoiceId', get_invoice_details)
-    app.use('/invoice', authorize, invoiceRouter)
+    app.use('/invoice', authorize({}), invoiceRouter)
 
     /** Order Status: all OrderStatus */
     const orderStatusRouter = express.Router()
     orderStatusRouter.get('/', get_all_order_status)
-    app.use('/order-status', orderStatusRouter)
+    app.use('/order-status', authorize({}), orderStatusRouter)
 
     /** Payment: */
     const paymentRouter = express.Router()
@@ -87,5 +100,5 @@ export default function routes(app: Express) {
     paymentRouter.patch('/:transactionId', update_payment_status_by_id)
     paymentRouter.get('/', find_all_payments)
     paymentRouter.get('/transaction/:transactionId', get_payment_details)
-    app.use('/payment', authorize, paymentRouter)
+    app.use('/payment', authorize({}), paymentRouter)
 }

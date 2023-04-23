@@ -69,3 +69,23 @@ export async function getOrderStatus(): Promise<OrderStatusResponse> {
         throw error
     }
 }
+
+export async function updateOrder({
+    orderId,
+    orderStatusId,
+}: {
+    orderId: number
+    orderStatusId?: number
+}): Promise<OrderResponse | OrderError> {
+    try {
+        const res = await axios.patch(`/order/${orderId}`, {
+            orderStatusId,
+        })
+        return res.data
+    } catch (error: unknown) {
+        if (error instanceof AxiosError) {
+            throw error.response?.data
+        }
+        throw error
+    }
+}

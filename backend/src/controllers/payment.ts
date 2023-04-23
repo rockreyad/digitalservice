@@ -8,7 +8,6 @@ import {
     find_all_payment_for_an_order,
     new_payment,
     find_payment_by_id,
-    update_payment_status,
 } from '../services/payment'
 import {
     pay_by_bank,
@@ -16,6 +15,7 @@ import {
     pay_by_debit_card,
     pay_by_mobile_banking,
 } from '../services/paymentMethod'
+import update_payment from '../helpers/updatePaymentStatus'
 
 function getErrorStatus(error: any) {
     return error.status || 500
@@ -379,43 +379,61 @@ const get_payment_details = async (req: Request, res: Response) => {
 }
 
 //update payment status
+
+//update payment status
 const update_payment_status_by_id = async (req: Request, res: Response) => {
     const { transactionId } = req.params
     const { paymentStatusId } = req.body
 
     try {
         if (!transactionId || !paymentStatusId) {
-            //Response: Mandatory fields are missing
             return res
                 .status(400)
                 .json({ status: false, message: 'Missing required fields' })
         }
 
-        //find the payment by id
         const payment = await find_payment_by_id({ id: Number(transactionId) })
 
         if (!payment) {
-            //Response: Payment not found
             return res
                 .status(400)
                 .json({ status: false, message: 'Payment not found' })
         }
 
-        //update payment status
-        //FIX THIS ERROR LATER
-        //Error : Payemnt could not have all the payment method to update the status
-        // @ts-ignore
-
-        const updatedPayment = await update_payment_status({
-            paymentId: Number(transactionId),
-            paymentStatusId: Number(paymentStatusId),
-        })
+        let updatedPayment
+        if (payment.mobileBanking) {
+            updatedPayment = await update_payment({
+                id: payment.mobileBanking.id,
+                type: 'mobile_banking',
+                status: paymentStatusId,
+            })
+        }
+        if (payment.debitCard) {
+            updatedPayment = await update_payment({
+                id: payment.debitCard.id,
+                type: 'debit_card',
+                status: paymentStatusId,
+            })
+        }
+        if (payment.bank) {
+            updatedPayment = await update_payment({
+                id: payment.bank.id,
+                type: 'bank',
+                status: paymentStatusId,
+            })
+        }
+        if (payment.cashPayment) {
+            updatedPayment = await update_payment({
+                id: payment.cashPayment.id,
+                type: 'cash_payment',
+                status: paymentStatusId,
+            })
+        }
 
         if (!updatedPayment) {
-            //Response: Payment not found
             return res
                 .status(400)
-                .json({ status: false, message: 'Payment not found' })
+                .json({ status: false, message: 'Something Went Wrong!' })
         }
 
         let response = {
@@ -424,7 +442,6 @@ const update_payment_status_by_id = async (req: Request, res: Response) => {
             data: updatedPayment,
         }
 
-        //Response: Payment found successfully
         return res.status(200).json(response)
     } catch (error: unknown) {
         let status: number = getErrorStatus(error)
@@ -434,7 +451,6 @@ const update_payment_status_by_id = async (req: Request, res: Response) => {
             message: error,
         }
 
-        //Response: Error
         res.status(status || 500).json(responseData)
     }
 }

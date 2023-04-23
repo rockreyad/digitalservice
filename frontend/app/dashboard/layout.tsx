@@ -2,7 +2,7 @@
 import React from 'react'
 import DashboardHeader from '@/components/navbar/dashboardHeader'
 import Sidebar from '@/components/sidebars/Sidebar'
-import FooterAdmin from '@/components/footer/FooterAdmin'
+import Footer from '@/components/layout/footer'
 // import { useAuth } from '@/contexts/auth-context'
 // import { useRouter } from 'next/navigation'
 
@@ -38,7 +38,7 @@ export default function DashboardLayout({
 
                 {/* Footer */}
                 <footer className="bg-white p-5">
-                    <FooterAdmin />
+                    <Footer />
                 </footer>
             </div>
         </section>

@@ -46,7 +46,7 @@ export default function ServiceList({ data }: { data: ServiceResponse }) {
 }
 
 import { HStack, Stack, Text } from '@chakra-ui/react'
-import RouterButton from '../Button/RouterButton'
+import RouterButton from '../buttons/RouterButton'
 import { useAuth } from '@/contexts/auth-context'
 
 function ServiceListHeader() {

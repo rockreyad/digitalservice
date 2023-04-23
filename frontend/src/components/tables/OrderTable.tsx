@@ -12,17 +12,17 @@ import {
     Thead,
     Tr,
 } from '@chakra-ui/react'
-import { FaRegEdit } from 'react-icons/fa'
 import { CiRead } from 'react-icons/ci'
 import { useQuery } from 'react-query'
 import { getOrders, getOrderStatus } from '@/utils/api/order'
 import Link from 'next/link'
 import { useAuth } from '@/contexts/auth-context'
 import { MdPayment } from 'react-icons/md'
-import OrderTableFilter from '@/components/orders/OrderTableFilter'
+import OrderTableFilter from '@/components/tableFilters/OrderTableFilter'
 import React from 'react'
 import Loading from '@/components/loading'
 import { Order } from 'types/order'
+import OrderDrawer from '../drawers/OrderDrawer'
 
 export default function OrderTable() {
     const { data, isLoading, isError } = useQuery('orders', getOrders)
@@ -65,16 +65,50 @@ export default function OrderTable() {
                             overflow={'scroll'}
                             size={'sm'}
                         >
-                            <Thead bgColor={'gray.200'}>
-                                <Tr>
-                                    <Th>Order ID</Th>
+                            <Thead>
+                                <Tr bgColor={'#F0EFE9'}>
+                                    <Th
+                                        color={'gray.500'}
+                                        textTransform="capitalize"
+                                        width={'fit-content'}
+                                    >
+                                        Order ID
+                                    </Th>
                                     {user?.role === 'admin' ? (
-                                        <Th>Order By</Th>
+                                        <Th
+                                            color={'gray.500'}
+                                            textTransform="capitalize"
+                                            width={'fit-content'}
+                                        >
+                                            Order By
+                                        </Th>
                                     ) : null}
-                                    <Th>Order Date</Th>
-                                    <Th>Order Status</Th>
-                                    <Th>Order Total</Th>
-                                    <Th></Th>
+                                    <Th
+                                        color={'gray.500'}
+                                        textTransform="capitalize"
+                                        width={'fit-content'}
+                                    >
+                                        Order Date
+                                    </Th>
+                                    <Th
+                                        color={'gray.500'}
+                                        textTransform="capitalize"
+                                        width={'fit-content'}
+                                    >
+                                        Order Status
+                                    </Th>
+                                    <Th
+                                        color={'gray.500'}
+                                        textTransform="capitalize"
+                                        width={'fit-content'}
+                                    >
+                                        Order Total
+                                    </Th>
+                                    <Th
+                                        color={'gray.500'}
+                                        textTransform="capitalize"
+                                        width={'fit-content'}
+                                    ></Th>
                                 </Tr>
                             </Thead>
                             <Tbody>
@@ -153,7 +187,7 @@ const TableRow = ({ order }: { order: Order }) => {
                 </Badge>
             </Td>
             <Td isNumeric>{order.price?.toFixed(2)} &#2547;</Td>
-            <Td className="space-x-2 items-center">
+            <Td isNumeric className="space-x-2 items-center">
                 <Link
                     href={`/dashboard/order/${order.orderId}`}
                     className="font-light text-gray-500 scale-110 transition  ease-in-out duration-500 hover:text-gray-700"
@@ -185,16 +219,7 @@ const TableRow = ({ order }: { order: Order }) => {
                     </Link>
                 ) : null}
 
-                {user?.role === 'admin' ? (
-                    <Button
-                        size={'xs'}
-                        colorScheme={'primary'}
-                        className="space-x-1"
-                    >
-                        <FaRegEdit className="" />
-                        <p> edit</p>
-                    </Button>
-                ) : null}
+                {user?.role === 'admin' ? <OrderDrawer order={order} /> : null}
             </Td>
         </Tr>
     )

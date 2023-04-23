@@ -1,7 +1,5 @@
 'use client'
 
-/*eslint-disable*/
-
 import {
     Flex,
     Link,

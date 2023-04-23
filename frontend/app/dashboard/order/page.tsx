@@ -1,6 +1,6 @@
-import RouterButton from '@/components/Button/RouterButton'
+import RouterButton from '@/components/buttons/RouterButton'
 import OrderCard from '@/components/cards/orderCard'
-import OrderTable from '@/features/OrderTable'
+import OrderTable from '@/components/tables/OrderTable'
 
 export const metadata = {
     title: 'Order List | Admin Dashboard',

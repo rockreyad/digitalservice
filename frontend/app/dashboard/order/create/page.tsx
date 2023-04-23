@@ -1,4 +1,4 @@
-import CreateOrderForm from '@/components/orders/CreateOrderForm'
+import CreateOrderForm from '@/components/forms/CreateOrderForm'
 
 export const metadata = {
     title: 'Create an Order | Dashboard' as string,

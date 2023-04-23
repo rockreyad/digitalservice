@@ -161,42 +161,72 @@ async function find_payment_by_id({ id }: { id: number }) {
     return payment
 }
 
-async function update_payment_status({
-    paymentId,
-    paymentStatusId,
+async function update_mobile_banking({
+    id,
+    status,
 }: {
-    paymentId: number
-    paymentStatusId: number
+    id: number
+    status: number
 }) {
-    const payment = await prisma.payment.update({
+    const mobile_banking_payment = await prisma.mobileBanking.update({
         where: {
-            id: paymentId,
+            id,
         },
         data: {
-            cashPayment: {
-                update: {
-                    status: paymentStatusId,
-                },
-            },
-            bank: {
-                update: {
-                    status: paymentStatusId,
-                },
-            },
-            debitCard: {
-                update: {
-                    status: paymentStatusId,
-                },
-            },
-            mobileBanking: {
-                update: {
-                    status: paymentStatusId,
-                },
-            },
+            status,
         },
     })
 
-    return payment
+    return mobile_banking_payment
+}
+async function update_cash_payment({
+    id,
+    status,
+}: {
+    id: number
+    status: number
+}) {
+    const cash_payment = await prisma.cashPayment.update({
+        where: {
+            id,
+        },
+        data: {
+            status,
+        },
+    })
+
+    return cash_payment
+}
+async function update_debit_card({
+    id,
+    status,
+}: {
+    id: number
+    status: number
+}) {
+    const debit_card_payment = await prisma.debitCard.update({
+        where: {
+            id,
+        },
+        data: {
+            status,
+        },
+    })
+
+    return debit_card_payment
+}
+
+async function update_bank({ id, status }: { id: number; status: number }) {
+    const bank_payment = await prisma.bank.update({
+        where: {
+            id,
+        },
+        data: {
+            status,
+        },
+    })
+
+    return bank_payment
 }
 
 export {
@@ -205,5 +235,8 @@ export {
     all_payment,
     all_user_payments,
     find_payment_by_id,
-    update_payment_status,
+    update_mobile_banking,
+    update_debit_card,
+    update_bank,
+    update_cash_payment,
 }

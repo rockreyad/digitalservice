@@ -1,5 +1,5 @@
 import React from 'react'
-import './globals.css'
+import '../src/styles/globals.css'
 import { Montserrat } from 'next/font/google'
 
 import ChakraWrapper from '@/components/wrappers/chakra'
@@ -14,8 +14,8 @@ const montserrat = Montserrat({
 
 export const metadata = {
     title: {
-        default: 'Project D',
-        template: '%s | Project D',
+        default: 'DigitUX',
+        template: '%s | DigitUX',
     },
 }
 

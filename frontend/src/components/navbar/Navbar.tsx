@@ -1,180 +1,95 @@
 'use client'
-
 import { useAuth } from '@/contexts/auth-context'
-import {
-    Box,
-    Button,
-    CloseButton,
-    Flex,
-    HStack,
-    IconButton,
-    useColorModeValue,
-    useDisclosure,
-    VStack,
-    VisuallyHidden,
-    chakra,
-} from '@chakra-ui/react'
-import { useRouter } from 'next/navigation'
-import React from 'react'
-import { AiOutlineMenu } from 'react-icons/ai'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { useState } from 'react'
+import { HiMenuAlt1, HiOutlineX } from 'react-icons/hi'
+
 
 export default function Navbar() {
-    const [show] = React.useState(true)
-    const bg = useColorModeValue('white', 'gray.800')
-    const mobileNav = useDisclosure()
-
+    const [isNavOpen, setIsNavOpen] = useState(false)
     const { isAuthenticated } = useAuth()
 
-    const router = useRouter()
+    const handleOpenNavMenu = () => {
+        setIsNavOpen(prev => !prev)
+    }
+
+    const menuOptions = [
+        { id: 1, label: 'Home', navUrl: '/' },
+        { id: 2, label: 'Who are We ?', navUrl: 'https://ztrios.com/' },
+        { id: 3, label: 'Our Services', navUrl: '/services' },
+        { id: 4, label: 'Our Projects', navUrl: '/projects' },
+        { id: 5, label: 'Contact', navUrl: '/contact' }
+    ]
+
+    const pathname = usePathname();
+
     return (
-        <React.Fragment>
-            {show ? (
-                <chakra.header
-                    bg={bg}
-                    w="full"
-                    px={{
-                        base: 2,
-                        sm: 4,
-                    }}
-                    py={4}
-                    shadow="md"
-                >
-                    <Flex
-                        alignItems="center"
-                        justifyContent="space-between"
-                        mx="auto"
-                    >
-                        <Flex>
-                            <chakra.a
-                                href="/"
-                                title="Choc Home Page"
-                                display="flex"
-                                alignItems="center"
-                            >
-                                {/* Logo Component */}
-                                <chakra.span ml="1">🍫</chakra.span>
-                                <VisuallyHidden>Project-D</VisuallyHidden>
-                            </chakra.a>
-                            <chakra.h1
-                                color={'primary.500'}
-                                fontSize="xl"
-                                fontWeight="bold"
-                                ml="2"
-                                fontFamily={'heading'}
-                            >
-                                Project-D
-                            </chakra.h1>
-                        </Flex>
-                        <HStack display="flex" alignItems="center" spacing={1}>
-                            <HStack
-                                spacing={1}
-                                mr={1}
-                                color="brand.500"
-                                display={{
-                                    base: 'none',
-                                    md: 'inline-flex',
-                                }}
-                            >
-                                <Button variant="ghost">Work</Button>
-                                <Button variant="ghost">Sevices</Button>
-                                <Button variant="ghost">Pricing</Button>
-                                <Button variant="ghost">Career</Button>
-                            </HStack>
+        <header className='fixed z-10 w-full mx-auto py-2 px-4 lg:px-16 bg-digitux-dark/70 backdrop-blur-[80px] flex items-center justify-between lg:justify-around'>
+            <h1 className='text-2xl font-semibold'>DigitUX</h1>
 
-                            {isAuthenticated ? (
-                                <>
-                                    <Button
-                                        onClick={() =>
-                                            router.push('/dashboard')
-                                        }
-                                        color={'primary.500'}
-                                        variant={'outline'}
-                                        size={'sm'}
-                                    >
-                                        Dashboard
-                                    </Button>
-                                </>
-                            ) : (
-                                <>
-                                    <Button
-                                        onClick={() => router.push('/login')}
-                                        color={'primary.500'}
-                                        variant={'outline'}
-                                        size={'sm'}
-                                    >
-                                        Sign in
-                                    </Button>
-                                </>
-                            )}
+            {isNavOpen ? (
+                <HiOutlineX
+                    onClick={handleOpenNavMenu}
+                    size={32}
+                    className='lg:hidden z-10 cursor-pointer'
+                />
+            ) : (
+                <HiMenuAlt1
+                    onClick={handleOpenNavMenu}
+                    size={32}
+                    className='lg:hidden z-10 cursor-pointer rotate-180'
+                />
+            )}
 
-                            <Box
-                                display={{
-                                    base: 'inline-flex',
-                                    md: 'none',
-                                }}
-                            >
-                                <IconButton
-                                    display={{
-                                        base: 'flex',
-                                        md: 'none',
-                                    }}
-                                    aria-label="Open menu"
-                                    fontSize="20px"
-                                    color="gray.800"
-                                    _dark={{
-                                        color: 'inherit',
-                                    }}
-                                    variant="ghost"
-                                    icon={<AiOutlineMenu />}
-                                    onClick={mobileNav.onOpen}
-                                />
-
-                                <VStack
-                                    pos="absolute"
-                                    top={0}
-                                    left={0}
-                                    right={0}
-                                    display={mobileNav.isOpen ? 'flex' : 'none'}
-                                    flexDirection="column"
-                                    p={2}
-                                    pb={4}
-                                    m={2}
-                                    bg={bg}
-                                    spacing={3}
-                                    rounded="sm"
-                                    shadow="sm"
-                                >
-                                    <CloseButton
-                                        aria-label="Close menu"
-                                        onClick={mobileNav.onClose}
-                                    />
-
-                                    <Button w="full" variant="ghost">
-                                        Features
-                                    </Button>
-                                    <Button w="full" variant="ghost">
-                                        Pricing
-                                    </Button>
-                                    <Button w="full" variant="ghost">
-                                        Blog
-                                    </Button>
-                                    <Button w="full" variant="ghost">
-                                        Company
-                                    </Button>
-
-                                    <Button
-                                        onClick={() => router.push('/login')}
-                                        w="full"
-                                        variant="ghost"
-                                    >
-                                        Sign in
-                                    </Button>
-                                </VStack>
-                            </Box>
-                        </HStack>
-                    </Flex>
-                </chakra.header>
-            ) : null}
-        </React.Fragment>
+            {/* Mobile */}
+            <nav
+                className={
+                    isNavOpen
+                        ? 'fixed top-0 right-0 w-4/5 h-screen text-center pt-28 bg-digitux-dark/95 backdrop-blur-[80px] ease-in-out duration-300 overflow-auto'
+                        : 'fixed top-0 -right-full w-4/5 h-screen text-center pt-28 bg-digitux-dark/95 backdrop-blur-[80px] ease-in-out duration-300 overflow-auto'
+                }>
+                <ul>
+                    {menuOptions.map(({ id, label, navUrl }) => (
+                        <li key={id} className='pb-8'>
+                            <Link href={navUrl} onClick={handleOpenNavMenu}>
+                                <span
+                                    className={
+                                        pathname === navUrl
+                                            ? 'text-white font-bold border-b-2'
+                                            : 'text-white/60 hover:text-white hover:border-b-2'
+                                    }>
+                                    {label}
+                                </span>
+                            </Link>
+                        </li>
+                    ))}
+                </ul>
+            </nav>
+            {/* Desktop */}
+            <nav className='hidden lg:flex lg:items-center lg:space-x-10'>
+                <ul className='flex gap-6'>
+                    {menuOptions.map(({ id, label, navUrl }) => (
+                        <li key={id}>
+                            <Link href={navUrl}>
+                                <span
+                                    className={
+                                        pathname === navUrl
+                                            ? 'text-white font-bold border-b-2'
+                                            : 'text-white/60 hover:text-white hover:border-b-2'
+                                    }>
+                                    {label}
+                                </span>
+                            </Link>
+                        </li>
+                    ))}
+                </ul>
+                {!isAuthenticated ?
+                    <Link prefetch href='/login'>
+                        <button className="rounded px-4 py-2 text-xs capitalize border-2 border-white/60 text-white/60 hover:bg-digitux-primary hover:text-white duration-300">log in</button> </Link> :
+                    <Link prefetch href='/dashboard'>
+                        <button className="rounded px-4 py-2 text-xs capitalize border-2 border-white/60 text-white/60 hover:bg-digitux-primary hover:text-white duration-300">Dashboard</button> </Link>}
+            </nav>
+        </header>
     )
 }

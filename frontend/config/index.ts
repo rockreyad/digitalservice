@@ -1,9 +1,11 @@
-const SEVER_PORT = process.env.SERVER_PORT
-const SERVER_URL = process.env.SERVER_URL
+const SERVER_PORT = process.env.NEXT_SERVER_PORT
+const SERVER_HOST = process.env.NEXT_SERVER_HOST
 
-export const config = {
+const config = {
     server: {
-        url: SERVER_URL,
-        port: SEVER_PORT,
+        host: SERVER_HOST,
+        port: SERVER_PORT,
     },
 }
+
+export default config

@@ -1,6 +1,6 @@
-import RouterButton from '@/components/Button/RouterButton'
+import RouterButton from '@/components/buttons/RouterButton'
 import OrderCard from '@/components/cards/orderCard'
-import PaymentTable from '@/features/PaymentTable'
+import PaymentTable from '@/components/tables/PaymentTable'
 
 export const metadata = {
     title: 'Payment Page | Dashboard',

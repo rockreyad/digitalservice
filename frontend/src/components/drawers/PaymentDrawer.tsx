@@ -7,11 +7,9 @@ import {
     DrawerBody,
     DrawerCloseButton,
     DrawerContent,
-    // DrawerFooter,
     DrawerHeader,
     DrawerOverlay,
     Flex,
-    // Stack,
     Table,
     TableContainer,
     Tbody,
@@ -37,40 +35,22 @@ export function PaymentDrawer({ transactionId }: { transactionId: number }) {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const btnRef = useRef()
 
-    const [paymentStatus, setPaymentStatus] = useState('1')
-
-    const handlePaymentStatusChange = (value: string) => {
-        setPaymentStatus(value)
-    }
-
     const { data, isLoading, isError } = useQuery(
         ['transaction', transactionId],
         () => get_payment_details({ transactionId }),
     )
-    const { mutate, isLoading: loading } = useMutation(
-        'update_payment_status',
-        update_payment_status,
-    )
-
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault()
-
-        console.log('paymentStatus', paymentStatus)
-        mutate({
-            paymentId: transactionId,
-            paymentStatusId: Number(paymentStatus),
-        })
-    }
 
     return (
         <>
             <Button
                 ref={btnRef as React.MutableRefObject<any>}
-                colorScheme="primary"
-                size={'sm'}
+                size={'xs'}
+                colorScheme={'gray'}
+                className="space-x-1"
                 onClick={onOpen}
             >
-                view
+                <CiRead className="" />
+                <p> view</p>
             </Button>
             <Drawer
                 isOpen={isOpen}
@@ -95,30 +75,17 @@ export function PaymentDrawer({ transactionId }: { transactionId: number }) {
                             fontSize="sm"
                             marginBlock={'4'}
                             padding={'4'}
+                            borderRadius={'sm'}
                             bgColor={'AppWorkspace'}
                         >
                             <h1>Payment Status</h1>
-                            <form onSubmit={handleSubmit}>
-                                <PaymentStatusRadio
-                                    value={paymentStatus}
-                                    onChange={handlePaymentStatusChange}
-                                />
-                                <button
-                                    className="bg-rose-400"
-                                    type="submit"
-                                    disabled={loading}
-                                >
-                                    Update Payment Status
-                                </button>
-                            </form>
+
+                            <PaymentStatusRadio
+                                paymentId={transactionId}
+                                payStatus={data?.data.transactionDetails.status}
+                            />
                         </Box>
                     </DrawerBody>
-                    {/* <DrawerFooter>
-                        <Button variant="outline" mr={3} onClick={onClose}>
-                            Cancel
-                        </Button>
-                        <Button colorScheme="blue">Save</Button>
-                    </DrawerFooter> */}
                 </DrawerContent>
             </Drawer>
         </>
@@ -126,6 +93,7 @@ export function PaymentDrawer({ transactionId }: { transactionId: number }) {
 }
 
 import { Radio, RadioGroup } from '@chakra-ui/react'
+import { CiRead } from 'react-icons/ci'
 
 const ViewTransaction = ({
     transaction,
@@ -322,47 +290,75 @@ const Bank = ({ transaction }: { transaction: BankPayment }) => {
 }
 
 function PaymentStatusRadio({
-    value,
-    onChange,
+    paymentId,
+    payStatus,
 }: {
-    value: string
-    onChange: (value: string) => void
+    paymentId: number
+    payStatus: number
 }) {
-    const [paymentStatus, setPaymentStatus] = useState(String(value))
-    const radioTextColor = useColorModeValue('gray.800', 'gray.200')
+    const [paymentStatus, setPaymentStatus] = useState(String(payStatus))
+    const radioTextColor = useColorModeValue('gray.600', 'gray.200')
 
     const handlePaymentStatusChange = (value: string) => {
         setPaymentStatus(value)
-        console.log(value)
-        if (onChange) {
-            onChange(value)
-        }
+    }
+    const { mutate, isLoading: loading } = useMutation(
+        'update_payment_status',
+        update_payment_status,
+    )
+
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
+
+        console.log('paymentStatus', paymentStatus)
+        mutate({
+            paymentId,
+            paymentStatusId: Number(paymentStatus),
+        })
     }
 
     return (
-        <RadioGroup value={paymentStatus} onChange={handlePaymentStatusChange}>
-            <Flex
-                direction={{ base: 'column', lg: 'row' }}
-                rounded="md"
-                p={2}
-                justify={{ base: 'space-around', md: 'center' }}
+        <form onSubmit={handleSubmit}>
+            <RadioGroup
+                value={paymentStatus}
+                onChange={handlePaymentStatusChange}
             >
-                {['pending', 'failed', 'complete', 'refunded'].map(
-                    (status, index) => (
-                        <Radio
-                            key={index}
-                            value={String(index + 1)}
-                            colorScheme="blue"
-                        >
-                            <Text fontWeight="medium" color={radioTextColor}>
-                                {status.toUpperCase()}
-                            </Text>
-                        </Radio>
-                    ),
-                )}
-            </Flex>
-        </RadioGroup>
+                <Flex
+                    direction={{ base: 'column' }}
+                    rounded="md"
+                    p={2}
+                    justify={{ base: 'space-around', md: 'center' }}
+                >
+                    {['pending', 'failed', 'complete', 'refunded'].map(
+                        (status, index) => (
+                            <Radio
+                                key={index}
+                                value={String(index + 1)}
+                                colorScheme="blue"
+                                className="hover:bg-gray-100"
+                            >
+                                <Text
+                                    fontWeight="medium"
+                                    textColor={radioTextColor}
+                                    textTransform={'capitalize'}
+                                    color={radioTextColor}
+                                >
+                                    {status}
+                                </Text>
+                            </Radio>
+                        ),
+                    )}
+                </Flex>
+            </RadioGroup>
+            <Button
+                colorScheme="primary"
+                size={'xs'}
+                className=" px-2 py-0.5 rounded"
+                type="submit"
+                disabled={loading}
+            >
+                Update Payment Status
+            </Button>
+        </form>
     )
 }
-
-export default PaymentStatusRadio

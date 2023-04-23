@@ -118,10 +118,17 @@ const signInWithEmailAndPassword = async (req: Request, res: Response) => {
                 .json({ status: false, message: 'Password is incorrect!' })
         }
 
+        let permissions = {
+            canAccessAdminPanel:
+                user.role[0]?.role.role_name === 'admin' ? true : false,
+            // Add more permissions properties as needed
+        }
+
         let jwtToken = await jwt.sign(
             {
                 userId: user.user_id,
                 role: user.role[0]?.role.role_name,
+                permissions,
             },
             config.jwt.secret as string,
             { expiresIn: config.jwt.expiresIn },

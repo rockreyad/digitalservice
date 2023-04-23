@@ -74,16 +74,17 @@ const create_an_order = async (req: Request, res: Response) => {
 
 //Update an Order
 const update_an_order = async (req: Request, res: Response) => {
-    const { id, statusId } = req.body
-    if (!id || !statusId) {
+    const { orderId } = req.params
+    const { orderStatusId } = req.body
+    if (!orderId && !orderStatusId) {
         //Response: Mandatory fields are missing
         return res
             .status(400)
             .json({ status: false, message: 'Missing required fields' })
     }
     const OrderData = {
-        id: Number(id),
-        statusId: Number(statusId),
+        id: Number(orderId),
+        statusId: Number(orderStatusId),
     }
     try {
         const updatedOrder = await update_order(OrderData)
@@ -99,7 +100,7 @@ const update_an_order = async (req: Request, res: Response) => {
             },
         }
         //Response: Order updated successfully
-        return res.status(201).json(response)
+        return res.status(200).json(response)
     } catch (error: unknown) {
         let status: number = getErrorStatus(error)
         let responseData = {

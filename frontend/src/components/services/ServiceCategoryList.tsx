@@ -6,7 +6,7 @@ import { Box, HStack, SimpleGrid, Stack, Text } from '@chakra-ui/react'
 import Link from 'next/link'
 import { useQuery } from 'react-query'
 import { ServiceCategory } from 'types/service'
-import RouterButton from '../Button/RouterButton'
+import RouterButton from '../buttons/RouterButton'
 
 export default function ServiceCategoryList() {
     const { isSuccess, isError, data } = useQuery(
