@@ -32,15 +32,15 @@ export async function getService() {
     return res.data as ServiceResponse
 }
 
-export async function getServiceCategory() {
+export async function getCategories() {
     //send the request with axios
-    const res = await axios.get(`/service/category`)
+    const res = await axios.get(`/category`)
     return res.data as ServiceCategoryResponse
 }
 
 export async function getServiceByCategory(categoryId: number) {
     //send the request with axios
-    const res = await axios.get(`/service/category/${categoryId}`)
+    const res = await axios.get(`/category/${categoryId}`)
     return res.data as ServiceResponse
 }
 
@@ -51,7 +51,7 @@ export async function createCategory({
     name: string
     description: string
 }) {
-    const res = await axios.post(`/service/category`, {
+    const res = await axios.post(`/category`, {
         name,
         description,
     })

@@ -5,6 +5,7 @@ import { getOrders } from '@/utils/api/order'
 
 import {
     Box,
+    Button,
     Center,
     Flex,
     Grid,
@@ -47,6 +48,11 @@ export default function Reports() {
                             padding={'4'}
                             borderRadius={'lg'}
                         >
+                            <Flex justify={'flex-end'}>
+                                <Button size={'sm'} colorScheme="primary">
+                                    Print
+                                </Button>
+                            </Flex>
                             <Text textColor={'gray.500'} fontWeight={'medium'}>
                                 Providing Services
                             </Text>

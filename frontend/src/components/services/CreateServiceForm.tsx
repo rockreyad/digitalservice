@@ -1,6 +1,6 @@
 'use client'
 
-import { addService, getServiceCategory } from '@/utils/api/services'
+import { addService, getCategories } from '@/utils/api/services'
 import { Checkbox, Select, Stack, Textarea } from '@chakra-ui/react'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
@@ -34,7 +34,7 @@ export default function CreateServiceForm() {
         },
     })
 
-    const { data: categories } = useQuery('categories', getServiceCategory)
+    const { data: categories } = useQuery('categories', getCategories)
 
     //validation and send data to backend
 

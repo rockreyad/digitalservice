@@ -62,11 +62,11 @@ export default function routes(app: Express) {
 
     /** Service Category : new,Service list by Category,modify*/
     const categoryRouter = express.Router()
-    categoryRouter.get('/category', find_all_category)
-    categoryRouter.get('/category/:categoryId', find_all_services_by_category)
-    categoryRouter.post('/category', create_a_category)
-    categoryRouter.put('/category', update_a_category)
-    app.use('/service', authorize({}), categoryRouter)
+    categoryRouter.get('/', find_all_category)
+    categoryRouter.get('/:categoryId', find_all_services_by_category)
+    categoryRouter.post('/', authorizeAdmin, create_a_category)
+    categoryRouter.put('/', update_a_category)
+    app.use('/category', categoryRouter)
 
     /** Service : new,Service list,modify*/
     const serviceRouter = express.Router()

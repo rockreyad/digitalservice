@@ -1,7 +1,7 @@
 'use client'
 
 import { useAuth } from '@/contexts/auth-context'
-import { getServiceCategory } from '@/utils/api/services'
+import { getCategories } from '@/utils/api/services'
 import { Box, HStack, SimpleGrid, Stack, Text } from '@chakra-ui/react'
 import Link from 'next/link'
 import { useQuery } from 'react-query'
@@ -9,10 +9,7 @@ import { ServiceCategory } from 'types/service'
 import RouterButton from '../buttons/RouterButton'
 
 export default function ServiceCategoryList() {
-    const { isSuccess, isError, data } = useQuery(
-        'serviceCategory',
-        getServiceCategory,
-    )
+    const { isSuccess, isError, data } = useQuery('categories', getCategories)
 
     return (
         <>

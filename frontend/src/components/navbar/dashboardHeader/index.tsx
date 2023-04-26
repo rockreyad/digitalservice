@@ -16,7 +16,7 @@ import {
     Text,
     useColorMode,
 } from '@chakra-ui/react'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 
 import { FiMenu } from 'react-icons/fi'
 import { MdDarkMode } from 'react-icons/md'
@@ -31,6 +31,8 @@ export default function DashboardHeader() {
     const { logout, user } = useAuth()
     const { colorMode, toggleColorMode } = useColorMode()
     const pathname = usePathname()?.split('/').filter(Boolean)
+
+    const router = useRouter()
 
     return (
         <header className=" top-0 left-0 w-full p-2">
@@ -148,6 +150,9 @@ export default function DashboardHeader() {
                                         _hover={{
                                             bg: 'gray.100',
                                         }}
+                                        onClick={() =>
+                                            router.push('/dashboard/profile')
+                                        }
                                     >
                                         My Account
                                     </MenuItem>
