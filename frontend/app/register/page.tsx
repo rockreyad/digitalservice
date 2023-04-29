@@ -14,6 +14,7 @@ import {
     Stack,
     Text,
     chakra,
+    useToast,
 } from '@chakra-ui/react'
 import { useState } from 'react'
 
@@ -39,6 +40,7 @@ interface PasswordVisibility {
 }
 
 export default function Register() {
+    const toast = useToast()
     const [user, setUser] = useState({
         firstName: '',
         lastName: '',
@@ -92,7 +94,12 @@ export default function Register() {
         e.preventDefault()
         if (user.password !== user.repeatPassword) {
             //TODO: send a toast message
-            return alert('Password does not match')
+            return toast({
+                title: `Password does not match`,
+                status: 'error',
+                isClosable: false,
+                duration: 1300,
+            })
         }
         mutate(user)
     }

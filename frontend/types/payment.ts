@@ -64,6 +64,7 @@ export type PaymentList = {
     data: {
         transactionId: number
         username: string
+        invoiceId: string
         paymentType: string
         amount: number
         status: string

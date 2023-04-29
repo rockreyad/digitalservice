@@ -13,8 +13,9 @@ import {
     Text,
     useColorModeValue,
     useDisclosure,
+    useToast,
 } from '@chakra-ui/react'
-import { useMutation } from 'react-query'
+import { useMutation, useQueryClient } from 'react-query'
 import { Radio, RadioGroup } from '@chakra-ui/react'
 import { FaRegEdit } from 'react-icons/fa'
 import { Order } from 'types/order'
@@ -80,16 +81,26 @@ function OrderStatusRadio({
 }) {
     const [status, setStatus] = useState(String(orderStatus))
     const radioTextColor = useColorModeValue('gray.600', 'gray.200')
+    const queryClient = useQueryClient()
+    const toast = useToast()
 
     const handleStatusChange = (value: string) => {
         setStatus(value)
     }
-    const { mutate, isLoading } = useMutation(`order ${orderId}`, updateOrder)
+    const { mutate, isLoading } = useMutation(`orders`, updateOrder, {
+        onSuccess: () => {
+            queryClient.invalidateQueries(`orders`)
+            toast({
+                title: 'Order has been updated',
+                status: 'success',
+                duration: 3000,
+                isClosable: true,
+            })
+        },
+    })
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
-
-        console.log('orderStatus', status)
         mutate({
             orderId,
             orderStatusId: Number(status),

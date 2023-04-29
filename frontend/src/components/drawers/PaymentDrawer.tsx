@@ -20,8 +20,9 @@ import {
     Tr,
     useColorModeValue,
     useDisclosure,
+    useToast,
 } from '@chakra-ui/react'
-import { useMutation, useQuery } from 'react-query'
+import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { get_payment_details, update_payment_status } from '@/utils/api/payment'
 import {
     BankPayment,
@@ -36,7 +37,7 @@ export function PaymentDrawer({ transactionId }: { transactionId: number }) {
     const btnRef = useRef()
 
     const { data, isLoading, isError } = useQuery(
-        ['transaction', transactionId],
+        [`payment`, transactionId],
         () => get_payment_details({ transactionId }),
     )
 
@@ -299,18 +300,31 @@ function PaymentStatusRadio({
     const [paymentStatus, setPaymentStatus] = useState(String(payStatus))
     const radioTextColor = useColorModeValue('gray.600', 'gray.200')
 
+    const queryClient = useQueryClient()
+    const toast = useToast()
+
     const handlePaymentStatusChange = (value: string) => {
         setPaymentStatus(value)
     }
     const { mutate, isLoading: loading } = useMutation(
-        'update_payment_status',
+        `payment`,
         update_payment_status,
+        {
+            onSuccess: () => {
+                queryClient.invalidateQueries('payment')
+                toast({
+                    title: 'Payment status updated',
+                    status: 'success',
+                    duration: 3000,
+                    isClosable: true,
+                })
+            },
+        },
     )
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
 
-        console.log('paymentStatus', paymentStatus)
         mutate({
             paymentId,
             paymentStatusId: Number(paymentStatus),

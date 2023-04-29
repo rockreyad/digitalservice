@@ -7,8 +7,8 @@ export default function ReportCard({
     amount,
 }: {
     title: string
-    value?: string
-    amount?: string
+    value?: number
+    amount?: number
 }) {
     return (
         <>
@@ -31,7 +31,7 @@ const Header = ({ title }: { title: string }) => {
     )
 }
 
-const Body = ({ value, amount }: { value?: string; amount?: string }) => {
+const Body = ({ value, amount }: { value?: number; amount?: number }) => {
     return (
         <Text
             textColor={'blackAlpha.800'}

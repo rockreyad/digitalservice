@@ -33,6 +33,7 @@ import {
     update_payment_status_by_id,
 } from '../controllers/payment'
 import { get_invoice_details } from '../controllers/invoice'
+import { getOrdersByDateRangeController } from '../controllers/report'
 
 export default function routes(app: Express) {
     app.get('/', (req: Request, res: Response) => {
@@ -83,6 +84,11 @@ export default function routes(app: Express) {
     orderRouter.get('/:orderId', authorize({}), find_an_order)
     orderRouter.get('/user/:userId', authorizeAdmin, get_all_order_by_userId)
     app.use('/order', orderRouter)
+
+    /** Reports:  */
+    const reportRouter = express.Router()
+    reportRouter.get('/', authorizeAdmin, getOrdersByDateRangeController)
+    app.use('/reports', reportRouter)
 
     /** Invoice:  */
     const invoiceRouter = express.Router()

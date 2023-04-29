@@ -26,13 +26,15 @@ export interface Order {
     price?: number
     statusType: string
     statusId: number
-    orderItems: {
-        service: {
-            title: string
-        }[]
-        itemPrice?: number
-    }
+    orderItems: OrderItem[]
     createAt: string
+}
+
+interface OrderItem {
+    service: {
+        title: string
+    }
+    itemPrice?: number
 }
 
 export type OrderStatus = {

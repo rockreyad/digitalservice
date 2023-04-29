@@ -57,6 +57,7 @@ async function all_payment() {
                             lastName: true,
                         },
                     },
+                    invoiceId: true,
                 },
             },
             cashPayment: {
@@ -101,6 +102,7 @@ async function all_user_payments({ userId }: { userId: string }) {
                             lastName: true,
                         },
                     },
+                    invoiceId: true,
                 },
             },
             cashPayment: {

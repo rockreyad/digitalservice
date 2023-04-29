@@ -274,6 +274,7 @@ const find_all_payments = async (req: Request, res: Response) => {
                 return {
                     transactionId: item.id,
                     username: `${item.order.user.firstName} ${item.order.user.lastName}`,
+                    invoiceId: item.order.invoiceId,
                     paymentType: item.mobileBanking
                         ? item.mobileBanking.bank_name
                         : item.bank

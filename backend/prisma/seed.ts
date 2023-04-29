@@ -12,8 +12,8 @@ async function main() {
             email: 'admin@gmail.com',
             password:
                 '$2b$10$ioXNQ8oDKUQT9WZvHih28.dExM4DSn8SHXtscbOjltK8MM6WJhy4C',
-            firstName: 'Admin',
-            lastName: 'Admin',
+            firstName: 'Reyad',
+            lastName: 'Hasan',
             phone: '0123456789',
             role: {
                 create: {
@@ -30,14 +30,14 @@ async function main() {
 
     //upsert user
     const user = await prisma.user.upsert({
-        where: { email: 'user@gmail.com' },
+        where: { email: 'test@gmail.com' },
         update: {},
         create: {
-            email: 'user@gmail.com',
+            email: 'test@gmail.com',
             password:
                 '$2b$10$ioXNQ8oDKUQT9WZvHih28.dExM4DSn8SHXtscbOjltK8MM6WJhy4C',
-            firstName: 'User',
-            lastName: 'User',
+            firstName: 'Sabbir',
+            lastName: 'Islam',
             phone: '0123456789',
             role: {
                 create: {
@@ -201,7 +201,7 @@ async function main() {
                             bank_name: 'bKash',
                             account_holder_name: 'Rahim',
                             account_number: '01700000000',
-                            trxId: '1234567890',
+                            trxId: 'HT8QWP3Z5S',
                             amount: parseFloat('1500'),
                             status: 3,
                         },

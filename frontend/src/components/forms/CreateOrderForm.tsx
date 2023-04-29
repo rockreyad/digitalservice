@@ -100,8 +100,6 @@ export default function CreateOrderForm() {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         mutate(order)
-
-        console.log(order)
     }
 
     //remove services from selected services

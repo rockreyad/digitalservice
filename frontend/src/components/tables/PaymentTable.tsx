@@ -48,7 +48,7 @@ export default function PaymentTable() {
                                     textTransform="capitalize"
                                     width={'fit-content'}
                                 >
-                                    Transaction Id
+                                    invoiceId
                                 </Th>
                                 {user?.role === 'admin' ? (
                                     <Th
@@ -114,7 +114,7 @@ export default function PaymentTable() {
                                         })
                                         .map((item) => (
                                             <Tr key={item.transactionId}>
-                                                <Td>{item.transactionId}</Td>
+                                                <Td>{item.invoiceId}</Td>
 
                                                 {user?.role === 'admin' ? (
                                                     <Td>
