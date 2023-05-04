@@ -3,17 +3,17 @@ generator client {
 }
 
 // POstgresql Connector
-// datasource db {
-//   provider  = "postgresql"
-//   url       = env("DATABASE_URL")
-//   directUrl = env("DIRECT_URL")
-// }
+ datasource db {
+   provider  = "postgresql"
+   url       = env("DATABASE_URL")
+   directUrl = env("DIRECT_URL")
+ }
 
 // SQLite Connector
-datasource db {
-  provider = "sqlite" // data source connector
-  url      = env("DATABASE_URL") // path to the database file
-}
+//datasource db {
+//  provider = "sqlite" // data source connector
+//  url      = env("DATABASE_URL") // path to the database file
+//}
 
 model User {
   user_id   String    @id @default(uuid())

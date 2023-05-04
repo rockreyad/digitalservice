@@ -47,7 +47,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 })
 
 app.listen(port, () => {
-    Logger.info(`⚡: Server is running at https://localhost:${port}`)
+    Logger.info(`⚡: Server is running at http://localhost:${port}`)
     /** Routes Index */
     routes(app)
 })

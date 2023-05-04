@@ -2,6 +2,8 @@ import axios from 'axios'
 
 let token: string | null = null
 
+let BASE_URL = process.env.BASE_URL as string
+
 if (typeof window !== 'undefined') {
     const user = window.localStorage.getItem('user')
     if (user) {
@@ -18,7 +20,7 @@ if (typeof window !== 'undefined') {
 }
 
 const instance = axios.create({
-    baseURL: 'http://localhost:4000',
+    baseURL: BASE_URL,
     headers: {
         Authorization: `Bearer ${token}`,
         ...(typeof window !== 'undefined' && {
