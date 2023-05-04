@@ -24,15 +24,15 @@ Set the following environment variable to `backend` directory. Also, an example 
 SERVER_PORT=4000
 
 # PostgreSQL connection string used for migrations
-DIRECT_URL="postgres://postgres:[YOUR-PASSWORD]@db.[YOUR-PROJECT-REF].supabase.co:5432/postgres"
+# DIRECT_URL="postgres://postgres:[YOUR-PASSWORD]@db.[YOUR-PROJECT-REF].supabase.co:5432/postgres"
 
 # PostgreSQL connection string with pgBouncer config — used by Prisma Client
-DATABASE_URL="postgres://postgres:[YOUR-PASSWORD]@db.[YOUR-PROJECT-REF].supabase.co:6543/postgres?pgbouncer=true"
+# DATABASE_URL="postgres://postgres:[YOUR-PASSWORD]@db.[YOUR-PROJECT-REF].supabase.co:6543/postgres?pgbouncer=true"
 
 JWT_KEY="any random string cryptographically secure"
 JWT_EXPIRES_IN="1d"
 BCRYPT_SALT_OR_ROUNDS=10
-# DATABASE_URL="file:./dev.db"
+DATABASE_URL="file:./dev.db"
 ```
 
 Read the supabase docs [Configure Conncection](https://supabase.com/docs/guides/integrations/prisma#step-2-testing-the-connection)
