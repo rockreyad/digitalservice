@@ -6,7 +6,7 @@ Digital Web Services “DWS” is a leading IT outsourcing company with speciali
 
 You need [Node JS](https://nodejs.org/) installed on your local machine.
 
-## Installation ⚙
+## Installation 🛠
 
 Run the follwing command to install all the packages:
 
@@ -14,37 +14,44 @@ Run the follwing command to install all the packages:
 npm run setup
 ```
 
-### Setup enviornment variable
+### Setup enviornment variable 🌳
 
-To run this project, you will need to add the following environment variables.
+To run this project, you will need to add the environment variables.
 
-Set the following environment variable to `backend` directory. Also, an example file is given with the name of `.env.example`:
-
-```bash
-SERVER_PORT=4000
-
-# PostgreSQL connection string used for migrations
-# DIRECT_URL="postgres://postgres:[YOUR-PASSWORD]@db.[YOUR-PROJECT-REF].supabase.co:5432/postgres"
-
-# PostgreSQL connection string with pgBouncer config — used by Prisma Client
-# DATABASE_URL="postgres://postgres:[YOUR-PASSWORD]@db.[YOUR-PROJECT-REF].supabase.co:6543/postgres?pgbouncer=true"
-
-JWT_KEY="any random string cryptographically secure"
-JWT_EXPIRES_IN="1d"
-BCRYPT_SALT_OR_ROUNDS=10
-DATABASE_URL="file:./dev.db"
-```
-
-Read the supabase docs [Configure Conncection](https://supabase.com/docs/guides/integrations/prisma#step-2-testing-the-connection)
-
-Set the following environment variable to `frontend` directory. Also, an example file is given with the name of `.env.example`:
+Run the following command to create `.env` files inside `backend` && `frontend` directory
 
 ```bash
-SERVER_URL=localhost
-SERVER_PORT=4000
+    cd backend && cp .env.example .env && cd .. && cd frontend && cp .env.example .env && cd ..
 ```
 
-### Database migration
+**NOTE:** Update the `.env` file with your own values
+
+### Setup supabase
+
+<span style="background-color:#ff0000; font-weight: bold; padding-inline:5px; border-radius: 5px">_ignore:_</span> if you want to use supabase as database then you have to update the `.env` file from `backend` directories with your own values otherwise you can use sqlite as database
+
+Read the supabase docs to get the `DIRECT_URL` and `DATABASE_URL` key [here](https://supabase.com/docs/guides/integrations/prisma#step-2-testing-the-connection)
+
+### Database migration 🗄
+
+Delete the `migrations` folder from `backend/prisma` directory
+
+Update the following code with `lines 5-16` in the `schema.prisma` file from `backend/prisma` directory to use `sqlite` as database
+
+```prisma
+// POstgresql Connector
+//  datasource db {
+//    provider  = "postgresql"
+//    url       = env("DATABASE_URL")
+//    directUrl = env("DIRECT_URL")
+//  }
+
+// SQLite Connector
+datasource db {
+ provider = "sqlite" // data source connector
+ url      = env("DATABASE_URL") // path to the database file
+}
+```
 
 Run the following command to `generate the sql`
 
@@ -58,21 +65,48 @@ Run the following command if you want `reset` database and applying migration:
 npm run prisma:reset
 ```
 
-You only have to run this for only one time at the beginning of project setup
+You only have to run one of the following command for only one time at the beginning of project setup
 
 ## Run 🏃‍♂️
 
-By this command your app will be run concurrently
+By this command your app will be run `development` mode concurrently
 
 ```bash
 npm run start
 ```
 
-An server will be run at [http://localhost:4000](http://localhost:4000)
+#### Run in Production Mode 🚀
+
+By this command your app will be run `production` mode concurrently
+
+```bash
+npm run build && npm run start:prod
+```
+
+A server will be run at [http://localhost:4000](http://localhost:4000)
 
 And frontend server will be run at [http://localhost:3000](http://localhost:3000)
 
-# Built With
+### Default Login Credentials 🔐
+
+```bash
+#admin
+email: admin@gmail.com
+password: 102030
+
+#user
+email: test@gmail.com
+password: 102030
+```
+
+### Project Documentation 📖
+
+inside `docs` directory
+
+-   [Project Report](https://github.com/rockreyad/digitalservice/blob/main/docs/project-report.pdf)
+-   [Project Presentation](https://github.com/rockreyad/digitalservice/blob/main/docs/presentation.pptx)
+
+# Built With 🛠
 
 -   [NodeJS](https://nodejs.org/en/) - Node.js® is an open-source, cross-platform JavaScript runtime environment.
 
@@ -86,11 +120,11 @@ And frontend server will be run at [http://localhost:3000](http://localhost:3000
 
 ## Tech Stack
 
-**Client:** React, NEXT, TailwindCSS , React Query
+**Client:** React, NEXT, Chakra, TailwindCSS , React Query
 
 **Server:** Node, Express
 
-**Database:** Prisma(postgres)
+**Database:** Prisma - Development (Sqlite) Production (postgres)
 
 **Type Check:** Typescript
 
@@ -100,8 +134,14 @@ This project is used by the following companies:
 
 -   Ztrios Tech & Marketing
 
-# Credit
+Project was created for Internship Purpose
 
-# Authors
+-   IUBAT- International University of Business Agriculture and Technology
 
--   [Md. Mahamud Hasan](https://github.com/rockreyad) - **_software engineeer_**
+# Credit & Supervised By
+
+[Krishna Das](http://cse.iubat.edu/krishna-das/)
+
+### Authors
+
+-   [Md. Mahamud Hasan](https://www.linkedin.com/in/rockreyad) - **_software engineeer_**
