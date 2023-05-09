@@ -2,7 +2,7 @@ import axios from 'axios'
 
 let token: string | null = null
 
-let BASE_URL = process.env.BASE_URL as string
+let BASE_URL = process.env.NEXT_PUBLIC_API_URL as string
 
 if (typeof window !== 'undefined') {
     const user = window.localStorage.getItem('user')
