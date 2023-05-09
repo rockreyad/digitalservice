@@ -15,3 +15,4 @@ frontend/next.config.js
 backend/node_modules
 backend/dist
 backend/build
+backend/public

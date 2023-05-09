@@ -8,8 +8,8 @@
     },
     "scripts": {
         "postinstall": "tsc",
-        "start": "node build/server.js",
-        "build": "concurrently \"tsc --watch\" \"nodemon -q build/server.js\"",
+        "start": "node public/server.js",
+        "build": "npm run postinstall",
         "dev": "nodemon src/server.ts"
     },
     "keywords": [],
